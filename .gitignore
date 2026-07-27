@@ -1,0 +1,18 @@
+# This repository tracks the v3 Lewix site ONLY.
+#
+# v1-ascii-mountain and v2-raw-3d are local prototypes kept on disk for
+# reference; public-shared/ holds their assets, including an 84MB
+# mountain-hq.glb that has no business in git history. v3-lewix-site is fully
+# self-contained — every asset it loads at runtime resolves inside its own
+# public/ folder — so nothing below is needed to build or run it.
+v1-ascii-mountain/
+v2-raw-3d/
+public-shared/
+
+# Root package.json/lock belong to the Vite prototypes above, not to v3.
+/package.json
+/package-lock.json
+
+node_modules/
+.DS_Store
+*.log

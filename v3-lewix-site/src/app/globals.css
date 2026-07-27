@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Dark editorial palette. Carried from lewix-ai's token set, pushed darker
+     so the ASCII render behind the page reads as the brightest element. */
+  --color-bg: #050505;
+  --color-bg-raised: #0b0b0d;
+  --color-fg: #ededed;
+  --color-fg-muted: #8a8a90;
+  --color-fg-faint: #55555c;
+  --color-line: #1c1c20;
+  /* Lewix brand gradient, sampled from the logomark. The accent was dragonfly's
+     orange until the real brand assets landed — these are the actual colours. */
+  --color-accent: #6880f2;
+  --color-accent-cyan: #67e1f9;
+  --color-accent-purple: #8151df;
+
+  /* Brand typefaces: Figtree for body/UI, Urbanist for display.
+     `--font-mono` is aliased to Figtree so any stray `font-mono` still lands on
+     brand rather than falling back to a system monospace. */
+  --font-sans: var(--font-sans-stack);
+  --font-display: var(--font-display-stack);
+  --font-mono: var(--font-sans-stack);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-bg);
+  /* Lenis drives scrolling; native smooth would fight it. */
+  scroll-behavior: auto;
+
+  /* Kills horizontal scroll from full-bleed decoration.
+   *
+   * Must be on `html`, not `body`: overflow set on body PROPAGATES to the
+   * viewport, and in that hand-off `clip` computed as `hidden` and the page
+   * still scrolled sideways — measured, scrollX reached 400. On html it
+   * applies to the viewport directly.
+   *
+   * `clip` rather than `hidden` so no scroll container is created and
+   * `position: sticky` descendants keep resolving against the viewport. */
+  overflow-x: clip;
+}
+
+body {
+  background: transparent;
+  color: var(--color-fg);
+  font-family: var(--font-sans-stack), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* The WebGL canvas is fixed at -z-10; this keeps a solid backdrop behind it
+   so no white flashes through before the first frame paints. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  background: var(--color-bg);
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #000;
+}
+
+/* Utilities -------------------------------------------------------------- */
+
+/* These MUST stay inside `@layer components`.
+ *
+ * Unlayered CSS beats every layered rule in the cascade, regardless of source
+ * order or specificity. Declared at the top level, `.eyebrow`'s colour silently
+ * overrode `text-accent` on any element carrying both classes — which is how
+ * every accent index number on the page (About's principles, Contact's process
+ * steps, the menu's active row) ended up rendering faint grey. Inside
+ * `components`, Tailwind's `utilities` layer comes later and wins. */
+@layer components {
+  /* Small caps label. Previously monospace; Figtree at heavier weight and wider
+     tracking keeps the same editorial rhythm while staying on-brand. */
+  .eyebrow {
+    font-family: var(--font-sans-stack), sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-fg-faint);
+  }
+
+  .rule {
+    height: 1px;
+    width: 100%;
+    background: var(--color-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Marquee ---------------------------------------------------------------- */
+
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee-track {
+  animation: marquee-scroll 38s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* Entrance motion --------------------------------------------------------- */
+
+/* Rises from behind a mask. The parent clips, the child starts fully below its
+   own box, so the text wipes up into place rather than fading. Used for
+   headlines, where a fade alone reads as nothing happening. */
+@keyframes mask-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mask-rise > span {
+  display: inline-block;
+  animation: mask-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Generic staggered entrance for blocks that replace each other in place, such
+   as the fields on each step of the brief. Re-keying the container restarts it. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mask-rise > span,
+  .rise-in {
+    animation: none;
+  }
+}
+
+/* Accordion --------------------------------------------------------------- */
+
+/* Animates <details> open/close without giving up the element.
+ *
+ * `details > *` is display:none while closed, so the usual height trick can't
+ * touch it. `::details-content` is the pseudo that CAN be animated, and
+ * `interpolate-size` is what makes `auto` a legal transition endpoint. Where
+ * either is unsupported the accordion simply snaps open, which is the same
+ * behaviour it had before — no fallback needed. */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    content-visibility 0.4s allow-discrete;
+}
+
+details[open]::details-content {
+  block-size: auto;
+}
+
+/* Live indicator ---------------------------------------------------------- */
+
+/* Slow breath, not a blink. A hard on/off reads as an alarm; this reads as
+   something ticking over. Disabled under prefers-reduced-motion by the global
+   rule above, which leaves a static dot — still legible as a status light. */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.72);
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* Brand gradient ---------------------------------------------------------- */
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #67e1f9 0%, #6880f2 55%, #8151df 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-gradient-rule {
+  background: linear-gradient(90deg, #67e1f9 0%, #6880f2 55%, #8151df 100%);
+}
+
+/* Legibility over the ASCII field, without an opaque panel. */
+.text-legible {
+  text-shadow:
+    0 1px 14px rgba(0, 0, 0, 0.95),
+    0 0 5px rgba(0, 0, 0, 0.9),
+    0 0 2px rgba(0, 0, 0, 0.85);
+}
