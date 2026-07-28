@@ -456,8 +456,20 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
 
-      const dpr = renderer.getPixelRatio();
-      sceneRT.setSize(w * dpr, h * dpr);
+      // CSS pixels, deliberately NOT multiplied by devicePixelRatio.
+      //
+      // This target only feeds the ascii pass, which samples roughly one texel
+      // per cell. Rendering the terrain at 2x on a Retina display resolves far
+      // more micro-relief in the surface normals, which spreads luminance out
+      // of the blank mid-tone band the holes depend on — so the same code lost
+      // its holes on a dpr-2 Mac while looking correct on a dpr-1 Windows
+      // machine. Measured: identical viewport, identical atlas scale of 1, only
+      // dpr differing.
+      //
+      // The visible canvas still renders at full device resolution, so glyph
+      // edges stay crisp. Only the luminance source is normalised. Also removes
+      // a 4x fragment cost on Retina.
+      sceneRT.setSize(w, h);
       asciiUniforms.uResolution.value.set(w, h);
       refit();
     }
