@@ -35,7 +35,19 @@ export function TeamCard({ member, index }: { member: TeamMember; index: number 
         )
       )}
 
-      <div className="aspect-square w-full overflow-hidden border border-line bg-[#0a0a0c]">
+      {/*
+        No fill and no border on the media slot.
+
+        It used to carry `bg-[#0a0a0c]` and `border border-line` against a
+        `#050505` page, which drew a visible lighter square around each model —
+        the ascii figure reads as sitting in a box rather than on the page. The
+        registration marks above already frame the card, so the box was doing
+        the same job twice and losing the float.
+
+        Photographs keep their own edges by being opaque, and the pending-asset
+        placeholder carries its own hatch, so neither needed the frame either.
+      */}
+      <div className="aspect-square w-full overflow-hidden">
         <MediaSlot member={member} />
       </div>
 
