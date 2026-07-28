@@ -528,7 +528,14 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
 
       // Slide the subject sideways by panning camera and target together along
       // the camera's own right axis, so it holds up once the orbit has rotated.
-      const pan = THREE.MathUtils.lerp(INTRO_PAN, 0, introEase) * modelRadius;
+      //
+      // Dropped entirely on narrow screens. The pan exists to clear the desktop
+      // hero lockup, which sits in the left half — but the mobile hero is
+      // full-width and stacked, so there is no side channel to clear. Applying
+      // it there just shoves the mountain into the bottom-right corner and
+      // crops most of it away, which is exactly how mobile was rendering.
+      const introPan = window.innerWidth < 640 ? 0 : INTRO_PAN;
+      const pan = THREE.MathUtils.lerp(introPan, 0, introEase) * modelRadius;
       if (pan !== 0) {
         viewDir.subVectors(lookTarget, camera.position).normalize();
         rightAxis.crossVectors(viewDir, camera.up).normalize();

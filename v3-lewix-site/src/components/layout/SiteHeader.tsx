@@ -156,10 +156,14 @@ export function SiteHeader() {
               Goes to the /contact route, not the homepage anchor or a mailto:
               the anchor shows the address, the route walks someone through an
               actual brief. */}
+          {/* Hidden below sm. Wordmark + both pills overflow a ~390px viewport,
+              and this one was getting clipped off the right edge. Nothing is
+              lost: the drawer this sits beside carries the same /contact link
+              plus the email and both founder numbers. */}
           <a
             href="/contact"
             onClick={() => setOpen(false)}
-            className={`rounded-full px-5 py-2.5 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors ${
+            className={`hidden rounded-full px-5 py-2.5 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors sm:inline-block ${
               dark
                 ? 'bg-[#0a0a0c] text-white hover:bg-accent'
                 : 'bg-white text-[#0a0a0c] hover:bg-accent hover:text-white'
