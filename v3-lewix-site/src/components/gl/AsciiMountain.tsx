@@ -10,60 +10,49 @@ import { quadVertex, meshVertex, meshFragment, asciiFragment } from './asciiShad
 import { setLoadProgress, setLoadReady, startReveal, subscribeLoad } from '@/lib/loadProgress';
 import { STAGE_END_VH, clamp01, smoothstep, stageProgress, track } from '@/lib/scrollStage';
 
-// dragonfly.xyz's own preset, verbatim — except granularity. See below.
+/**
+ * dragonfly.xyz's own preset, verbatim. The blanks are load-bearing.
+ *
+ *   ' * _<>,  ./O#SF +'
+ *    ^   ^     ^^    ^     blank glyphs at indices 0, 2, 7, 8, 15
+ *
+ * The shader picks a glyph by luminance (`floor(gray * (uCharactersLimit-1))`),
+ * so those blanks aren't only at the dark end of the ramp — they sit part-way
+ * up it. Any cell landing on one renders nothing, which is what punches the
+ * holes through the middle of the terrain. That negative space IS the look.
+ * Replacing the charset with a monotonic dark-to-light ramp closes the holes
+ * and turns the mountain into a solid mass.
+ */
 const CHARSET = ' * _<>,  ./O#SF +';
 const CHAR_LIMIT = 16;
 const FONT_SIZE = 72;
 
 /**
- * Target ascii cells spanning the mountain's on-screen width, at rest.
+ * Ascii cell size in CSS pixels. Flat and unscaled, exactly as dragonfly ships
+ * it (`uGranularity: 6`, confirmed from their production bundle) and paired
+ * with the shader's `division = uResolution / uGranularity`.
  *
- * dragonfly ships a flat, unscaled 6px cell (`uGranularity: 6`) against raw
- * viewport CSS pixels — confirmed straight from their bundle, and the shader
- * formula here (`division = uResolution / uGranularity`) is a faithful port
- * of theirs. That flat constant works for THEM because their camera holds a
- * fixed distance (z: 5, never recomputed) and only swaps FOV across a single
- * desktop/mobile breakpoint (11°/16° at 800px) — the subject's on-screen size
- * never drifts far from what was hand-tuned for each tier.
+ * DO NOT make this adaptive. A previous attempt derived it from the model's
+ * projected width to hold a constant CELL COUNT across aspect ratios, on the
+ * theory that a wide flat terrain plus a bounding-sphere camera fit made the
+ * subject's on-screen size drift. The arithmetic was right and the result was
+ * wrong, because it optimised the wrong quantity:
  *
- * Ours doesn't hold a fixed distance. `refit()` continuously re-solves
- * fitDistance from the model's bounding-sphere radius, and the terrain is
- * very wide and flat (radius ~500, only ~324 tall) — so as the viewport gets
- * narrower/taller, the width-fit term blows up and the camera backs off far
- * more than a wide desktop needs, just to keep the model's width in frame. A
- * flat cell size against a shrinking on-screen subject means fewer, chunkier
- * cells covering the same mountain. That's the inconsistency: the pixelation
- * shader is a correct port, the camera fit isn't dragonfly's, and a flat cell
- * size only looks consistent when the subject's on-screen size is itself held
- * constant — which dragonfly gets by fixing camera distance, and we don't.
+ *   constant cell COUNT  =>  cell SIZE grows with window width
+ *                            (6.0px at 1374 wide, ~7.7px at ~1900)
  *
- * Fix: derive cell size from the model's actual projected width at
- * fitDistance instead of the raw viewport, so a narrower/taller frame gets a
- * proportionally smaller cell and the SAME cell count still spans the
- * mountain, whatever the aspect ratio.
+ * and a larger cell draws a larger glyph, which fills more of its own cell.
+ * Past roughly 6px the characters stop reading as separate marks and merge
+ * into a solid grey mass — the exact opposite of the sparse, legible grain
+ * that makes this look right.
  *
- * 180 is not a round number picked by eye. It's the flat `granularity: 6`
- * math evaluated against lewix.ai in production — real Mac Chrome via
- * claude-in-chrome, not the emulated preview tool — at 1374×702 (dpr 1),
- * which is the actual reference window this was judged against. An earlier
- * pass calibrated against 1512×810 in the emulated browser instead (208
- * cells) and shipped visibly denser than production at the real comparison
- * size — the emulated tool's default viewport was never the right anchor.
- * If the reference window changes, recompute this the same way: open
- * whatever is the current ground truth in real Chrome and run the formula
- * below against its actual innerWidth/innerHeight, not an assumed size.
- *
- * Recomputed only in refit() — on load and on resize, not per animation
- * frame — so granularity stays flat during the scroll choreography itself:
- * the close-pass reveals detail and the pull-back hides it exactly like a
- * real halftone would. Only the resting, cross-device baseline is normalized.
+ * What has to stay constant is the GRAIN: glyph size, weight, and the amount
+ * of black between characters. That is a constant cell size, i.e. this. The
+ * number of cells spanning the mountain does vary with the window, and that
+ * is fine and correct — it is what "more of the same texture" looks like on a
+ * bigger screen, rather than "the same texture, scaled up".
  */
-const TARGET_CELLS_ACROSS = 180;
-
-// Cell-size bounds, in CSS px. Below MIN the glyphs outrun what the atlas can
-// render crisply; above MAX the mountain reads as a handful of giant blocks.
-const MIN_GRANULARITY = 3;
-const MAX_GRANULARITY = 9;
+const GRANULARITY = 6;
 
 /** Canvas opacity once the field is only a backdrop behind section copy. */
 const BACKDROP_OPACITY = 0.16;
@@ -140,7 +129,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       // Placeholder until refit() runs post-load with the model's real
       // on-screen size — matches what refit() converges to at 1512×810.
-      uGranularity: { value: 6 },
+      uGranularity: { value: GRANULARITY },
       uCharactersLimit: { value: CHAR_LIMIT },
       uFillPixels: { value: false },
       uOutProgress: { value: 0 },
@@ -179,16 +168,6 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       const fitH = modelRadius / Math.sin(vFov * 0.5);
       const fitW = modelRadius / Math.sin(Math.atan(Math.tan(vFov * 0.5) * camera.aspect));
       fitDistance = Math.max(fitH, fitW) * 0.62;
-
-      // Cell size from the model's actual projected width at fitDistance, not
-      // the raw viewport. See TARGET_CELLS_ACROSS for why.
-      const worldViewWidth = 2 * fitDistance * Math.tan(vFov * 0.5) * camera.aspect;
-      const onScreenWidthPx = ((modelRadius * 2) / worldViewWidth) * window.innerWidth;
-      asciiUniforms.uGranularity.value = THREE.MathUtils.clamp(
-        onScreenWidthPx / TARGET_CELLS_ACROSS,
-        MIN_GRANULARITY,
-        MAX_GRANULARITY
-      );
     }
 
     let disposed = false;
