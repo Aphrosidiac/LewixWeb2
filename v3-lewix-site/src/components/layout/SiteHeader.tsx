@@ -156,14 +156,12 @@ export function SiteHeader() {
               Goes to the /contact route, not the homepage anchor or a mailto:
               the anchor shows the address, the route walks someone through an
               actual brief. */}
-          {/* Hidden below sm. Wordmark + both pills overflow a ~390px viewport,
-              and this one was getting clipped off the right edge. Nothing is
-              lost: the drawer this sits beside carries the same /contact link
-              plus the email and both founder numbers. */}
+          {/* Kept at every width. Hiding it below sm was wrong — both pills do
+              fit a 390px viewport once the padding and type step down. */}
           <a
             href="/contact"
             onClick={() => setOpen(false)}
-            className={`hidden rounded-full px-5 py-2.5 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors sm:inline-block ${
+            className={`shrink-0 rounded-full px-3.5 py-2 text-[10px] font-medium tracking-[0.1em] uppercase transition-colors sm:px-5 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
               dark
                 ? 'bg-[#0a0a0c] text-white hover:bg-accent'
                 : 'bg-white text-[#0a0a0c] hover:bg-accent hover:text-white'
@@ -177,7 +175,7 @@ export function SiteHeader() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="site-menu"
-            className={`flex items-center gap-3 rounded-full border px-5 py-2.5 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors outline-none ${
+            className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[10px] font-medium tracking-[0.1em] uppercase transition-colors outline-none sm:gap-3 sm:px-5 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
               dark
                 ? 'border-[#0a0a0c]/20 text-[#0a0a0c] hover:border-[#0a0a0c]'
                 : 'border-white/40 text-white hover:border-white'
