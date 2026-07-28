@@ -54,6 +54,35 @@ const FONT_SIZE = 72;
  */
 const GRANULARITY = 6;
 
+/**
+ * Ascii cells the mountain should span at rest, enforced by camera distance
+ * rather than by cell size.
+ *
+ * The holes through the terrain come from blank glyphs sitting part-way up the
+ * brightness ramp (see CHARSET) — a cell whose luminance lands there draws
+ * nothing. Whether a cell lands there depends on how much terrain that cell
+ * covers: sample finer and you resolve more micro-relief in the surface
+ * normals, luminance spreads out of the blank mid-tone band, and the holes
+ * fill in.
+ *
+ * `refit()` sizes the camera so the model keeps a constant FRACTION of the
+ * viewport, which means a wider window makes it physically larger on screen and
+ * spans it with more cells. Measured: ~190 cells across at ~1390px wide, ~256
+ * at ~1920 — same code, same 6px cell, and the second one closes into a solid
+ * mass.
+ *
+ * Fixing this by growing the cell was the wrong lever and looked worse: it
+ * changes the grain, which is the one thing that must not move. Holding the
+ * model's on-screen SIZE instead keeps both — same 6px grain, same cell count
+ * over the terrain, same holes — at the cost of the mountain occupying less of
+ * a very large screen. That trade is exactly what dragonfly gets from its fixed
+ * camera distance.
+ *
+ * 190 is measured off the framing that was signed off, so this is a no-op at
+ * that size and only ever pulls the camera back on larger viewports.
+ */
+const TARGET_CELLS_ACROSS = 190;
+
 /** Canvas opacity once the field is only a backdrop behind section copy. */
 const BACKDROP_OPACITY = 0.16;
 /** ...and at the very bottom, where the footer has room to share the frame. */
@@ -168,6 +197,22 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       const fitH = modelRadius / Math.sin(vFov * 0.5);
       const fitW = modelRadius / Math.sin(Math.atan(Math.tan(vFov * 0.5) * camera.aspect));
       fitDistance = Math.max(fitH, fitW) * 0.62;
+
+      // Floor the distance so the model never spans more than
+      // TARGET_CELLS_ACROSS ascii cells. Derived from
+      //   onScreenPx = modelWidth * viewportH / (2 * d * tan(vFov/2))
+      // solved for d at onScreenPx = TARGET_CELLS_ACROSS * GRANULARITY. Note it
+      // falls out as a function of viewport HEIGHT only — widening a window
+      // genuinely shouldn't change how big the subject is, and that is the
+      // property the old aspect-driven fit was quietly breaking.
+      const targetPx = TARGET_CELLS_ACROSS * GRANULARITY;
+      const capDistance =
+        (modelRadius * 2 * window.innerHeight) / (2 * Math.tan(vFov * 0.5) * targetPx);
+
+      // max(), never min(): this only ever pulls the camera back on large
+      // viewports. Small and narrow ones keep whatever the bounding-sphere fit
+      // already gave them, so nothing below the reference size shifts.
+      fitDistance = Math.max(fitDistance, capDistance);
     }
 
     let disposed = false;
