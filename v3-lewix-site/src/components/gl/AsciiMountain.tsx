@@ -7,14 +7,63 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { CharacterAtlas } from './CharacterAtlas';
 import { MouseTrail } from './MouseTrail';
 import { quadVertex, meshVertex, meshFragment, asciiFragment } from './asciiShaders';
-import { setLoadProgress, setLoadReady, subscribeLoad } from '@/lib/loadProgress';
+import { setLoadProgress, setLoadReady, startReveal, subscribeLoad } from '@/lib/loadProgress';
 import { STAGE_END_VH, clamp01, smoothstep, stageProgress, track } from '@/lib/scrollStage';
 
-// dragonfly.xyz's own preset, verbatim.
+// dragonfly.xyz's own preset, verbatim — except granularity. See below.
 const CHARSET = ' * _<>,  ./O#SF +';
-const GRANULARITY = 6;
 const CHAR_LIMIT = 16;
 const FONT_SIZE = 72;
+
+/**
+ * Target ascii cells spanning the mountain's on-screen width, at rest.
+ *
+ * dragonfly ships a flat, unscaled 6px cell (`uGranularity: 6`) against raw
+ * viewport CSS pixels — confirmed straight from their bundle, and the shader
+ * formula here (`division = uResolution / uGranularity`) is a faithful port
+ * of theirs. That flat constant works for THEM because their camera holds a
+ * fixed distance (z: 5, never recomputed) and only swaps FOV across a single
+ * desktop/mobile breakpoint (11°/16° at 800px) — the subject's on-screen size
+ * never drifts far from what was hand-tuned for each tier.
+ *
+ * Ours doesn't hold a fixed distance. `refit()` continuously re-solves
+ * fitDistance from the model's bounding-sphere radius, and the terrain is
+ * very wide and flat (radius ~500, only ~324 tall) — so as the viewport gets
+ * narrower/taller, the width-fit term blows up and the camera backs off far
+ * more than a wide desktop needs, just to keep the model's width in frame. A
+ * flat cell size against a shrinking on-screen subject means fewer, chunkier
+ * cells covering the same mountain. That's the inconsistency: the pixelation
+ * shader is a correct port, the camera fit isn't dragonfly's, and a flat cell
+ * size only looks consistent when the subject's on-screen size is itself held
+ * constant — which dragonfly gets by fixing camera distance, and we don't.
+ *
+ * Fix: derive cell size from the model's actual projected width at
+ * fitDistance instead of the raw viewport, so a narrower/taller frame gets a
+ * proportionally smaller cell and the SAME cell count still spans the
+ * mountain, whatever the aspect ratio.
+ *
+ * 180 is not a round number picked by eye. It's the flat `granularity: 6`
+ * math evaluated against lewix.ai in production — real Mac Chrome via
+ * claude-in-chrome, not the emulated preview tool — at 1374×702 (dpr 1),
+ * which is the actual reference window this was judged against. An earlier
+ * pass calibrated against 1512×810 in the emulated browser instead (208
+ * cells) and shipped visibly denser than production at the real comparison
+ * size — the emulated tool's default viewport was never the right anchor.
+ * If the reference window changes, recompute this the same way: open
+ * whatever is the current ground truth in real Chrome and run the formula
+ * below against its actual innerWidth/innerHeight, not an assumed size.
+ *
+ * Recomputed only in refit() — on load and on resize, not per animation
+ * frame — so granularity stays flat during the scroll choreography itself:
+ * the close-pass reveals detail and the pull-back hides it exactly like a
+ * real halftone would. Only the resting, cross-device baseline is normalized.
+ */
+const TARGET_CELLS_ACROSS = 180;
+
+// Cell-size bounds, in CSS px. Below MIN the glyphs outrun what the atlas can
+// render crisply; above MAX the mountain reads as a handful of giant blocks.
+const MIN_GRANULARITY = 3;
+const MAX_GRANULARITY = 9;
 
 /** Canvas opacity once the field is only a backdrop behind section copy. */
 const BACKDROP_OPACITY = 0.16;
@@ -89,7 +138,9 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       tMouseTrail: { value: mouseTrail.texture },
       uCharactersTexture: { value: atlas.texture },
       uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-      uGranularity: { value: GRANULARITY },
+      // Placeholder until refit() runs post-load with the model's real
+      // on-screen size — matches what refit() converges to at 1512×810.
+      uGranularity: { value: 6 },
       uCharactersLimit: { value: CHAR_LIMIT },
       uFillPixels: { value: false },
       uOutProgress: { value: 0 },
@@ -128,6 +179,16 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       const fitH = modelRadius / Math.sin(vFov * 0.5);
       const fitW = modelRadius / Math.sin(Math.atan(Math.tan(vFov * 0.5) * camera.aspect));
       fitDistance = Math.max(fitH, fitW) * 0.62;
+
+      // Cell size from the model's actual projected width at fitDistance, not
+      // the raw viewport. See TARGET_CELLS_ACROSS for why.
+      const worldViewWidth = 2 * fitDistance * Math.tan(vFov * 0.5) * camera.aspect;
+      const onScreenWidthPx = ((modelRadius * 2) / worldViewWidth) * window.innerWidth;
+      asciiUniforms.uGranularity.value = THREE.MathUtils.clamp(
+        onScreenWidthPx / TARGET_CELLS_ACROSS,
+        MIN_GRANULARITY,
+        MAX_GRANULARITY
+      );
     }
 
     let disposed = false;
@@ -305,6 +366,33 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
         },
         get radius() {
           return modelRadius;
+        },
+        get granularity() {
+          return asciiUniforms.uGranularity.value;
+        },
+        get build() {
+          return asciiUniforms.uBuild.value;
+        },
+        get resolution() {
+          return asciiUniforms.uResolution.value.toArray();
+        },
+        get dpr() {
+          return renderer.getPixelRatio();
+        },
+        // rAF never fires at all in this automation-driven tab — confirmed:
+        // document.hidden stays true even after a CDP-dispatched click reports
+        // hasFocus true, and a canvas left to the normal animate() loop here
+        // painted zero frames (solid black, not merely stale). Flipping the
+        // load-state flags alone doesn't help, because nothing ever calls
+        // renderer.render() to go with them. Calling animate() directly forces
+        // one real pass through the exact same code the rAF loop runs —
+        // camera, uniforms, both render targets — with no separate rendering
+        // path to drift out of sync with production.
+        forceReady() {
+          asciiUniforms.uBuild.value = 1;
+          setLoadReady();
+          startReveal();
+          animate();
         },
       };
     }
