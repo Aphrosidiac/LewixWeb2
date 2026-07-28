@@ -84,9 +84,15 @@ export function TeamModels() {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    /** Layout viewport, matching AsciiMountain — see the note there for why
+     *  `window.innerWidth/innerHeight` is the wrong measurement on mobile. */
+    const viewport = () => ({ w: canvas.clientWidth, h: canvas.clientHeight });
+
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const initial = viewport();
+    // `false`: the canvas is sized by `fixed inset-0`, not by inline styles.
+    renderer.setSize(initial.w, initial.h, false);
     renderer.setScissorTest(true);
 
     const atlas = new CharacterAtlas(CHARSET, { fontSize: 72 });
@@ -260,9 +266,16 @@ export function TeamModels() {
     });
 
     function onResize() {
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      const { w, h } = viewport();
+      if (w === 0 || h === 0) return;
+      renderer.setSize(w, h, false);
     }
     window.addEventListener('resize', onResize);
+    // Rotation and mobile browser chrome don't reliably fire window `resize`.
+    const sizeObserver = new ResizeObserver(onResize);
+    sizeObserver.observe(canvas);
+    window.visualViewport?.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
 
     // Dev handle: tune framing live instead of reloading per guess.
     //   __team[0].cfg.yaw = 1.2
@@ -281,8 +294,7 @@ export function TeamModels() {
       renderer.clear();
       renderer.setScissorTest(true);
 
-      const vh = window.innerHeight;
-      const vw = window.innerWidth;
+      const { w: vw, h: vh } = viewport();
 
       entries.forEach((entry, i) => {
         const el = document.querySelector<HTMLElement>(`[data-team-slot="${entry.src}"]`);
@@ -331,6 +343,9 @@ export function TeamModels() {
       disposed = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+      window.visualViewport?.removeEventListener('resize', onResize);
+      sizeObserver.disconnect();
       entries.forEach((e) => {
         e.material.dispose();
         e.scene.traverse((o) => {
@@ -351,7 +366,7 @@ export function TeamModels() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-20 h-screen w-screen"
+      className="pointer-events-none fixed inset-0 z-20 h-full w-full"
     />
   );
 }

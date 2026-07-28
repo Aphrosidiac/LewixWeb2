@@ -104,12 +104,37 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    /**
+     * The LAYOUT viewport — the box `position: fixed; inset: 0` resolves
+     * against, and therefore the only size this canvas can actually occupy.
+     *
+     * Deliberately NOT `window.innerWidth/innerHeight`. Measured on the
+     * deployed site in a mobile viewport: `documentElement.clientWidth` read
+     * 375 while `window.innerWidth` read 538, and `visualViewport` agreed with
+     * the former. Sizing the renderer off `innerWidth` left the ascii pass
+     * drawing into a region that stopped short of the right and bottom edges,
+     * with page-black beyond a hard seam — the terrain looked cropped to a
+     * rectangle rather than filling the screen.
+     *
+     * The two disagree on mobile for more than one reason (iOS Safari moves
+     * `innerHeight` as the URL bar collapses; a pinch-zoomed page moves it
+     * again), so this is not a browser quirk to special-case — `innerWidth` is
+     * simply not the quantity being asked for.
+     */
+    const viewport = () => ({ w: canvas.clientWidth, h: canvas.clientHeight });
+
+    const initial = viewport();
+
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    // `false` = don't write inline width/height styles onto the canvas. The
+    // element is already sized by `fixed inset-0`; letting three.js also set
+    // pixel styles gives two sources of truth that drift apart the moment the
+    // layout viewport changes without a matching resize event.
+    renderer.setSize(initial.w, initial.h, false);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(35, initial.w / initial.h, 0.1, 100);
     const modelGroup = new THREE.Group();
     scene.add(modelGroup);
 
@@ -143,7 +168,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       side: THREE.DoubleSide,
     });
 
-    const sceneRT = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
+    const sceneRT = new THREE.WebGLRenderTarget(initial.w, initial.h, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
     });
@@ -155,7 +180,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       tDiffuse: { value: sceneRT.texture },
       tMouseTrail: { value: mouseTrail.texture },
       uCharactersTexture: { value: atlas.texture },
-      uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+      uResolution: { value: new THREE.Vector2(initial.w, initial.h) },
       // Placeholder until refit() runs post-load with the model's real
       // on-screen size — matches what refit() converges to at 1512×810.
       uGranularity: { value: GRANULARITY },
@@ -225,7 +250,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       // property the old aspect-driven fit was quietly breaking.
       const targetPx = TARGET_CELLS_ACROSS * GRANULARITY;
       const capDistance =
-        (modelRadius * 2 * window.innerHeight) / (2 * Math.tan(vFov * 0.5) * targetPx);
+        (modelRadius * 2 * viewport().h) / (2 * Math.tan(vFov * 0.5) * targetPx);
 
       // max(), never min(): this only ever pulls the camera back on large
       // viewports. Small and narrow ones keep whatever the bounding-sphere fit
@@ -299,7 +324,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     const pointerCurrent = new THREE.Vector2(0, 0);
 
     function onPointerMove(e: PointerEvent) {
-      pointerUv.set(e.clientX / window.innerWidth, 1 - e.clientY / window.innerHeight);
+      pointerUv.set(e.clientX / viewport().w, 1 - e.clientY / viewport().h);
       mouseTrail.push(pointerUv);
       pointerTarget.set(pointerUv.x * 2 - 1, pointerUv.y * 2 - 1);
     }
@@ -464,10 +489,17 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       lastScrollY = scrollY;
     }
 
+    let sizedW = initial.w;
+    let sizedH = initial.h;
+
     function onResize() {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      renderer.setSize(w, h);
+      const { w, h } = viewport();
+      if (w === 0 || h === 0) return;
+      if (w === sizedW && h === sizedH) return;
+      sizedW = w;
+      sizedH = h;
+
+      renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
 
@@ -501,6 +533,23 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
 
+    /**
+     * A `resize` listener alone is not enough on mobile.
+     *
+     * The layout viewport changes on rotation, on the URL bar collapsing, and
+     * when a browser chrome overlay opens or closes — and those do not all fire
+     * a window `resize`. Observing the element the canvas is sized against
+     * catches every one of them, whatever the cause, and the guard in
+     * `onResize()` makes the extra calls free when nothing actually moved.
+     *
+     * `visualViewport` is listened to as well because Safari reports some of
+     * these there and nowhere else.
+     */
+    const sizeObserver = new ResizeObserver(onResize);
+    sizeObserver.observe(canvas);
+    window.visualViewport?.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+
     // --- loop ---
     const clock = new THREE.Clock();
     let raf = 0;
@@ -513,7 +562,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       // upward-facing normals while this sits at 1.
       meshUniforms.uReveal.value = THREE.MathUtils.damp(meshUniforms.uReveal.value, 0, 1.4, dt);
 
-      const vh = window.innerHeight;
+      const vh = viewport().h;
       const maxScroll = Math.max(document.documentElement.scrollHeight - vh, 1);
       const introEnd = vh * INTRO_VH;
       const stageEnd = vh * STAGE_END_VH;
@@ -549,7 +598,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       // full-width and stacked, so there is no side channel to clear. Applying
       // it there just shoves the mountain into the bottom-right corner and
       // crops most of it away, which is exactly how mobile was rendering.
-      const introPan = window.innerWidth < 640 ? 0 : INTRO_PAN;
+      const introPan = viewport().w < 640 ? 0 : INTRO_PAN;
       const pan = THREE.MathUtils.lerp(introPan, 0, introEase) * modelRadius;
       if (pan !== 0) {
         viewDir.subVectors(lookTarget, camera.position).normalize();
@@ -630,6 +679,9 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+      window.visualViewport?.removeEventListener('resize', onResize);
+      sizeObserver.disconnect();
 
       mouseTrail.dispose();
       atlas.dispose();
@@ -649,7 +701,12 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10 h-screen w-screen"
+      /* `inset-0` alone. `h-screen`/`w-screen` are 100vh/100vw, which is a
+         different box from the one the drawing buffer is now sized against:
+         100vw ignores the scrollbar, and 100vh on iOS is the URL-bar-hidden
+         height the page does not currently have. Either mismatch stretches the
+         render across a canvas of the wrong size. */
+      className="pointer-events-none fixed inset-0 -z-10 h-full w-full"
     />
   );
 }
