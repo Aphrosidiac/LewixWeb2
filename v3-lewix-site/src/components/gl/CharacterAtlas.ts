@@ -26,6 +26,40 @@ const CELL_PADDING = 2;
 const FONT_STACK =
   'Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", "Courier New", monospace';
 
+/**
+ * Mean ink coverage, over the charset's NON-BLANK glyphs, that the atlas is
+ * normalised to. Fraction of a cell's pixels carrying ink, averaged.
+ *
+ * This is the one thing about the atlas that is genuinely platform-dependent,
+ * and it is what made the same build read completely differently on two
+ * machines. `FONT_STACK` resolves to a different face per OS, and the faces do
+ * not carry the same weight. Measured off the live site at an identical
+ * 1920-wide dpr-1 viewport, per glyph, as covered-pixel fraction:
+ *
+ *            *      #      O      S      F      /
+ *   Menlo   .178   .281   .260   .229   .195   .130     (macOS)
+ *   Consolas.107   .207   .214   .173   .147   .108     (Windows)
+ *
+ * Menlo runs ~34% heavier across the ramp. The shader draws one glyph per ~6px
+ * cell, so that extra ink is the difference between marks that read as separate
+ * dots with black between them and marks that touch their neighbours and close
+ * into a continuous grey hatch. Same cell size, same cell count, same charset,
+ * same dpr — only the weight of the ink differs.
+ *
+ * Normalising WEIGHT rather than switching to a bundled webfont is deliberate:
+ * this number IS the Consolas profile, so on Windows the correction solves to
+ * ~1.0 and that render — the one that was signed off — does not move at all.
+ * Only platforms that resolve a heavier face are pulled onto it.
+ *
+ * Note this scales the glyph, not the cell. GRANULARITY stays at 6 and the cell
+ * count over the terrain is untouched; the grain keeps its spacing and only the
+ * mark inside each cell gets back to the right weight.
+ */
+const TARGET_MEAN_INK = 0.1166;
+
+/** Ink-coverage alpha above which a pixel counts as inked. */
+const INK_ALPHA = 8;
+
 export interface AtlasOptions {
   characters?: string;
   fontSize?: number;
@@ -46,7 +80,10 @@ export class CharacterAtlas {
     canvas.width = ATLAS_SIZE;
     canvas.height = ATLAS_SIZE;
 
-    const ctx = canvas.getContext('2d');
+    // `willReadFrequently` because the weight normalisation reads every cell
+    // back once per pass; without it Chrome keeps the surface on the GPU and
+    // each getImageData pays a full readback.
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) throw new Error('CharacterAtlas: could not acquire a 2D context');
     this.ctx = ctx;
 
@@ -90,7 +127,6 @@ export class CharacterAtlas {
     const { ctx } = this;
     if (characters) this.characters = characters;
 
-    ctx.clearRect(0, 0, ATLAS_SIZE, ATLAS_SIZE);
     ctx.fillStyle = 'white';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
@@ -110,10 +146,50 @@ export class CharacterAtlas {
     // Only ever shrink. If the font already fits, the atlas is byte-identical
     // to the old one, so nothing changes on the platform this was tuned against.
     const budget = CELL - CELL_PADDING * 2;
-    const scale = maxInk > 0 ? Math.min(1, budget / maxInk) : 1;
-    ctx.font = `${fontSize * scale}px ${fontFamily}`;
+    const fitScale = maxInk > 0 ? Math.min(1, budget / maxInk) : 1;
+    const fitSize = fontSize * fitScale;
 
-    // Pass 2 — draw each glyph centred on its own ink box, clipped to its cell.
+    /**
+     * Pass 2 — paint, then pull the glyph weight onto TARGET_MEAN_INK.
+     *
+     * Ink area goes roughly with the square of the type size, so
+     * `sqrt(target / measured)` lands close on the first correction and the
+     * loop is only there to absorb the part that isn't quadratic (hinting,
+     * stem snapping, the padding). Two or three passes is convergence to well
+     * under a pixel; it runs once at startup on a 1024² canvas.
+     *
+     * Never allowed above `fitSize`: pass 1's guarantee that ink stays inside
+     * its own cell has to survive this, or spill lands in the blank tiles
+     * through RepeatWrapping and takes the holes with it.
+     */
+    let size = fitSize;
+    let ink = this.paint(chars, size, fontFamily);
+
+    for (let pass = 0; pass < 3 && ink > 0; pass++) {
+      const next = Math.min(size * Math.sqrt(TARGET_MEAN_INK / ink), fitSize);
+      if (Math.abs(next - size) < 0.2) break;
+      size = next;
+      ink = this.paint(chars, size, fontFamily);
+    }
+
+    this.texture.needsUpdate = true;
+  }
+
+  /**
+   * Draws the whole charset at `size` and returns the mean ink coverage of its
+   * non-blank glyphs, as a fraction of a cell.
+   *
+   * Blanks are excluded from the average on purpose — they contribute a
+   * guaranteed zero, so including them would just scale the measurement by
+   * however many blanks the charset happens to carry and make TARGET_MEAN_INK
+   * a function of the charset rather than of the font.
+   */
+  private paint(chars: string[], size: number, fontFamily: string): number {
+    const { ctx } = this;
+
+    ctx.clearRect(0, 0, ATLAS_SIZE, ATLAS_SIZE);
+    ctx.font = `${size}px ${fontFamily}`;
+
     chars.forEach((char, i) => {
       const cellX = (i % GRID) * CELL;
       const cellY = Math.floor(i / GRID) * CELL;
@@ -139,7 +215,23 @@ export class CharacterAtlas {
       ctx.restore();
     });
 
-    this.texture.needsUpdate = true;
+    let total = 0;
+    let counted = 0;
+
+    chars.forEach((char, i) => {
+      if (char === ' ') return;
+      const cellX = (i % GRID) * CELL;
+      const cellY = Math.floor(i / GRID) * CELL;
+      const { data } = ctx.getImageData(cellX, cellY, CELL, CELL);
+
+      let inked = 0;
+      for (let p = 3; p < data.length; p += 4) if (data[p] > INK_ALPHA) inked++;
+
+      total += inked / (CELL * CELL);
+      counted++;
+    });
+
+    return counted > 0 ? total / counted : 0;
   }
 
   dispose() {

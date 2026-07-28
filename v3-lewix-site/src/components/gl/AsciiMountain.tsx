@@ -393,12 +393,27 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
 
     // Live handle for tuning the shot against a real viewport. Mutating the
     // arrays takes effect on the next frame.
-    if (process.env.NODE_ENV !== 'production') {
+    //
+    // Also reachable on the deployed site via `?mtn=1`, opt-in and inert
+    // otherwise. This look has to be identical on machines that can only be
+    // compared through production: the two dev boxes are on different networks,
+    // so neither can load the other's dev server, and lewix.ai is the only
+    // surface both can open. Diagnosing a divergence from screenshots alone —
+    // with no read on the render target, the fitted distance or the glyph ramp —
+    // is guesswork, and this look has already cost several reverted guesses.
+    const debugRequested =
+      typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('mtn');
+
+    if (process.env.NODE_ENV !== 'production' || debugRequested) {
       (window as unknown as { __mtn: unknown }).__mtn = {
         STAGE,
         camera,
         scene,
         modelGroup,
+        renderer,
+        sceneRT,
+        asciiUniforms,
+        atlas,
         THREE,
         get fit() {
           return fitDistance;
