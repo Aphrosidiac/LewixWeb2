@@ -194,8 +194,26 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
 
     function refit() {
       const vFov = THREE.MathUtils.degToRad(camera.fov);
+
+      // Aspect floored at 1 for the WIDTH fit only.
+      //
+      // The terrain is 1000 units wide and ~324 tall. Fitting its full width
+      // into a portrait viewport shoves the camera back hard — measured 1953
+      // at 409x802, against 1237 on desktop — which leaves the mountain tiny,
+      // spans it with only ~109 cells instead of 190, and stops the on-screen
+      // size cap below from ever engaging. Coarser cells cover more terrain
+      // each, luminance stops landing in the blank mid-tone band, and the holes
+      // vanish. Same root cause as the desktop case, approached from the other
+      // side.
+      //
+      // Desktop already crops the terrain horizontally rather than fitting it,
+      // so doing the same on narrow screens is consistent, not a special case.
+      // With this floor a portrait viewport lands on exactly the same 190 cells
+      // as desktop, and landscape is untouched (aspect is already >= 1 there).
+      const fitAspect = Math.max(camera.aspect, 1);
+
       const fitH = modelRadius / Math.sin(vFov * 0.5);
-      const fitW = modelRadius / Math.sin(Math.atan(Math.tan(vFov * 0.5) * camera.aspect));
+      const fitW = modelRadius / Math.sin(Math.atan(Math.tan(vFov * 0.5) * fitAspect));
       fitDistance = Math.max(fitH, fitW) * 0.62;
 
       // Floor the distance so the model never spans more than
