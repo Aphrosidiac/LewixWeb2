@@ -308,10 +308,30 @@ export function TeamModels() {
         // through 360°, so it never sits on a silhouette that reads as nothing
         // (a dragon end-on, a katana edge-on).
         const cfg = VIEW[entry.src.split('/').pop() ?? ''] ?? DEFAULT_VIEW;
-        // Continuous 360°. `yaw` is now the starting offset — it still decides
-        // which face you see first (and holds that face under reduced-motion),
-        // but the model turns all the way through.
-        entry.pivot.rotation.y = reduced ? cfg.yaw : cfg.yaw + t * 0.32 + i * 1.9;
+        /**
+         * `yaw` is the angle the model READS at, and the swing stays near it.
+         *
+         * This was a continuous 360° turn, which meant every model spent part
+         * of each revolution on a silhouette that says nothing: the dragon
+         * end-on collapses into a lump with its head hidden behind its own
+         * body, and the katana edge-on is a pair of hairlines. Sampled the
+         * dragon around the full turn — at 0.01 rad the head, snout and a
+         * foreleg all read; by 4.46 it is an unrecognisable blob. A 360° spin
+         * guarantees the bad angles get equal screen time.
+         *
+         * SWING is deliberately under a radian. Enough that the models are
+         * clearly alive and the light moves across them, small enough that the
+         * subject never turns away from the angle it was framed for.
+         *
+         * `i * 1.9` moves from the angle to the PHASE, so the three cards drift
+         * out of step with each other instead of rocking in unison — which is
+         * what it was really buying, and it no longer costs each model its
+         * framing to get it.
+         */
+        const SWING = 0.5;
+        entry.pivot.rotation.y = reduced
+          ? cfg.yaw
+          : cfg.yaw + Math.sin(t * 0.28 + i * 1.9) * SWING;
         entry.pivot.rotation.x = cfg.pitch;
 
         // Pass 1: the model, into the shared render target.
