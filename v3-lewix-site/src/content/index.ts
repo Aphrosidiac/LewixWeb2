@@ -45,4 +45,5 @@ export {
   contactBrief,
   contactForm,
   contactLabels,
+  pricing,
 } from "./site";

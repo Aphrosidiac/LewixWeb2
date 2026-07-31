@@ -299,12 +299,41 @@ export const contactForm = {
   ],
   budgetRanges: [
     { value: "", label: "Select a range" },
-    { value: "5k-10k", label: "RM 5,000 - RM 10,000" },
+    // Floored at `pricing.amount`. A band opening below the starting price
+    // invites a budget we would only have to turn down.
+    { value: "8k-10k", label: "RM 8,000 - RM 10,000" },
     { value: "10k-25k", label: "RM 10,000 - RM 25,000" },
     { value: "25k-50k", label: "RM 25,000 - RM 50,000" },
     { value: "50k+", label: "RM 50,000+" },
   ],
   submitLabel: "Send Message",
+} as const;
+
+/* ------------------------------------------------------------------ */
+/* Pricing                                                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The starting price, stated openly.
+ *
+ * This is the single source for the figure — the Contact section, the brief's
+ * budget bands and the pricing FAQ all read from here, so the number cannot end
+ * up quoted three different ways.
+ *
+ * It is on the page deliberately. Studios in this market almost universally
+ * withhold a number until a discovery call, which costs a prospect a meeting
+ * just to learn whether they are in the right room at all. Publishing the floor
+ * is the advantage: it qualifies people in or out before anybody spends time,
+ * and a competitor who won't say cannot match it without also saying.
+ *
+ * `amount` is the FLOOR, not an estimate — the language must stay "starts at"
+ * and must never imply a typical or average project lands here.
+ */
+export const pricing = {
+  eyebrow: "Pricing",
+  amount: "RM 8,000",
+  label: "Starting price",
+  note: "Most won't quote before a meeting. This is where a production system starts, so you know before you write to us whether we're the right people to be talking to.",
 } as const;
 
 /**

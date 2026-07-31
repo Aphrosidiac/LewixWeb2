@@ -100,7 +100,8 @@ export const briefSteps: readonly BriefStep[] = [
         type: 'select',
         options: [
           'Not sure yet',
-          'RM 5,000 – RM 10,000',
+          // Floored at the published starting price — see `pricing` in site.ts.
+          'RM 8,000 – RM 10,000',
           'RM 10,000 – RM 25,000',
           'RM 25,000 – RM 50,000',
           'RM 50,000+',
@@ -114,11 +115,17 @@ export const briefSteps: readonly BriefStep[] = [
  * Answers are drawn from `process`, `principles` and the About story so the page
  * can't drift from what the rest of the site says.
  *
- * TODO: pricing model, NDAs and current availability are the three questions
- * prospects ask most, and all three need a decision from Lewix before they can
- * be answered here.
+ * Pricing is answered below, from the `pricing` figure in site.ts rather than a
+ * number retyped here.
+ *
+ * TODO: NDAs and current availability are the other two questions prospects ask
+ * most, and both still need a decision from Lewix before they can be answered.
  */
 export const faqs = [
+  {
+    q: 'What does it cost?',
+    a: 'Projects start at RM 8,000. That is a floor rather than an average — what a system actually costs depends on how much of the operation it has to cover — but it is a real number, and we would rather you had it before spending an hour on a call finding out.',
+  },
   {
     q: 'What do you actually build?',
     a: 'The operational software a business runs on: inventory, invoicing, dispatch, production scheduling. The systems that stop the company when they stop. Not marketing sites.',

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Section } from './Section';
 import { LocalTime } from '@/components/layout/LocalTime';
-import { contact, contactBrief, site, process as processSteps } from '@/content';
+import { contact, contactBrief, pricing, site, process as processSteps } from '@/content';
 
 // Numbers match the section headers and the header's counter, so the footer
 // speaks the same index language as the rest of the page.
@@ -34,6 +34,29 @@ export function Contact() {
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-fg-muted sm:text-base">
           {contact.intro}
         </p>
+
+        {/*
+          The starting price, above the fold of the section and before the
+          address rather than buried in an FAQ.
+
+          It sits here because it does the same job as the headline: it tells
+          someone whether to keep reading. A figure only findable on a
+          question-and-answer page is one most people leave without, which is
+          the situation every competitor withholding a number is already in.
+
+          The rule and the accent set it apart from the intro copy without
+          making it a banner — it should read as a stated fact, not a promotion.
+        */}
+        <div className="mt-10 border-t border-line pt-6">
+          <p className="eyebrow">{pricing.eyebrow}</p>
+          <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="font-display font-semibold text-3xl tracking-tight text-accent sm:text-4xl">
+              From {pricing.amount}
+            </span>
+            <span className="eyebrow">{pricing.label}</span>
+          </p>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-fg-muted">{pricing.note}</p>
+        </div>
       </div>
 
       <div className="mt-16 grid gap-14 sm:mt-20 sm:grid-cols-12 sm:gap-10">
