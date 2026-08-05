@@ -4,11 +4,29 @@ import { Reveal } from '@/components/layout/Reveal';
 import { HeadlineReveal } from '@/components/contact/HeadlineReveal';
 import { LocalTime } from '@/components/layout/LocalTime';
 import { contactPage, faqs } from '@/content/contactPage';
-import { contact, metadata as siteMeta, site } from '@/content';
+import { contact, pricing, metadata as siteMeta, site } from '@/content';
+import { JsonLd, faqSchema } from '@/lib/schema';
 
+/**
+ * The title no longer appends the brand by hand: the root layout's
+ * `title.template` does it, so writing "Start a project · LEWIX" here would
+ * render "Start a project · LEWIX · LEWIX".
+ *
+ * The description was `contactPage.intro`, which describes the form ("Three
+ * steps, then a review...") rather than the page. Nobody searches for a form.
+ * This leads with the pricing floor, which is the actual reason to click and
+ * the one thing on the page competitors in this market do not publish.
+ */
 export const metadata: Metadata = {
-  title: `Start a project · ${siteMeta.openGraph.siteName}`,
-  description: contactPage.intro,
+  title: 'Start a project',
+  description: `What a custom business system costs and how a build starts. Projects with ${siteMeta.openGraph.siteName} start at ${pricing.amount}. Replies within 24 hours, from a founder.`,
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    title: `Start a project · ${siteMeta.openGraph.siteName}`,
+    description: `${pricing.note} ${contact.intro}`,
+    url: '/contact',
+    type: 'website',
+  },
 };
 
 /**
@@ -27,6 +45,15 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main>
+      {/*
+        The seven questions further down this page are already written as
+        complete, self-contained answers, which is the exact shape an answer
+        engine can quote without paraphrasing. Marking them up as FAQPage is
+        the highest-leverage schema on the site: "What does it cost?" answered
+        with a real number is something almost nobody else in this market
+        publishes at all.
+      */}
+      <JsonLd data={faqSchema()} />
       <Reveal />
 
       {/* `data-light-surface` tells SiteHeader to invert. Without it the white

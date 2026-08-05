@@ -64,19 +64,104 @@ export const site = {
   copyrightHolder: "Lewix AI Sdn Bhd",
 } as const;
 
+/**
+ * Search + social metadata.
+ *
+ * Rewritten 2026-08-06. What was here before was ported from the v1 site and
+ * had gone stale in three separate ways:
+ *
+ *  1. "We Engineer Systems That Run Businesses" predates the brand work in
+ *     `~/Desktop/dev/LewixSocials` and contradicts the locked tagline.
+ *  2. The description was 108 characters, which is short enough that Google
+ *     stopped trusting it and started splicing page text onto the end. The
+ *     live SERP snippet read "...need to move fast. +60 10-280 8533Lewis",
+ *     because the next crawlable text after the intro is the header's
+ *     WhatsApp line. A description in the 150-160 range gets used verbatim.
+ *  3. `openGraph` was never wired into `app/layout.tsx` — it only ever read
+ *     `title` and `description`, so the site shipped with zero og:* tags and
+ *     every share rendered as a bare link.
+ *
+ * Two titles on purpose. `title` is the search title and leads with what
+ * someone actually types into Google, since the brand has no search volume
+ * yet. `openGraph.title` is the share title, where the audience already knows
+ * who LEWIX is and the locked tagline is the stronger line.
+ *
+ * Copy rules from the brand guidelines apply here as everywhere: no em
+ * dashes, and no project tallies.
+ */
 export const metadata = {
-  title: "LEWIX · We Engineer Systems That Run Businesses",
+  /** Search title. 54 chars, inside Google's ~580px desktop cut. */
+  title: "Custom ERP and Software Development in Malaysia · LEWIX",
+  /** Applied to every route except the home page, which uses `title` above. */
+  titleTemplate: "%s · LEWIX",
+  /**
+   * 156 chars. Self-contained by design: it names the company, the work, the
+   * market and the price, so there is no gap for Google to fill from the page.
+   */
   description:
-    "Lewix.ai builds production-grade systems, ERPs, and web applications for businesses that need to move fast.",
-  keywords: ["software engineering", "ERP", "web development", "AI", "systems"],
+    "LEWIX builds the operational software Malaysian businesses run on: custom ERPs, logistics platforms and AI agents. Production, not prototypes. From RM 8,000.",
+  /**
+   * Google has ignored this since 2009; Bing and several AI crawlers still
+   * read it. Cheap to keep accurate, so it names real services rather than
+   * the previous one-word abstractions.
+   */
+  keywords: [
+    "custom ERP Malaysia",
+    "software development Malaysia",
+    "inventory management system",
+    "logistics software",
+    "business systems",
+    "AI agents",
+    "custom software development",
+    "SQL Account integration",
+  ],
   openGraph: {
-    title: "LEWIX · We Engineer Systems That Run Businesses",
+    /** The locked tagline from LewixSocials/03-Quick-Reference/bio-copy.md. */
+    title: "LEWIX · Transcending the Industry",
+    /**
+     * The locked LinkedIn About opening, verbatim. Deliberately not the same
+     * as the search description: a share card is read by someone who already
+     * clicked, so it can afford the positioning line over the keywords.
+     */
     description:
-      "Production-grade systems for businesses that need to move fast.",
+      "We build the systems real businesses run on: logistics platforms tracking deliveries in real time, ERPs handling live inventory, AI agents that don't sleep. Not demos. Not prototypes. Production.",
     url: "https://lewix.ai",
     siteName: "LEWIX",
     type: "website",
+    locale: "en_MY",
   },
+} as const;
+
+/**
+ * Public profiles, used for the `sameAs` array in the Organization schema.
+ *
+ * `sameAs` is one of the few things that lets a search engine or an LLM tie
+ * "LEWIX" the string to LEWIX the company rather than guessing, so this is
+ * worth completing. Per `LewixSocials`, live profiles exist on LinkedIn,
+ * Threads, Instagram and TikTok. X was deliberately skipped.
+ *
+ * TODO: fill in the four real URLs. Empty strings are filtered out before the
+ * schema is emitted, so a partial list is safe to ship.
+ */
+export const socialProfiles = {
+  linkedin: "",
+  instagram: "",
+  threads: "",
+  tiktok: "",
+} as const;
+
+/**
+ * Registered company identifiers, from the LinkedIn About block in
+ * `LewixSocials/03-Quick-Reference/bio-copy.md`. Emitted as schema
+ * identifiers because a real registration number is strong corroboration
+ * that the entity exists.
+ */
+export const registration = {
+  companyNo: "202601027756",
+  oldFormat: "1689852-D",
+  foundingDate: "2026",
+  addressCountry: "MY",
+  addressLocality: "Kuala Lumpur",
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -105,6 +190,16 @@ export const footerEmail = {
 /* ------------------------------------------------------------------ */
 
 export const hero = {
+  /**
+   * The document h1, rendered screen-reader-only behind the wordmark image.
+   *
+   * Was the single word "LEWIX", which is the whole brand signal and none of
+   * the topic signal, on the one page that most needs the topic signal. This
+   * names the company, the work and the market in one line. It is not the
+   * `<title>` verbatim on purpose: repeating the title exactly wastes the
+   * second-strongest on-page slot the site has.
+   */
+  h1: "LEWIX builds custom ERPs, logistics platforms and AI agents for Malaysian businesses",
   /**
    * Hero kicker. Taken from the official brand board
    * (`public/brand/lewix-brand-preview.jpg`) — sharper and more specific than

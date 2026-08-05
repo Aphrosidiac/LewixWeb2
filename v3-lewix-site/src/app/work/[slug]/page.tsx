@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { caseStudies, getCaseStudy, caseStudyPageCopy } from '@/content';
+import { JsonLd, caseStudySchema } from '@/lib/schema';
 
 export function generateStaticParams() {
   return caseStudies.map((study) => ({ slug: study.slug }));
@@ -16,8 +17,26 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const study = getCaseStudy(slug);
-  if (!study) return {};
-  return { title: `${study.title} · LEWIX`, description: study.description };
+  // Explicitly noindex the miss rather than returning `{}`. Without this the
+  // 404 inherits the root layout's `index: true` and its canonical of `/`,
+  // which points every bad /work/* URL at the home page.
+  if (!study) return { title: 'Project not found', robots: { index: false, follow: false } };
+
+  return {
+    // The brand suffix comes from the root layout's `title.template` now.
+    // Leading with the client and the system type rather than just the
+    // product name: "Girpack" alone means nothing in a search result, and
+    // these four titles were otherwise near-identical to each other.
+    title: `${study.title}: ${study.type} for ${study.client}`,
+    description: study.description,
+    alternates: { canonical: `/work/${study.slug}` },
+    openGraph: {
+      title: `${study.title} · ${study.type}`,
+      description: study.description,
+      url: `/work/${study.slug}`,
+      type: 'article',
+    },
+  };
 }
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,6 +46,13 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <main className="px-6 pt-32 pb-24 sm:px-10">
+      {/*
+        CreativeWork plus BreadcrumbList. The breadcrumb matters more than it
+        looks: these pages are three levels deep with no /work index above
+        them, so without it a search result shows the bare URL path instead of
+        a Home > Work > Girpack trail.
+      */}
+      <JsonLd data={caseStudySchema(study.slug)} />
       <article className="mx-auto w-full max-w-4xl">
         <Link href="/#work" className="eyebrow transition-colors hover:text-accent">
           &larr; {caseStudyPageCopy.backLabel}

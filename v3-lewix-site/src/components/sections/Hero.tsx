@@ -16,7 +16,19 @@ export function Hero() {
       {/* Vertically centred, left-aligned. The mountain starts panned right so
           it fills the space beside this rather than sitting under it. */}
       <div className="pointer-events-none flex flex-1 flex-col justify-center">
-        <h1 className="sr-only">{site.wordmark}</h1>
+        {/*
+          The h1 stays screen-reader-only, because the visible lockup is the
+          wordmark image and putting a sentence there would break the design.
+          But it no longer says just "LEWIX".
+
+          A one-word h1 tells a crawler nothing about what the page is for,
+          and this is the only h1 on the site's most important URL: every
+          other heading here is a section label ("About", "Work", "Contact").
+          `sr-only` clips the element rather than hiding it, so the text is
+          still counted; `alt=""` on the wordmark below is correct precisely
+          because this line now carries the meaning.
+        */}
+        <h1 className="sr-only">{hero.h1}</h1>
         {/* Sized so the mountain stays the hero. Wider share on small screens,
             where a percentage-only cap would render it tiny. */}
         <Image

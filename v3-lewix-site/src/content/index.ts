@@ -31,6 +31,8 @@ export type { NavItem, Stat, WhatsAppContact } from "./site";
 export {
   site,
   metadata,
+  socialProfiles,
+  registration,
   navItems,
   footerLinks,
   footerEmail,
