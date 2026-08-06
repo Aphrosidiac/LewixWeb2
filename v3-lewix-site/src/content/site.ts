@@ -90,8 +90,20 @@ export const site = {
  * dashes, and no project tallies.
  */
 export const metadata = {
-  /** Search title. 54 chars, inside Google's ~580px desktop cut. */
-  title: "Custom ERP and Software Development in Malaysia · LEWIX",
+  /**
+   * Search title. 54 chars, inside Google's ~580px desktop cut.
+   *
+   * Brand first, deliberately. The keyword-leading version of this line
+   * ("Custom ERP and Software Development in Malaysia · LEWIX") is very
+   * slightly stronger for ranking, since leading position in a title carries
+   * a small edge and the brand has no search volume to trade on yet. It is
+   * not worth it. The title is not only a search result: it is the browser
+   * tab, the bookmark, the history entry and the text in every screenshot
+   * anyone shares. Keyword-first truncated to "Custom ERP and Sof..." in the
+   * tab bar, so the brand was invisible in all four places at once, and
+   * Google reads the whole tag regardless of order.
+   */
+  title: "LEWIX · Custom ERP and Software Development in Malaysia",
   /** Applied to every route except the home page, which uses `title` above. */
   titleTemplate: "%s · LEWIX",
   /**
