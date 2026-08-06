@@ -140,14 +140,25 @@ export const metadata = {
  * worth completing. Per `LewixSocials`, live profiles exist on LinkedIn,
  * Threads, Instagram and TikTok. X was deliberately skipped.
  *
- * TODO: fill in the four real URLs. Empty strings are filtered out before the
- * schema is emitted, so a partial list is safe to ship.
+ * The first three were opened and confirmed to be this company on
+ * 2026-08-06, rather than derived from the handle pattern. That check was
+ * not academic: `linkedin.com/company/lewix` is a roofing contractor in
+ * Doetinchem, and a LinkedIn search for "lewix" returns four different
+ * companies. A wrong `sameAs` is worse than an absent one, because it
+ * actively tells a search engine that LEWIX is somebody else.
+ *
+ * TikTok serves a bot interstitial to automated browsers, so that one could
+ * not be checked the same way. It is here on Fakhrul's direct confirmation
+ * of the handle, which is the better source anyway.
+ *
+ * Empty strings are filtered out before the schema is emitted, so if one of
+ * these is ever cleared the list still ships valid.
  */
 export const socialProfiles = {
-  linkedin: "",
-  instagram: "",
-  threads: "",
-  tiktok: "",
+  linkedin: "https://www.linkedin.com/company/lewix-ai/",
+  instagram: "https://www.instagram.com/lewix.ai/",
+  threads: "https://www.threads.com/@lewix.ai",
+  tiktok: "https://www.tiktok.com/@lewix.ai",
 } as const;
 
 /**
