@@ -10,10 +10,10 @@ const CELL = ATLAS_SIZE / GRID; // 64
 /**
  * Empty margin kept inside every cell, in atlas pixels.
  *
- * The shader samples the atlas with LinearFilter and heavy minification (a
- * 64px tile drawn into a ~6px screen cell), so a glyph whose ink runs right to
- * the tile edge can still pick up its neighbour through filter taps. Two pixels
- * of guaranteed emptiness kills that.
+ * The atlas samples with NearestFilter now, so this isn't defending against
+ * filter-tap bleed anymore — it's a hedge against a font whose reported
+ * metrics disagree with what it actually rasterises (see the clip in
+ * `paint()`, which is the hard guarantee; this margin is the soft one).
  */
 const CELL_PADDING = 2;
 
@@ -88,8 +88,18 @@ export class CharacterAtlas {
     this.ctx = ctx;
 
     this.texture = new THREE.CanvasTexture(canvas);
-    this.texture.minFilter = THREE.LinearFilter;
-    this.texture.magFilter = THREE.LinearFilter;
+    // NearestFilter, not Linear: matches dragonfly.xyz's own atlas config
+    // verbatim (confirmed from their production bundle). More importantly,
+    // Linear bilinear-blends across a sample point with its neighbours —
+    // and the shader's charUV trick deliberately samples right at a tile
+    // boundary to land on a blank glyph one cell over. That boundary sample
+    // is exactly where two GPU backends computing the same UV through two
+    // different shader compilers (ANGLE->HLSL on Windows, ANGLE->MSL on
+    // Mac) can differ by a few ULPs and blend in a sliver of the *wrong*
+    // neighbouring glyph — differently per platform. Nearest has nothing to
+    // blend, so that divergence has no surface to act on.
+    this.texture.minFilter = THREE.NearestFilter;
+    this.texture.magFilter = THREE.NearestFilter;
     // Must repeat, not clamp: the shader's charUV lands one full tile below the
     // target row (y - 1.0) and relies on wrapping to land back on it. With
     // ClampToEdge the whole thing renders blank, with no console error.
