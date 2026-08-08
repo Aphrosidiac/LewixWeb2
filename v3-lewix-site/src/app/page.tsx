@@ -1,4 +1,5 @@
 import { AsciiMountain } from '@/components/gl/AsciiMountain';
+import { AsciiDebugPanel } from '@/components/gl/AsciiDebugPanelLoader';
 import { TeamModels } from '@/components/gl/TeamModels';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import { PageReveal } from '@/components/layout/PageReveal';
@@ -19,6 +20,7 @@ export default function Home() {
       <TeamModels />
       <LoadingScreen />
       <PageReveal />
+      <AsciiDebugPanel />
 
       <Hero />
       <ScrollStage />
