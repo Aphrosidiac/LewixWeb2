@@ -24,7 +24,10 @@ function body(): string {
   const caseStudyLines = caseStudies
     .map(
       (study) =>
-        `- [${study.title}](${site.url}/work/${study.slug}): ${study.type} for ${study.client}. ${study.description}`
+        // No client name: these entries describe the system, matching how the
+        // Work section and the page titles now read. The companies are named
+        // in the Trusted By band instead.
+        `- [${study.title}](${site.url}/work/${study.slug}): ${study.type}. ${study.description}`
     )
     .join('\n');
 

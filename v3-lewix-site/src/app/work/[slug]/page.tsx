@@ -24,10 +24,14 @@ export async function generateMetadata({
 
   return {
     // The brand suffix comes from the root layout's `title.template` now.
-    // Leading with the client and the system type rather than just the
-    // product name: "Girpack" alone means nothing in a search result, and
-    // these four titles were otherwise near-identical to each other.
-    title: `${study.title}: ${study.type} for ${study.client}`,
+    //
+    // `study.title` is the system, not the client, so this reads
+    // "Packaging Supplies MIS: Pricing and order management · LEWIX" — which is
+    // what someone actually searches for. The client name used to be appended
+    // here; it came out with the rest of the rename, since a title is the most
+    // visible surface on the site and the one place the old naming would have
+    // survived the change.
+    title: `${study.title}: ${study.type}`,
     description: study.description,
     alternates: { canonical: `/work/${study.slug}` },
     openGraph: {

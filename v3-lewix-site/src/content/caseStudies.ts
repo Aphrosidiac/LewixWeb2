@@ -19,6 +19,12 @@
  *     records nine features previously marked "fixed and verified" that did not
  *     exist in the codebase — that habit must not reach the marketing site.
  *     Anything uncertain is left out rather than softened.
+ *  3. `title` names the SYSTEM, not the client. "Girpack" tells a stranger
+ *     nothing; "Packaging Supplies MIS" tells them whether this is their
+ *     problem. The client names moved to the Trusted By band on the home page,
+ *     where four logos do that job better than four headings did. `client` is
+ *     still recorded here because the schema credits it, but it must not come
+ *     back into a title, a heading or the llms.txt line.
  */
 
 export type CaseStudyCategory = "erp" | "logistics" | "web-app" | "ai";
@@ -26,10 +32,27 @@ export type CaseStudyCategory = "erp" | "logistics" | "web-app" | "ai";
 export interface CaseStudy {
   /** URL segment: /work/[slug] */
   slug: string;
+  /**
+   * The system, in industry terms. Never the client's brand name — see rule 3
+   * in the file header.
+   */
   title: string;
-  /** The client / business the system was built for. */
+  /**
+   * The client / business the system was built for.
+   *
+   * Data only. Credited in the CreativeWork schema and used to keep these
+   * entries traceable back to a real repository, but deliberately not rendered
+   * as a heading or a page title anywhere.
+   */
   client: string;
-  /** Kicker shown above the title. Plain description, not a product category. */
+  /**
+   * Kicker shown above the title, and the second half of the page title.
+   *
+   * Must not restate `title`. Since titles became system names, this is the
+   * line that has to add the detail: "Workshop Management" paired with a `type`
+   * of "Workshop management" produced the page title "Workshop Management:
+   * Workshop management". Name what the system actually does instead.
+   */
   type: string;
   category: CaseStudyCategory;
   /** Not recorded anywhere reliable — left undefined rather than invented. */
@@ -59,8 +82,8 @@ export interface CaseStudy {
 // code filtering over the full CaseStudyCategory union stops type-checking.
 export const caseStudies: readonly CaseStudy[] = [
   {
-    slug: "girpack",
-    title: "Girpack",
+    slug: "packaging-supplies-mis",
+    title: "Packaging Supplies MIS",
     client: "Gir Pack Trading",
     type: "Pricing and order management",
     category: "erp",
@@ -86,10 +109,10 @@ export const caseStudies: readonly CaseStudy[] = [
     images: [],
   },
   {
-    slug: "harvestgrow",
-    title: "HarvestGrow",
+    slug: "produce-supply-delivery",
+    title: "Produce Supply & Delivery",
     client: "HarvestGrow Veg Sdn Bhd",
-    type: "Ordering, packing and delivery",
+    type: "Storefront, packing floor and driver runs",
     category: "erp",
     description:
       "Order-to-delivery system for a vegetable supplier: customers order online, the warehouse packs to a live board, and drivers deliver the same day.",
@@ -115,10 +138,10 @@ export const caseStudies: readonly CaseStudy[] = [
     images: [],
   },
   {
-    slug: "shuda-logistics",
-    title: "Shuda Logistics",
+    slug: "distribution-fleet",
+    title: "Distribution & Fleet",
     client: "Shuda Logistics",
-    type: "Distribution and delivery",
+    type: "Route assignment and proof of delivery",
     category: "logistics",
     description:
       "Turns a day's orders into driver runs by area, and proves every drop was made.",
@@ -143,10 +166,10 @@ export const caseStudies: readonly CaseStudy[] = [
     images: [],
   },
   {
-    slug: "dream-garage",
-    title: "Dream Garage",
+    slug: "workshop-management",
+    title: "Workshop Management",
     client: "Dream Garage (M) Sdn Bhd",
-    type: "Workshop management",
+    type: "Jobs, parts, invoicing and service history",
     category: "erp",
     description:
       "Workshop management for a car service business: jobs, parts, invoicing and customer history in one system.",
@@ -173,10 +196,10 @@ export const caseStudies: readonly CaseStudy[] = [
 
 /** Display order on the work index. */
 export const featuredCaseStudySlugs = [
-  "girpack",
-  "harvestgrow",
-  "shuda-logistics",
-  "dream-garage",
+  "packaging-supplies-mis",
+  "produce-supply-delivery",
+  "distribution-fleet",
+  "workshop-management",
 ] as const;
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {

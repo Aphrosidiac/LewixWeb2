@@ -34,9 +34,19 @@ export function Work() {
 
   return (
     <Section id="work" num="04" title="Work">
+      {/*
+        Named industries have to match the four entries below. This previously
+        advertised "bakeries", which no case study evidenced — the bakery system
+        is real but has never been written up, so the page was claiming a fourth
+        sector on the strength of three.
+
+        Rows are titled by system rather than by client now, so the line also
+        has to carry that these are specific real builds and not a service menu.
+      */}
       <p className="mx-auto mb-12 max-w-2xl text-center text-sm leading-relaxed text-fg-muted">
-        Systems running in production for real businesses: inventory, logistics, workshop
-        floors, and bakeries. Not prototypes.
+        Four systems running in production: packaging supply, fresh produce, distribution
+        fleets, and car workshops. Each one replaced whatever the business was holding
+        itself together with.
       </p>
 
       <div className="mb-10 flex flex-wrap justify-center gap-x-6 gap-y-3">

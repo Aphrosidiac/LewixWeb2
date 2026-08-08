@@ -33,6 +33,19 @@ const nextConfig: NextConfig = {
         destination: 'https://lewix.ai/:path*',
         permanent: true,
       },
+
+      /*
+        Case studies were renamed from the client's brand to the system they
+        are ("girpack" -> "packaging-supplies-mis"), because the old slugs
+        named companies a stranger has never heard of. These four URLs were in
+        the sitemap and have been crawled, so they 301 rather than 404.
+
+        Permanent, and cheap to keep: four static rules with no runtime cost.
+      */
+      { source: '/work/girpack', destination: '/work/packaging-supplies-mis', permanent: true },
+      { source: '/work/harvestgrow', destination: '/work/produce-supply-delivery', permanent: true },
+      { source: '/work/shuda-logistics', destination: '/work/distribution-fleet', permanent: true },
+      { source: '/work/dream-garage', destination: '/work/workshop-management', permanent: true },
     ];
   },
 
