@@ -18,6 +18,9 @@ export {
 export type { Service, ProcessStep } from "./services";
 export { services, process, servicesCopy } from "./services";
 
+export type { Partner } from "./partners";
+export { partners, partnersCopy } from "./partners";
+
 export type { Principle } from "./about";
 export {
   aboutHero,

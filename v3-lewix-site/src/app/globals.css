@@ -122,6 +122,41 @@ body::before {
   .marquee-track { animation: none; }
 }
 
+/* Partner logo band ------------------------------------------------------- */
+
+/* Same -50% technique as .marquee-track, but much slower: the text marquee
+   moves at reading speed, and a logo someone is trying to recognise should not.
+   The spacing between logos lives in each item's own padding rather than a flex
+   `gap`, which is what makes the seam exact — with a gap, a track of 2n items
+   has 2n-1 gaps, so -50% lands half a gap off and the loop visibly ticks. */
+@keyframes partner-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.partner-track {
+  animation: partner-scroll 64s linear infinite;
+}
+
+/* Stop the row so a logo can actually be looked at. */
+.partner-band:hover .partner-track {
+  animation-play-state: paused;
+}
+
+/* Fades the logos themselves to transparent at both edges, rather than laying a
+   gradient panel over them. The distinction matters on this page specifically:
+   the ASCII mountain renders behind everything, so a solid-colour overlay would
+   punch a visible box out of the terrain. Same trap the footer scrim had to be
+   written around. */
+.partner-band {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-track { animation: none; }
+}
+
 /* Entrance motion --------------------------------------------------------- */
 
 /* Rises from behind a mask. The parent clips, the child starts fully below its

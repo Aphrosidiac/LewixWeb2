@@ -9,6 +9,7 @@ import { About } from '@/components/sections/About';
 import { Writing } from '@/components/sections/Writing';
 import { Team } from '@/components/sections/Team';
 import { Work } from '@/components/sections/Work';
+import { TrustedBy } from '@/components/sections/TrustedBy';
 import { Contact } from '@/components/sections/Contact';
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <Writing />
       <Team />
       <Work />
+      <TrustedBy />
       <Contact />
     </main>
   );
