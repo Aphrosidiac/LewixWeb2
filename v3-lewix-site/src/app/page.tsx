@@ -9,7 +9,9 @@ import { About } from '@/components/sections/About';
 import { Writing } from '@/components/sections/Writing';
 import { Team } from '@/components/sections/Team';
 import { Work } from '@/components/sections/Work';
-import { TrustedBy } from '@/components/sections/TrustedBy';
+// Hidden for now — the Trusted By logo band is kept in the tree, not deleted.
+// Restore by uncommenting this import and the <TrustedBy /> below.
+// import { TrustedBy } from '@/components/sections/TrustedBy';
 import { Contact } from '@/components/sections/Contact';
 
 export default function Home() {
@@ -29,7 +31,7 @@ export default function Home() {
       <Writing />
       <Team />
       <Work />
-      <TrustedBy />
+      {/* <TrustedBy /> */}
       <Contact />
     </main>
   );
