@@ -30,6 +30,20 @@ export {
   principles,
 } from "./about";
 
+export type { AboutFact, AboutList } from "./aboutPage";
+export {
+  aboutPageCopy,
+  aboutIntro,
+  factsCopy,
+  engagementCopy,
+  rightFor,
+  notRightFor,
+  aboutCta,
+} from "./aboutPage";
+
+export type { PrivacySection } from "./legal";
+export { privacyMeta, privacyCopy, privacySections } from "./legal";
+
 export type { NavItem, Stat, WhatsAppContact } from "./site";
 export {
   site,
