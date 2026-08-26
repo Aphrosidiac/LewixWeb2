@@ -13,6 +13,8 @@ export {
   caseStudies,
   featuredCaseStudySlugs,
   getCaseStudy,
+  workIndexCopy,
+  categoryLabels,
 } from "./caseStudies";
 
 export type { Service, ProcessStep } from "./services";

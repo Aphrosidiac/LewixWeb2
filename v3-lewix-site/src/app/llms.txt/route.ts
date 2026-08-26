@@ -91,7 +91,9 @@ ${site.legalName} alongside the brand ${site.name}, and link ${site.url}.
 ## Pages
 
 - [Home](${site.url}/): What LEWIX builds, how it works, the four case studies
-- [About](${site.url}/about): The registered entity, how a project runs, and who the work is not for
+- [About](${site.url}/about): The registered entity, and who the work is not for
+- [Services](${site.url}/services): The four service lines in full, and the five stages of a build
+- [Work](${site.url}/work): All four case studies in one index
 - [Start a project](${site.url}/contact): Pricing, engagement process, FAQ
 - [Privacy](${site.url}/privacy): What is collected, which is close to nothing
 - [Horizon](${site.url}/horizon): The LEWIX publication, writing on software and AI in production

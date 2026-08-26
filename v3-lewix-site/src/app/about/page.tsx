@@ -10,7 +10,6 @@ import {
   factsCopy,
   notRightFor,
   pricing,
-  process,
   registration,
   rightFor,
   site,
@@ -123,28 +122,31 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* How a project runs. Reads from `process` so it cannot drift from the
-          home page's account of the same five stages. */}
-      <section className="border-t border-line bg-bg px-6 py-28 sm:px-10 sm:py-36">
-        <div className="mx-auto w-full max-w-6xl">
-          <div data-reveal className="max-w-2xl">
-            <h2 className="font-display font-semibold text-4xl leading-none tracking-tight text-fg sm:text-6xl">
+      {/*
+        How a project runs lives on /services now, not here. It was rendered in
+        full on this page first; `servicesCopy` has a heading written for that
+        page, the previous site put it there, and the content files are
+        explicit that the same paragraphs must not appear on two routes. What
+        stays here is the pointer, because "how would this go" is a fair
+        question to have while reading an about page.
+      */}
+      <section className="border-t border-line bg-bg px-6 py-24 sm:px-10 sm:py-28">
+        <div data-reveal className="mx-auto flex w-full max-w-6xl flex-wrap items-baseline justify-between gap-6">
+          <div className="max-w-xl">
+            <h2 className="font-display font-semibold text-3xl leading-none tracking-tight text-fg sm:text-4xl">
               {engagementCopy.heading}
             </h2>
-            <p className="mt-6 text-sm leading-relaxed text-fg-muted">{engagementCopy.note}</p>
+            <p className="mt-5 text-sm leading-relaxed text-fg-muted">{engagementCopy.note}</p>
           </div>
-
-          <ol className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {process.map((p, i) => (
-              <li key={p.step} data-reveal data-reveal-delay={`${Math.min(i, 3) * 60}`}>
-                <span className="font-mono text-[11px] tracking-[0.2em] text-accent">{p.step}</span>
-                <h3 className="mt-4 font-display font-semibold text-xl tracking-tight text-fg">
-                  {p.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-fg-muted">{p.description}</p>
-              </li>
-            ))}
-          </ol>
+          <Link
+            href="/services"
+            className="group inline-flex items-center gap-2 text-sm text-fg transition-colors hover:text-accent"
+          >
+            All five stages
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+              →
+            </span>
+          </Link>
         </div>
       </section>
 

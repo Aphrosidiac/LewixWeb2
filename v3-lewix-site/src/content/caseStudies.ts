@@ -202,6 +202,42 @@ export const featuredCaseStudySlugs = [
   "workshop-management",
 ] as const;
 
+/**
+ * The /work index.
+ *
+ * There was no index for most of this site's life: all four case studies
+ * existed at /work/[slug] and the only route to them was the home page
+ * carousel, which renders its links from a client component. An agent
+ * evaluating the site in August 2026 fetched /work, /services and
+ * /case-studies, got nothing from any of them, and reported that it could not
+ * establish what the company builds. `workPagePlaceholder` in site.ts is the
+ * old "Coming Soon" copy and stays reference-only; this is the real thing.
+ *
+ * Rule 3 from the file header applies to every line rendered from here: the
+ * systems are named, the clients are not.
+ */
+export const workIndexCopy = {
+  eyebrow: 'Work',
+  headingLine1: 'Systems running',
+  headingLine2Accent: 'in production',
+  intro:
+    'Four of them, in four different industries. Each one is the software the business now runs on, not a pilot that was handed over and left.',
+  countLabel: 'case studies',
+  ctaHeading: 'Something here look familiar?',
+  ctaBody:
+    'If one of these reads like your operation, the conversation starts the same way it did for them.',
+  ctaLabel: 'Start a project',
+  ctaHref: '/contact',
+} as const;
+
+/** Display labels for `CaseStudyCategory`, so the union never leaks to a page. */
+export const categoryLabels: Record<CaseStudyCategory, string> = {
+  erp: 'Systems & ERP',
+  logistics: 'Logistics',
+  'web-app': 'Web App',
+  ai: 'AI',
+};
+
 export function getCaseStudy(slug: string): CaseStudy | undefined {
   return caseStudies.find((c) => c.slug === slug);
 }

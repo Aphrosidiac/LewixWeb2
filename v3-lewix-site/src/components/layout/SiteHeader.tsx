@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LocalTime } from './LocalTime';
 import { contact, site } from '@/content';
@@ -12,6 +13,22 @@ const SECTIONS = [
   { id: 'team', label: 'Founding Team' },
   { id: 'work', label: 'Work' },
   { id: 'contact', label: 'Contact' },
+] as const;
+
+/**
+ * The standalone routes, listed under the section anchors.
+ *
+ * Without these the pages are reachable only from the sitemap: nothing in the
+ * site's own chrome linked to /work, /services, /about or /privacy, and an
+ * agent evaluating the domain in August 2026 guessed at all four and reported
+ * it could not tell what the company builds. A page no navigation points at is
+ * a page that does not really exist.
+ */
+const PAGES = [
+  { href: '/work', label: 'Case studies' },
+  { href: '/services', label: 'Services' },
+  { href: '/about', label: 'Company' },
+  { href: '/contact', label: 'Start a project' },
 ] as const;
 
 /**
@@ -211,13 +228,34 @@ export function SiteHeader() {
             {SECTIONS.map(({ id, label }) => (
               <a
                 key={id}
-                href={`#${id}`}
+                /*
+                 * A bare `#work` is inert on every route but the home page:
+                 * there is no such section on /contact, /work or /privacy, so
+                 * the link silently did nothing. Off home it has to go home
+                 * first. This was broken for every sub-page since /contact
+                 * shipped.
+                 */
+                href={isHome ? `#${id}` : `/#${id}`}
                 onClick={() => setOpen(false)}
                 tabIndex={open ? undefined : -1}
                 className="block font-display text-3xl leading-[1.35] text-[#0a0a0c] transition-colors outline-none hover:text-accent focus-visible:text-accent sm:text-4xl"
               >
                 {label}
               </a>
+            ))}
+          </nav>
+
+          <nav aria-label="Pages" className="mt-8 border-t border-[#0a0a0c]/10 pt-8">
+            {PAGES.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                tabIndex={open ? undefined : -1}
+                className="block py-1.5 text-sm text-[#0a0a0c]/60 transition-colors outline-none hover:text-accent focus-visible:text-accent"
+              >
+                {label}
+              </Link>
             ))}
           </nav>
 

@@ -41,6 +41,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       // The page an answer engine reads to decide the company is real.
       priority: 0.8,
     },
+    {
+      url: `${site.url}/services`,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      // The index the case studies never had. See `workIndexCopy`.
+      url: `${site.url}/work`,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     ...caseStudies.map((study) => ({
       url: `${site.url}/work/${study.slug}`,
       changeFrequency: 'yearly' as const,
