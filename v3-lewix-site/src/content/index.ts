@@ -8,20 +8,20 @@
  * These are pure data modules — no React, no JSX, no next/* imports.
  */
 
-export type { CaseStudy, CaseStudyCategory } from "./caseStudies";
+export type { CaseStudy, CaseStudyCategory, CaseStudyStatus } from "./caseStudies";
 export {
   caseStudies,
-  featuredCaseStudySlugs,
   getCaseStudy,
+  adjacentCaseStudies,
   workIndexCopy,
   categoryLabels,
 } from "./caseStudies";
 
+export type { Product } from "./products";
+export { products } from "./products";
+
 export type { Service, ProcessStep } from "./services";
 export { services, process, servicesCopy } from "./services";
-
-export type { Partner } from "./partners";
-export { partners, partnersCopy } from "./partners";
 
 export type { Principle } from "./about";
 export {

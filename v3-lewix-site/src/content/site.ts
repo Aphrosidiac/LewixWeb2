@@ -324,12 +324,22 @@ export const workPagePlaceholder = {
 
 /** Copy from the individual case study page shell. */
 export const caseStudyPageCopy = {
-  backLabel: "All Projects",
+  backLabel: "All Work",
   backHref: "/work",
+  sectorLabel: "Sector",
+  statusLabel: "Status",
+  clientLabel: "Client",
+  clientValue: "Confidential. We describe the system, never the business it runs.",
+  flowHeading: "How work moves through it",
   challengeHeading: "The Challenge",
   solutionHeading: "The Solution",
   capabilitiesHeading: "What It Does",
+  ctaEyebrow: "Next step",
   ctaLabel: "Start a Similar Project",
+  ctaBody:
+    "Tell us what is costing you hours. We will come back with what it takes to build, what it takes to run, and whether we are the right people for it.",
+  prevLabel: "Previous system",
+  nextLabel: "Next system",
   ctaHref: "/contact",
   notFoundHeading: "Project not found",
   notFoundLinkLabel: "Back to work",

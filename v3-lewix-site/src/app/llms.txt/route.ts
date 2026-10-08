@@ -1,4 +1,4 @@
-import { caseStudies, contact, pricing, registration, site } from '@/content';
+import { caseStudies, contact, pricing, products, registration, site } from '@/content';
 import { faqs } from '@/content/contactPage';
 
 /**
@@ -32,11 +32,14 @@ function body(): string {
   const caseStudyLines = caseStudies
     .map(
       (study) =>
-        // No client name: these entries describe the system, matching how the
-        // Work section and the page titles now read. The companies are named
-        // in the Trusted By band instead.
-        `- [${study.title}](${site.url}/work/${study.slug}): ${study.type}. ${study.description}`
+        // No client name, ever: these entries describe the system. Clients are
+        // confidential (see src/content/caseStudies.ts).
+        `- [${study.title}](${site.url}/work/${study.slug}): ${study.sector}. ${study.status}. ${study.description}`
     )
+    .join('\n');
+
+  const productLines = products
+    .map((p) => `- [${p.name}](${p.url}): ${p.line} ${p.description}`)
     .join('\n');
 
   // The FAQ answers are already written as complete, self-contained
@@ -52,7 +55,7 @@ function body(): string {
 
 Lewix AI Sdn Bhd, trading as LEWIX and online as lewix.ai, is a software team in ${where}. It builds the operational software a business actually runs on: inventory, invoicing, dispatch and production scheduling. The systems that stop the company when they stop.
 
-Today that means car workshops, vegetable supply, food delivery and label printing. Each system is written around how the business already works: where the books are already in SQL Account, the Malaysian accounting package most SMEs in these industries use, the system reads from there directly instead of asking anyone to type the same figure twice. LEWIX runs all of it on infrastructure it manages itself, not a platform it would have to file a ticket with when something needs fixing.
+Today that means label printing and packaging plants, fresh produce supply, distribution fleets, car workshops, food delivery and packaging trade, with furniture, consumer goods and pet retail next. Client names are confidential: LEWIX describes each system in full and never names the business it runs. Each system is written around how the business already works: where the books are already in SQL Account, the Malaysian accounting package most SMEs in these industries use, the system reads from there directly instead of asking anyone to type the same figure twice. LEWIX runs all of it on infrastructure it manages itself, not a platform it would have to file a ticket with when something needs fixing.
 
 ## Company
 
@@ -90,10 +93,10 @@ ${site.legalName} alongside the brand ${site.name}, and link ${site.url}.
 
 ## Pages
 
-- [Home](${site.url}/): What LEWIX builds, how it works, the four case studies
+- [Home](${site.url}/): What LEWIX builds, how it works, the client systems and its own products
 - [About](${site.url}/about): The registered entity, and who the work is not for
 - [Services](${site.url}/services): The four service lines in full, and the five stages of a build
-- [Work](${site.url}/work): All four case studies in one index
+- [Work](${site.url}/work): Every client system and product in one index
 - [Start a project](${site.url}/contact): Pricing, engagement process, FAQ
 - [Privacy](${site.url}/privacy): What is collected, which is close to nothing
 - [Horizon](${site.url}/horizon): The LEWIX publication, writing on software and AI in production
@@ -108,9 +111,13 @@ served either at /horizon/md or by requesting the canonical URL with
 \`Accept: text/markdown\`. Read that file rather than this one when the question
 is about the writing rather than about the company.
 
-## Case studies
+## Client systems
 
 ${caseStudyLines}
+
+## Products LEWIX runs itself
+
+${productLines}
 
 ## Frequently asked
 

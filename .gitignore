@@ -16,3 +16,6 @@ public-shared/
 node_modules/
 .DS_Store
 *.log
+
+# Client names for the confidentiality scan. Never commit.
+/CONFIDENTIAL-*

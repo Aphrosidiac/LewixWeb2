@@ -58,7 +58,7 @@ const FONT_PRESETS = {
  * instance, so they aren't introspectable at runtime); (2) confirmed those
  * three, plus a second read of everything else, via SSH against the actual
  * deployed source at commit 6206aad
- * (`ssh dreamgarage-do "cd /home/lewix-web/v3-lewix-site && git log -1"`).
+ * (`git log -1` in /home/lewix-web/v3-lewix-site on the droplet).
  *
  * If a future deploy changes any of AsciiMountain.tsx's `asciiUniforms`
  * initial values, CharacterAtlas's `FONT_STACK`, or AsciiMountain's

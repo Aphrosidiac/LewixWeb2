@@ -1,91 +1,44 @@
-'use client';
-
-import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Section } from './Section';
-import { caseStudies, type CaseStudyCategory } from '@/content';
+import { SystemList } from '@/components/work/SystemList';
+import { ProductCards } from '@/components/work/ProductCards';
+import { workIndexCopy } from '@/content';
 
-type Filter = 'all' | CaseStudyCategory;
-
-// Only offer filters that actually match something — dragonfly's index shows a
-// fixed set, but empty filters read as broken.
-const LABELS: Record<Filter, string> = {
-  all: 'All',
-  erp: 'Systems & ERP',
-  logistics: 'Logistics',
-  'web-app': 'Web Apps',
-  ai: 'AI',
-};
-
+/**
+ * Home page Work section: the client systems, then the products Lewix runs
+ * itself. Client systems are named by what they are; the businesses behind
+ * them never appear (see src/content/caseStudies.ts).
+ */
 export function Work() {
-  const [filter, setFilter] = useState<Filter>('all');
-
-  const available = useMemo(() => {
-    const present = new Set(caseStudies.map((c) => c.category));
-    return (Object.keys(LABELS) as Filter[]).filter(
-      (f) => f === 'all' || present.has(f as CaseStudyCategory)
-    );
-  }, []);
-
-  const shown = useMemo(
-    () => (filter === 'all' ? caseStudies : caseStudies.filter((c) => c.category === filter)),
-    [filter]
-  );
-
   return (
     <Section id="work" num="04" title="Work">
-      {/*
-        Named industries have to match the four entries below. This previously
-        advertised "bakeries", which no case study evidenced — the bakery system
-        is real but has never been written up, so the page was claiming a fourth
-        sector on the strength of three.
-
-        Rows are titled by system rather than by client now, so the line also
-        has to carry that these are specific real builds and not a service menu.
-      */}
       <p className="mx-auto mb-12 max-w-2xl text-center text-sm leading-relaxed text-fg-muted">
-        Four systems running in production: packaging supply, fresh produce, distribution
-        fleets, and car workshops. Each one replaced whatever the business was holding
-        itself together with.
+        Factories, warehouses, fleets, workshops and shops. Each system replaced whatever the
+        business was holding itself together with. Our clients stay confidential, so we name
+        the system and never the business.
       </p>
 
-      <div className="mb-10 flex flex-wrap justify-center gap-x-6 gap-y-3">
-        {available.map((f) => (
-          <button
-            key={f}
-            type="button"
-            onClick={() => setFilter(f)}
-            aria-pressed={filter === f}
-            className={`eyebrow transition-colors ${
-              filter === f ? 'text-accent' : 'hover:text-fg'
-            }`}
-          >
-            {LABELS[f]}
-          </button>
-        ))}
-      </div>
+      <SystemList />
 
-      <ul className="border-t border-line">
-        {shown.map((study) => (
-          <li key={study.slug}>
-            <Link
-              href={`/work/${study.slug}`}
-              className="group grid items-baseline gap-2 border-b border-line py-7 transition-colors hover:bg-bg-raised sm:grid-cols-12 sm:gap-6 sm:px-4"
-            >
-              <span className="eyebrow sm:col-span-1">{LABELS[study.category]}</span>
-              <span className="font-display font-semibold text-3xl text-fg transition-colors group-hover:text-accent sm:col-span-4 sm:text-4xl">
-                {study.title}
-              </span>
-              <span className="text-sm leading-relaxed text-fg-muted sm:col-span-6">
-                {study.shortDescription ?? study.description}
-              </span>
-              <span className="eyebrow text-right transition-colors group-hover:text-accent sm:col-span-1">
-                View
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-28 sm:mt-36">
+        <div className="mb-12 grid gap-6 sm:grid-cols-12">
+          <div className="sm:col-span-5">
+            <p className="eyebrow">{workIndexCopy.productsEyebrow}</p>
+            <h3 className="mt-4 font-display font-semibold text-4xl leading-none tracking-tight text-fg sm:text-5xl">
+              {workIndexCopy.productsHeading}
+            </h3>
+          </div>
+          <p className="text-sm leading-relaxed text-fg-muted sm:col-span-5 sm:col-start-8 sm:self-end">
+            {workIndexCopy.productsIntroSingle}
+          </p>
+        </div>
+        <ProductCards only={['smoothsail']} />
+        <div className="mt-12 text-center">
+          <Link href="/work" className="eyebrow transition-colors hover:text-accent">
+            All work &rarr;
+          </Link>
+        </div>
+      </div>
     </Section>
   );
 }

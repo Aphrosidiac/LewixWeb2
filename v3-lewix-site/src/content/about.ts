@@ -42,7 +42,7 @@ export const aboutHero = {
 /** The two-column company story on /about. Paragraph order matters. */
 export const story = [
   "Lewix.ai builds the operational software a business actually runs on: inventory, invoicing, dispatch, production scheduling. The systems that stop the company when they stop.",
-  "Today that means car workshops, vegetable supply, food delivery and label printing. Each system is written around how the business already works: where the books are already in SQL Account, it reads from there directly instead of asking anyone to type the same figure twice.",
+  "Today that means label printing and packaging plants, fresh produce supply, distribution fleets, car workshops, food delivery and packaging trade, with furniture, consumer goods and pet retail next. Each system is written around how the business already works: where the books are already in SQL Account, it reads from there directly instead of asking anyone to type the same figure twice.",
   "All of it runs on infrastructure we manage ourselves, not a platform we'd have to file a ticket with when something needs fixing.",
 ] as const;
 

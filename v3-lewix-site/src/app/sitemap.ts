@@ -9,7 +9,7 @@ import { caseStudies, site } from '@/content';
  * studies: nothing on the site links to /work/[slug] except the home page
  * carousel, which renders its links inside a client component, and there is
  * no /work index page for them to sit under. A sitemap is the only
- * unconditional path a crawler has to all four.
+ * unconditional path a crawler has to every one of them.
  *
  * `lastModified` is deliberately absent. Next would happily stamp build time
  * on every entry, which tells Google the whole site changed every deploy;

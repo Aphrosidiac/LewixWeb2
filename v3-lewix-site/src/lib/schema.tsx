@@ -158,7 +158,8 @@ export function faqSchema() {
 /**
  * A case study page. `Article` would over-claim (these are not journalism and
  * have no author or publish date), so each one is a `CreativeWork` about the
- * system, with the client named as the thing it was produced for.
+ * system. The client is deliberately absent: structured data is the easiest
+ * place for a name to leak, because nobody reads it on the page.
  */
 export function caseStudySchema(slug: string) {
   const study = caseStudies.find((entry) => entry.slug === slug);
@@ -176,10 +177,7 @@ export function caseStudySchema(slug: string) {
         url: `${site.url}/work/${study.slug}`,
         inLanguage: 'en-MY',
         creator: { '@id': ORG_ID },
-        about: {
-          '@type': 'Organization',
-          name: study.client,
-        },
+        genre: study.sector,
         keywords: study.capabilities.join(', '),
       },
       {

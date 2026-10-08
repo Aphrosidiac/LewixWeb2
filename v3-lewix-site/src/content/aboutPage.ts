@@ -32,7 +32,7 @@ export const aboutPageCopy = {
  */
 export const aboutIntro = [
   'Lewix AI Sdn Bhd, trading as LEWIX, is a software company in Kuala Lumpur. We build the operational software a business runs on: inventory, invoicing, dispatch, production scheduling. The systems that stop the company when they stop.',
-  'That work is currently live in car workshops, vegetable supply, food delivery and label printing. Each system is written around how the business already works rather than asking the business to change to suit it, which in practice usually means reading directly from the accounting package the books already live in.',
+  'That work is currently live in label printing and packaging plants, fresh produce supply, distribution fleets, car workshops, food delivery and packaging trade. Each system is written around how the business already works rather than asking the business to change to suit it, which in practice usually means reading directly from the accounting package the books already live in.',
   'We run all of it on infrastructure we manage ourselves. When something needs fixing at two in the morning, there is no ticket queue between us and the server.',
 ] as const;
 
