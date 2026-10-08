@@ -4,7 +4,7 @@ import { HeroExit } from '@/components/layout/HeroExit';
 
 export function Hero() {
   return (
-    <section id="top" className="relative flex min-h-screen flex-col px-6 pt-28 pb-10 sm:px-10">
+    <section id="top" className="relative flex min-h-svh flex-col px-6 pt-28 pb-10 sm:px-10">
       <HeroExit />
       {/* Everything the hero draws lives inside this one wrapper so HeroExit can
           drift the whole lockup out with a single transform. */}

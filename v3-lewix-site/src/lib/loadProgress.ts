@@ -57,6 +57,13 @@ export function subscribeLoad(listener: Listener): () => void {
   return () => listeners.delete(listener);
 }
 
-export function getLoadState(): LoadState {
-  return { ...state };
+/**
+ * True once this page load has already played the loading screen. Module state
+ * survives client navigation, so coming back to home from a case page finds it
+ * set: the loader is skipped and the mountain simply builds in when parsed,
+ * instead of replaying a 1.75s screen over a page the visitor already saw.
+ */
+export function hasRevealed() {
+  return state.revealing;
 }
+

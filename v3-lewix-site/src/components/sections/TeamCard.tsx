@@ -56,7 +56,9 @@ export function TeamCard({ member, index }: { member: TeamMember; index: number 
         <span className="eyebrow shrink-0">{num}</span>
       </div>
 
-      <p className="eyebrow mt-1.5">{member.role ?? '—'}</p>
+      {/* No placeholder when a role is unset: an em dash under every name read
+          as missing content. */}
+      {member.role && <p className="eyebrow mt-1.5">{member.role}</p>}
 
       {member.bio && <p className="mt-3 text-sm leading-relaxed text-fg-muted">{member.bio}</p>}
     </li>

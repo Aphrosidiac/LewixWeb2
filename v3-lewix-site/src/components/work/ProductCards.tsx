@@ -21,7 +21,7 @@ export function ProductCards({ only }: { only?: readonly string[] }) {
             href={p.url}
             target="_blank"
             rel="noopener"
-            className="group flex h-full flex-col rounded-3xl border border-line bg-bg-raised/80 p-3 outline-none transition-colors hover:border-fg-faint focus-visible:border-accent"
+            className="group flex h-full flex-col rounded-3xl border border-line bg-bg-raised/80 p-3 transition-colors hover:border-fg-faint focus-visible:border-accent"
           >
             <div className="overflow-hidden rounded-2xl border border-line bg-[#f4f4f5]">
               <div className="flex items-center gap-3 border-b border-black/5 bg-white px-3 py-2">
@@ -52,7 +52,10 @@ export function ProductCards({ only }: { only?: readonly string[] }) {
                 <h3 className="font-display font-semibold text-2xl text-fg transition-colors group-hover:text-accent">
                   {p.name}
                 </h3>
-                <span className="eyebrow transition-colors group-hover:text-accent">Open ↗</span>
+                <span className="eyebrow transition-colors group-hover:text-accent">
+                  Open <span aria-hidden="true">↗</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </span>
               </div>
               <p className="mt-2 text-sm text-fg">{p.line}</p>
               <p className="mt-4 text-sm leading-relaxed text-fg-muted">{p.description}</p>
@@ -106,7 +109,7 @@ function ProductFeature({ p }: { p: Product }) {
       href={p.url}
       target="_blank"
       rel="noopener"
-      className="group grid gap-8 rounded-3xl border border-line bg-bg-raised/80 p-3 outline-none transition-colors hover:border-fg-faint focus-visible:border-accent lg:grid-cols-12 lg:items-center lg:gap-12"
+      className="group grid gap-8 rounded-3xl border border-line bg-bg-raised/80 p-3 transition-colors hover:border-fg-faint focus-visible:border-accent lg:grid-cols-12 lg:items-center lg:gap-12"
     >
       <div className="lg:col-span-7">
         <BrowserFrame p={p} sizes="(min-width: 1024px) 640px, 100vw" />
@@ -116,7 +119,10 @@ function ProductFeature({ p }: { p: Product }) {
           <h3 className="font-display font-semibold text-3xl text-fg transition-colors group-hover:text-accent sm:text-4xl">
             {p.name}
           </h3>
-          <span className="eyebrow transition-colors group-hover:text-accent">Open ↗</span>
+          <span className="eyebrow transition-colors group-hover:text-accent">
+                  Open <span aria-hidden="true">↗</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </span>
         </div>
         <p className="mt-3 text-base text-fg">{p.line}</p>
         <p className="mt-5 text-sm leading-relaxed text-fg-muted">{p.description}</p>

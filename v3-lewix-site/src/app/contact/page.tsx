@@ -24,7 +24,9 @@ export const metadata: Metadata = {
   alternates: { canonical: '/contact' },
   ...shareCard({
     title: `Start a project · ${siteMeta.openGraph.siteName}`,
-    description: `${pricing.note} ${contact.intro}`,
+    // Was pricing.note + contact.intro joined: 277 characters, and it said
+    // "whether we're the right people" twice.
+    description: `Tell us what is costing you hours. Projects start at ${pricing.amount}, and the reply comes from a founder within 24 hours.`,
     url: '/contact',
     type: 'website',
   }),
@@ -45,7 +47,7 @@ export const metadata: Metadata = {
  */
 export default function ContactPage() {
   return (
-    <main>
+    <main id="main">
       <JsonLd data={breadcrumbSchema('Start a project', '/contact')} />
       {/*
         The seven questions further down this page are already written as
@@ -98,7 +100,7 @@ export default function ContactPage() {
         <div className="mx-auto w-full max-w-6xl">
           <p
             data-reveal
-            className="text-[10.5px] font-medium tracking-[0.2em] text-[#0a0a0c]/50 uppercase"
+            className="text-[10.5px] font-medium tracking-[0.2em] text-[#0a0a0c]/70 uppercase"
           >
             {contactPage.eyebrow}
           </p>
@@ -157,6 +159,7 @@ export default function ContactPage() {
                         className="text-fg transition-colors hover:text-accent"
                       >
                         {w.display}
+                        <span className="sr-only"> (opens in a new tab)</span>
                       </a>
                     </dd>
                   </div>
@@ -197,7 +200,7 @@ export default function ContactPage() {
             <h2 className="font-display font-semibold text-5xl leading-none tracking-tight sm:text-7xl">
               Questions
             </h2>
-            <p className="mt-8 max-w-[16rem] text-sm leading-relaxed text-[#0a0a0c]/55">
+            <p className="mt-8 max-w-[16rem] text-sm leading-relaxed text-[#0a0a0c]/70">
               What people usually ask before we start.
             </p>
           </div>
@@ -212,12 +215,12 @@ export default function ContactPage() {
                   {f.q}
                   <span
                     aria-hidden="true"
-                    className="mt-1 shrink-0 text-base text-[#0a0a0c]/40 transition-transform duration-300 group-open:rotate-180"
+                    className="mt-1 shrink-0 text-base text-[#0a0a0c]/70 transition-transform duration-300 group-open:rotate-180"
                   >
                     ↓
                   </span>
                 </summary>
-                <p className="mt-4 max-w-xl pr-10 text-sm leading-relaxed text-[#0a0a0c]/60">
+                <p className="mt-4 max-w-xl pr-10 text-sm leading-relaxed text-[#0a0a0c]/70">
                   {f.a}
                 </p>
               </details>

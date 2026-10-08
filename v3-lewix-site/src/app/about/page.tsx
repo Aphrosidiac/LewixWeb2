@@ -31,7 +31,7 @@ import {
  */
 export const metadata: Metadata = {
   title: `About ${site.legalName}`,
-  description: `${site.legalName}, trading as ${site.name}: a software company in ${registration.addressLocality} building custom ERPs, logistics platforms and AI agents. How a project runs, and who we are not right for.`,
+  description: `${site.legalName} (${site.name}), a ${registration.addressLocality} software company building custom ERPs, logistics platforms and AI agents. How a project runs.`,
   alternates: { canonical: '/about' },
   ...shareCard({
     title: `About · ${site.name}`,
@@ -52,7 +52,7 @@ const facts = [
 
 export default function AboutPage() {
   return (
-    <main>
+    <main id="main">
       <JsonLd data={breadcrumbSchema('About', '/about')} />
       <Reveal />
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
         <div className="mx-auto w-full max-w-6xl">
           <p
             data-reveal
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/45"
+            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/70"
           >
             {aboutPageCopy.eyebrow}
           </p>
@@ -74,13 +74,13 @@ export default function AboutPage() {
             className="mt-8 max-w-4xl font-display font-semibold text-5xl leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl"
           >
             {aboutPageCopy.headingLine1}{' '}
-            <span className="text-accent">{aboutPageCopy.headingLine2Accent}</span>
+            <span className="text-accent-ink">{aboutPageCopy.headingLine2Accent}</span>
           </h1>
 
           <p
             data-reveal
             data-reveal-delay="120"
-            className="mt-10 max-w-xl text-base leading-relaxed text-[#0a0a0c]/60"
+            className="mt-10 max-w-xl text-base leading-relaxed text-[#0a0a0c]/70"
           >
             {aboutPageCopy.intro}
           </p>
@@ -143,7 +143,7 @@ export default function AboutPage() {
           </div>
           <Link
             href="/services"
-            className="group inline-flex items-center gap-2 text-sm text-fg transition-colors hover:text-accent"
+            className="group inline-flex items-center gap-2 py-2 text-sm text-fg transition-colors hover:text-accent"
           >
             All five stages
             <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
@@ -164,7 +164,7 @@ export default function AboutPage() {
               <h2 className="font-display font-semibold text-3xl leading-none tracking-tight sm:text-4xl">
                 {list.heading}
               </h2>
-              <p className="mt-4 text-sm text-[#0a0a0c]/50">{list.note}</p>
+              <p className="mt-4 text-sm text-[#0a0a0c]/70">{list.note}</p>
               <ul className="mt-8 border-t border-[#0a0a0c]/12">
                 {list.items.map((item) => (
                   <li

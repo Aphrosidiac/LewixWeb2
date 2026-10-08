@@ -7,13 +7,17 @@
   --color-bg-raised: #0b0b0d;
   --color-fg: #ededed;
   --color-fg-muted: #8a8a90;
-  --color-fg-faint: #55555c;
+  /* Was #55555c (2.8:1 on the page). It carries real text (labels, filters,
+     footer links), so it has to clear 4.5:1: #7a7a82 is 4.8:1. */
+  --color-fg-faint: #7a7a82;
   --color-line: #1c1c20;
   /* Lewix brand gradient, sampled from the logomark. The accent was dragonfly's
      orange until the real brand assets landed — these are the actual colours. */
   --color-accent: #6880f2;
   --color-accent-cyan: #67e1f9;
   --color-accent-purple: #8151df;
+  /* Accent for text on the light bands, where #6880f2 is 2.3:1. */
+  --color-accent-ink: #3a4fc4;
 
   /* Brand typefaces: Figtree for body/UI, Urbanist for display.
      `--font-mono` is aliased to Figtree so any stray `font-mono` still lands on
@@ -60,6 +64,13 @@ body::before {
   inset: 0;
   z-index: -20;
   background: var(--color-bg);
+}
+
+/* One visible keyboard focus ring everywhere. Several controls set
+   outline-none for the mouse and replaced it with nothing. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 ::selection {

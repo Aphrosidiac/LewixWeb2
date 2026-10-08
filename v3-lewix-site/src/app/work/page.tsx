@@ -15,12 +15,12 @@ import { metadata as siteMeta, workIndexCopy } from '@/content';
  * `src/content/caseStudies.ts`.
  */
 export const metadata: Metadata = {
-  title: 'Work: custom systems in production',
-  description: `Production systems built by ${siteMeta.openGraph.siteName} for manufacturers, distributors, workshops and retailers in Malaysia, plus the products we run ourselves.`,
+  title: 'Work: custom systems for real operations',
+  description: `Systems built by ${siteMeta.openGraph.siteName} for manufacturers, distributors, workshops and retailers in Malaysia, plus the products we run ourselves.`,
   alternates: { canonical: '/work' },
   ...shareCard({
     title: `Work · ${siteMeta.openGraph.siteName}`,
-    description: workIndexCopy.intro,
+    description: `Systems built by ${siteMeta.openGraph.siteName} for manufacturers, distributors, workshops and retailers in Malaysia. Clients stay confidential.`,
     url: '/work',
     type: 'website',
   }),
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function WorkPage() {
   return (
-    <main>
+    <main id="main">
       <JsonLd data={breadcrumbSchema('Work', '/work')} />
       <Reveal />
 
@@ -39,7 +39,7 @@ export default function WorkPage() {
         <div className="mx-auto w-full max-w-6xl">
           <p
             data-reveal
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/45"
+            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/70"
           >
             {workIndexCopy.eyebrow}
           </p>
@@ -50,13 +50,13 @@ export default function WorkPage() {
             className="mt-8 max-w-4xl font-display font-semibold text-5xl leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl"
           >
             {workIndexCopy.headingLine1}{' '}
-            <span className="text-accent">{workIndexCopy.headingLine2Accent}</span>
+            <span className="text-accent-ink">{workIndexCopy.headingLine2Accent}</span>
           </h1>
 
           <p
             data-reveal
             data-reveal-delay="120"
-            className="mt-10 max-w-xl text-base leading-relaxed text-[#0a0a0c]/60"
+            className="mt-10 max-w-xl text-base leading-relaxed text-[#0a0a0c]/70"
           >
             {workIndexCopy.intro}
           </p>
@@ -101,7 +101,7 @@ export default function WorkPage() {
           <h2 className="font-display font-semibold text-4xl leading-none tracking-tight sm:text-5xl">
             {workIndexCopy.ctaHeading}
           </h2>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-[#0a0a0c]/60">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-[#0a0a0c]/70">
             {workIndexCopy.ctaBody}
           </p>
           <Link

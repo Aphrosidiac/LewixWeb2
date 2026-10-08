@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LocalTime } from './LocalTime';
 import { contact, site } from '@/content';
+import { lockScroll, unlockScroll } from '@/lib/scroll';
 
 const SECTIONS = [
   { id: 'about', label: 'About' },
-  { id: 'writing', label: 'Writing' },
   { id: 'team', label: 'Founding Team' },
   { id: 'work', label: 'Work' },
   { id: 'contact', label: 'Contact' },
@@ -55,7 +55,10 @@ export function SiteHeader() {
    * On home it stays an anchor, because that's the one that scrolls rather than
    * reloading — a full navigation there would re-download the 27MB model.
    */
-  const isHome = usePathname() === '/';
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   /**
    * The bar is styled for a dark page. /contact opens on a light band, where a
@@ -108,34 +111,71 @@ export function SiteHeader() {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+    // Re-run per route. Most pages open at scrollY 0, so the "has scrollY
+    // changed" poll never fired after a menu navigation: the bar kept the
+    // previous page's colours (white wordmark on /work's light band).
+  }, [pathname]);
 
   // Over the drawer the bar is always on white, whatever is behind the page.
   const dark = onLight || open;
 
+  // Close on any route change, including Back.
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
+    setOpen(false);
+  }, [pathname]);
 
+  /**
+   * The open drawer is a modal: the page behind stops scrolling (through Lenis,
+   * which ignores body overflow), focus moves into the drawer and is held
+   * between it and the bar's two pills, Escape closes it, and focus returns to
+   * the Menu button.
+   */
   useEffect(() => {
     if (!open) return;
+    lockScroll();
+    const menu = menuRef.current;
+    const first = menu?.querySelector<HTMLElement>('a[href]');
+    first?.focus({ preventScroll: true });
+
+    const focusables = () =>
+      [
+        ...Array.from(document.querySelectorAll<HTMLElement>('header a[href], header button')),
+        ...Array.from(menu?.querySelectorAll<HTMLElement>('a[href], button') ?? []),
+      ].filter((el) => el.offsetParent !== null);
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const list = focusables();
+      if (!list.length) return;
+      const i = list.indexOf(document.activeElement as HTMLElement);
+      const next = e.shiftKey
+        ? list[i <= 0 ? list.length - 1 : i - 1]
+        : list[i === -1 || i === list.length - 1 ? 0 : i + 1];
+      e.preventDefault();
+      next.focus();
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      unlockScroll();
+      // Back to the toggle, unless a menu link already moved focus to a new page.
+      if (menu?.contains(document.activeElement) || document.activeElement === document.body) {
+        toggleRef.current?.focus({ preventScroll: true });
+      }
+    };
   }, [open]);
 
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-6 sm:px-10">
-        <a
+        <Link
           href={isHome ? '#top' : '/'}
           aria-label={isHome ? `${site.wordmark}, back to top` : `${site.wordmark}, home`}
-          className="shrink-0 opacity-90 transition-opacity hover:opacity-100"
+          className="shrink-0 rounded-sm py-2 opacity-90 transition-opacity hover:opacity-100"
         >
           {/* Both variants rendered and cross-faded rather than swapping `src`.
               Swapping fetches the other file on first switch, and until it
@@ -147,6 +187,8 @@ export function SiteHeader() {
               alt={site.wordmark}
               width={1200}
               height={191}
+              // Displayed ~94px wide. Without `sizes` the srcset was 1200w/3840w.
+              sizes="96px"
               priority
               className={`h-[15px] w-auto transition-opacity duration-300 ${
                 dark ? 'opacity-0' : 'opacity-100'
@@ -158,13 +200,16 @@ export function SiteHeader() {
               aria-hidden="true"
               width={1200}
               height={191}
-              priority
+              sizes="96px"
+              // Eager so the cross-fade never waits on it, but not preloaded:
+              // only one variant is on screen at first paint.
+              loading="eager"
               className={`absolute inset-0 h-[15px] w-auto transition-opacity duration-300 ${
                 dark ? 'opacity-100' : 'opacity-0'
               }`}
             />
           </span>
-        </a>
+        </Link>
 
         <div className="flex items-center gap-2">
           {/* Primary action, filled. Inverts against the drawer so it stays the
@@ -175,7 +220,7 @@ export function SiteHeader() {
               actual brief. */}
           {/* Kept at every width. Hiding it below sm was wrong — both pills do
               fit a 390px viewport once the padding and type step down. */}
-          <a
+          <Link
             href="/contact"
             onClick={() => setOpen(false)}
             className={`shrink-0 rounded-full px-3.5 py-2 text-[10px] font-medium tracking-[0.1em] uppercase transition-colors sm:px-5 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
@@ -185,14 +230,15 @@ export function SiteHeader() {
             }`}
           >
             Let&rsquo;s talk
-          </a>
+          </Link>
 
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="site-menu"
-            className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[10px] font-medium tracking-[0.1em] uppercase transition-colors outline-none sm:gap-3 sm:px-5 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
+            className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[10px] font-medium tracking-[0.1em] uppercase transition-colors sm:gap-3 sm:px-5 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
               dark
                 ? 'border-[#0a0a0c]/20 text-[#0a0a0c] hover:border-[#0a0a0c]'
                 : 'border-white/40 text-white hover:border-white'
@@ -216,8 +262,16 @@ export function SiteHeader() {
       />
 
       <div
+        ref={menuRef}
         id="site-menu"
+        role="dialog"
+        aria-modal={open || undefined}
+        aria-label="Menu"
         aria-hidden={!open}
+        inert={!open}
+        // Lenis would otherwise swallow the wheel, so a drawer taller than the
+        // window (a 768px laptop) could not be scrolled to its bottom.
+        data-lenis-prevent
         className={`fixed inset-y-3 right-3 z-40 w-[min(92vw,27rem)] overflow-y-auto rounded-3xl bg-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           open ? 'translate-x-0' : 'translate-x-[calc(100%+0.75rem)]'
         }`}
@@ -226,7 +280,7 @@ export function SiteHeader() {
         <div className="flex min-h-full flex-col px-8 pt-28 pb-8 sm:px-10">
           <nav aria-label="Sections">
             {SECTIONS.map(({ id, label }) => (
-              <a
+              <Link
                 key={id}
                 /*
                  * A bare `#work` is inert on every route but the home page:
@@ -241,7 +295,7 @@ export function SiteHeader() {
                 className="block font-display text-3xl leading-[1.35] text-[#0a0a0c] transition-colors outline-none hover:text-accent focus-visible:text-accent sm:text-4xl"
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -252,7 +306,7 @@ export function SiteHeader() {
                 href={href}
                 onClick={() => setOpen(false)}
                 tabIndex={open ? undefined : -1}
-                className="block py-1.5 text-sm text-[#0a0a0c]/60 transition-colors outline-none hover:text-accent focus-visible:text-accent"
+                className="block py-1.5 text-sm text-[#0a0a0c]/70 transition-colors outline-none hover:text-accent focus-visible:text-accent"
               >
                 {label}
               </Link>
@@ -260,12 +314,12 @@ export function SiteHeader() {
           </nav>
 
           <div className="mt-14">
-            <p className="text-[10.5px] font-medium tracking-[0.18em] text-[#0a0a0c]/40 uppercase">
+            <p className="text-[10.5px] font-medium tracking-[0.18em] text-[#0a0a0c]/70 uppercase">
               Business enquiry
             </p>
             <dl className="mt-4 space-y-2 text-sm text-[#0a0a0c]">
               <div className="flex gap-5">
-                <dt className="w-4 shrink-0 text-[#0a0a0c]/40">E.</dt>
+                <dt className="w-4 shrink-0 text-[#0a0a0c]/70">E.</dt>
                 <dd>
                   <a
                     href={contact.email.href}
@@ -278,7 +332,7 @@ export function SiteHeader() {
               </div>
               {contact.whatsapp.map((w) => (
                 <div key={w.number} className="flex gap-5">
-                  <dt className="w-4 shrink-0 text-[#0a0a0c]/40">P.</dt>
+                  <dt className="w-4 shrink-0 text-[#0a0a0c]/70">P.</dt>
                   <dd className="flex gap-3">
                     <a
                       href={w.href}
@@ -288,8 +342,9 @@ export function SiteHeader() {
                       className="transition-colors hover:text-accent"
                     >
                       {w.display}
+                      <span className="sr-only"> (opens in a new tab)</span>
                     </a>
-                    <span className="text-[#0a0a0c]/40">{w.name}</span>
+                    <span className="text-[#0a0a0c]/70">{w.name}</span>
                   </dd>
                 </div>
               ))}
@@ -297,10 +352,9 @@ export function SiteHeader() {
           </div>
 
           {/*
-            The reference has a SOCIAL block here. Ours is deliberately absent:
-            the only social entry in `contact` is LinkedIn with href "#", and a
-            drawer full of links that go nowhere is worse than one that is
-            shorter. Add the real URLs and this block comes back.
+            The reference has a SOCIAL block here. Ours lives in the footer of
+            every page instead (PageFooter, and the home sign-off), so the
+            drawer stays short.
 
             The badge below takes the slot the reference gives its name-story
             link.
@@ -309,8 +363,8 @@ export function SiteHeader() {
             clock is real, and pairing it with "systems awake" is the one place
             the site gets to make its own point back to itself: at 03:00 in
             Malaysia nobody is at a desk, and everything Lewix has shipped is
-            still serving. Same claim the marquee and the uptime figure already
-            make, just landed at the hour where it means something.
+            still serving. Same claim the marquee already makes, just landed at the
+            hour where it means something.
           */}
           <div className="mt-auto pt-14">
             <span className="inline-flex items-center gap-3 rounded-full border border-[#0a0a0c]/15 px-4 py-2.5 text-[10.5px] font-medium tracking-[0.16em] text-[#0a0a0c]/70 uppercase">

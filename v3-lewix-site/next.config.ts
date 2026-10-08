@@ -4,7 +4,35 @@ import type { NextConfig } from 'next';
 // parent) has its own lockfile for the v1/v2 Vite builds. Pinning
 // `turbopack.root` via node:path/__dirname breaks config evaluation here, so
 // the warning is left in place rather than worked around badly.
+/**
+ * Content-Security-Policy. Written against what the pages actually load:
+ *  - script: own chunks plus Next's inline hydration scripts ('unsafe-inline';
+ *    a nonce would force every page dynamic), Cloudflare's injected beacon,
+ *    and 'wasm-unsafe-eval' for the meshopt decoder that unpacks the models.
+ *    Dev adds 'unsafe-eval' for React Refresh.
+ *  - img / connect: blob: and data: because GLTFLoader decodes embedded model
+ *    textures through blob URLs.
+ *  - connect: same origin covers /api/brief and Cloudflare's /cdn-cgi/rum.
+ */
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${
+    process.env.NODE_ENV === 'production' ? '' : " 'unsafe-eval'"
+  } https://static.cloudflareinsights.com`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  "connect-src 'self' blob: data: https://cloudflareinsights.com",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join('; ');
+
 const nextConfig: NextConfig = {
+  // `x-powered-by: Next.js` told every scanner which framework to try first.
+  poweredByHeader: false,
   // Next blocks cross-origin requests to the dev server by default (HMR
   // websocket, RSC payloads, etc. all 401 with a bare "Unauthorized" for any
   // Host other than localhost). Needed for the temporary Cloudflare quick
@@ -48,8 +76,8 @@ const nextConfig: NextConfig = {
     return [
       {
         /*
-          The hero's mountain.glb is 26MB and the three team models add
-          another 8.8MB, and every one of them was being served with
+          The models (mountain-v2 1.5MB, team models 1.7MB, after the
+          2026-10-09 compression; 35MB before) were being served with
           `cache-control: public, max-age=0`. Every repeat visitor
           revalidated ~35MB. Static chunks under /_next/static already get a
           year and `immutable`; these were the one class of large asset that
@@ -66,22 +94,13 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: '/draco/:path*',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-        ],
-      },
-      {
         /*
           Baseline security headers. The site shipped with none of these: no
           HSTS, no nosniff, no referrer policy, no framing protection.
 
-          Deliberately no full Content-Security-Policy here. A meaningful CSP
-          for this site has to account for the WebGL pipeline, next/font and
-          Next's inline hydration scripts, and a CSP written blind is the
-          kind of change that half-breaks a hero nobody notices until a
-          different platform loads it. `frame-ancestors` is the one directive
-          that carries real protection with no such risk, so it ships alone.
+          The CSP (see `csp` above) was left out at first for fear of
+          breaking the WebGL hero. It is now written against what the pages
+          actually load and was checked for violations on every route.
         */
         source: '/:path*',
         headers: [
@@ -98,10 +117,8 @@ const nextConfig: NextConfig = {
             // console that is otherwise clean.
             value: 'camera=(), microphone=(), geolocation=()',
           },
-          {
-            key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self'",
-          },
+          { key: 'Content-Security-Policy', value: csp },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
         ],
       },
     ];

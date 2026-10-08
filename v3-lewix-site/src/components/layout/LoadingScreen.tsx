@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { subscribeLoad, startReveal } from '@/lib/loadProgress';
+import { subscribeLoad, startReveal, hasRevealed } from '@/lib/loadProgress';
+import { lockScroll, unlockScroll, scrollToHash, consumePopNavigation } from '@/lib/scroll';
 import { hero } from '@/content';
 import { MARK_PATH, MARK_VIEWBOX } from '@/components/brand/logomark';
 
@@ -35,7 +36,11 @@ export function LoadingScreen() {
 
   // Rendered on the server too, so the light screen is up on first paint
   // rather than flashing the dark page first.
-  const [gone, setGone] = useState(false);
+  //
+  // On a client-side return to home the reveal has already happened: start
+  // gone. On the server and on a hard load the module state is fresh, so this
+  // reads false and matches the server HTML.
+  const [gone, setGone] = useState(hasRevealed);
   // The frame SVG's viewBox is kept equal to its pixel size. A stretched
   // viewBox breaks the dash maths: dash lengths resolve in user space while
   // non-scaling-stroke paints in device space, so the border stops short.
@@ -58,11 +63,21 @@ export function LoadingScreen() {
     const root = rootRef.current;
     const panel = panelRef.current;
     if (!root || !panel) return;
+    if (hasRevealed()) {
+      if (!consumePopNavigation()) scrollToHash();
+      return;
+    }
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mountedAt = performance.now();
 
-    document.body.style.overflow = 'hidden';
+    lockScroll();
+    let locked = true;
+    const unlock = () => {
+      if (!locked) return;
+      locked = false;
+      unlockScroll();
+    };
     window.scrollTo(0, 0);
 
     // Counter is driven off a tweened value, not raw progress, so it climbs
@@ -167,7 +182,11 @@ export function LoadingScreen() {
     // non-null narrowing of `panel` from the guard above.
     // ?loader=hold freezes it on screen for tuning; ?loader=slow stretches the
     // hold so the sequence can be watched without throttling the network.
-    const mode = new URLSearchParams(window.location.search).get('loader');
+    // Dev only: in production a shared ?loader=hold link froze the home page.
+    const mode =
+      process.env.NODE_ENV === 'production'
+        ? null
+        : new URLSearchParams(window.location.search).get('loader');
     const minVisible = mode === 'slow' ? 9000 : MIN_VISIBLE_MS;
 
     const tryExit = () => {
@@ -197,7 +216,10 @@ export function LoadingScreen() {
           panel.style.clipPath = `inset(${insetY}px ${insetX}px round ${2 * (1 - p)}px)`;
         },
         onComplete: () => {
-          document.body.style.overflow = '';
+          unlock();
+          // Arrived on /#team or similar: the loader pinned the page to the top
+          // while it was up, so go to the section now that it can be seen.
+          scrollToHash();
           setGone(true);
 
           // The panel now covers everything, and beneath it the hero is still
@@ -255,7 +277,7 @@ export function LoadingScreen() {
       gsap.ticker.remove(ticker as unknown as () => void);
       window.clearTimeout(minTimer);
       tl.kill();
-      document.body.style.overflow = '';
+      unlock();
     };
   }, []);
 

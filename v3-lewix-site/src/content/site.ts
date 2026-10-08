@@ -16,17 +16,6 @@
  * Copy is preserved EXACTLY as written. Do not rewrite or "polish" it.
  */
 
-export interface NavItem {
-  label: string;
-  href: string;
-}
-
-export interface Stat {
-  value: number;
-  suffix: string;
-  label: string;
-}
-
 export interface WhatsAppContact {
   /** Person the number belongs to. */
   name: string;
@@ -111,7 +100,7 @@ export const metadata = {
    * market and the price, so there is no gap for Google to fill from the page.
    */
   description:
-    "LEWIX builds the operational software Malaysian businesses run on: custom ERPs, logistics platforms and AI agents. Production, not prototypes. From RM 8,000.",
+    "LEWIX builds the operational software Malaysian businesses run on: custom ERPs, logistics platforms and AI agents, built for daily use. From RM 8,000.",
   /**
    * Google has ignored this since 2009; Bing and several AI crawlers still
    * read it. Cheap to keep accurate, so it names real services rather than
@@ -136,7 +125,7 @@ export const metadata = {
      * clicked, so it can afford the positioning line over the keywords.
      */
     description:
-      "We build the systems real businesses run on: logistics platforms tracking deliveries in real time, ERPs handling live inventory, AI agents that don't sleep. Not demos. Not prototypes. Production.",
+      "We build the systems real businesses run on: logistics platforms tracking deliveries in real time, ERPs handling live inventory, AI agents that don't sleep. Built for daily use, not for a pitch deck.",
     url: "https://lewix.ai",
     siteName: "LEWIX",
     type: "website",
@@ -191,23 +180,6 @@ export const registration = {
 /* Navigation                                                          */
 /* ------------------------------------------------------------------ */
 
-/** Navbar links (desktop pill nav + mobile overlay). Identical set used in the footer. */
-export const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Work", href: "/work" },
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-] as const satisfies readonly NavItem[];
-
-/** Footer link row — same five nav links, plus the email pushed to the right. */
-export const footerLinks = navItems;
-
-export const footerEmail = {
-  label: "hello@lewix.ai",
-  href: "mailto:hello@lewix.ai",
-} as const;
-
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
@@ -225,7 +197,7 @@ export const hero = {
   h1: "LEWIX builds custom ERPs, logistics platforms and AI agents for Malaysian businesses",
   /**
    * Hero kicker. Taken from the official brand board
-   * (`public/brand/lewix-brand-preview.jpg`) — sharper and more specific than
+   * (`brand/lewix-brand-preview.jpg`, kept out of `public/`) — sharper and more specific than
    * the studio-boilerplate line it replaced.
    */
   kicker: "A small team that ships big systems",
@@ -237,7 +209,7 @@ export const hero = {
   tagline:
     "We align strategy, design, and engineering into production-grade systems. Your vision, executed with precision and shipped to production.",
   ctas: [
-    { label: "Get in Touch", href: "/contact" },
+    { label: "Get in touch", href: "/contact" },
     { label: "View Work", href: "/work" },
   ],
   /** Bottom-of-hero service tags, separated by "/" in the original. */
@@ -257,7 +229,7 @@ export const marqueeItems = [
   "Full-Stack Engineering",
   "AI Integration",
   "Real Business Solutions",
-  "24/7 Uptime",
+  "Infrastructure We Run",
   "End-to-End Delivery",
 ] as const;
 
@@ -265,62 +237,17 @@ export const marqueeItems = [
 /* Stats / numbers                                                     */
 /* ------------------------------------------------------------------ */
 
-/**
- * Animated counters from the old site. NOT rendered anywhere in v3 — kept only
- * so the ported content set stays complete.
- *
- * "10+ Production Systems" was removed on request: the site does not publish a
- * project tally. If these ever get rendered, don't reintroduce one.
- *
- * TODO: "7+ Active Clients" is the same signal in different clothing, so it
- * probably shouldn't ship either. TODO: "3+ Years Shipping" contradicts the
- * hero's "(Est. 2026, Malaysia)"; confirm which is right.
- */
-export const stats = [
-  { value: 7, suffix: "+", label: "Active Clients" },
-  { value: 3, suffix: "+", label: "Years Shipping" },
-  { value: 99.99, suffix: "%", label: "Uptime" },
-] as const satisfies readonly Stat[];
-
 /* ------------------------------------------------------------------ */
 /* Home closing CTA                                                    */
 /* ------------------------------------------------------------------ */
-
-export const homeCta = {
-  /** Rendered as two lines, the second in the accent colour. */
-  headingLine1: "Let's build",
-  headingLine2Accent: "something real.",
-  body: "Tell us about your project. We move fast and ship production-ready.",
-  ctaLabel: "Get in Touch",
-  ctaHref: "/contact",
-} as const;
 
 /* ------------------------------------------------------------------ */
 /* Selected work section (home)                                        */
 /* ------------------------------------------------------------------ */
 
-export const featuredWorkCopy = {
-  eyebrow: "Selected Work",
-  heading: "Projects that ship",
-  viewAllLabel: "View all projects",
-  viewAllHref: "/work",
-} as const;
-
 /* ------------------------------------------------------------------ */
 /* Work index page                                                     */
 /* ------------------------------------------------------------------ */
-
-/**
- * TODO: the old /work index was a placeholder — it never listed the case studies,
- * even though all six existed at /work/[slug]. Kept here for reference only.
- */
-export const workPagePlaceholder = {
-  eyebrow: "Our Work",
-  heading: "Coming Soon",
-  body: "We're preparing our case studies. In the meantime, get in touch to learn about what we've built.",
-  ctaLabel: "Get in Touch",
-  ctaHref: "/contact",
-} as const;
 
 /** Copy from the individual case study page shell. */
 export const caseStudyPageCopy = {
@@ -335,7 +262,7 @@ export const caseStudyPageCopy = {
   solutionHeading: "The Solution",
   capabilitiesHeading: "What It Does",
   ctaEyebrow: "Next step",
-  ctaLabel: "Start a Similar Project",
+  ctaLabel: "Start a similar project",
   ctaBody:
     "Tell us what is costing you hours. We will come back with what it takes to build, what it takes to run, and whether we are the right people for it.",
   prevLabel: "Previous system",
@@ -350,7 +277,7 @@ export const caseStudyPageCopy = {
 /* ------------------------------------------------------------------ */
 
 export const contact = {
-  eyebrow: "Get in Touch",
+  eyebrow: "Get in touch",
   /**
    * Was "Let's build / together" over "Tell us about your project." Both are
    * true of literally any studio, so the closing section asked for nothing and
@@ -386,55 +313,7 @@ export const contact = {
     },
   ],
   location: "Malaysia",
-  social: [
-    // TODO: LinkedIn href was "#" on the old site — real URL still needed.
-    { label: "LinkedIn", href: "#" },
-  ],
-} as const;
-
-/**
- * Contact form fields as they appeared on the old site.
- * TODO: the original form had NO submit handler, no action, and no validation —
- * "Send Message" did nothing. Wire this up on the new site.
- */
-export const contactForm = {
-  fields: [
-    { name: "name", label: "Name", type: "text", placeholder: "Your name" },
-    {
-      name: "email",
-      label: "Email",
-      type: "email",
-      placeholder: "your@email.com",
-    },
-    {
-      name: "company",
-      label: "Company",
-      type: "text",
-      placeholder: "Company name",
-    },
-    {
-      name: "budget",
-      label: "Budget Range",
-      type: "select",
-      placeholder: "Select a range",
-    },
-    {
-      name: "message",
-      label: "Message",
-      type: "textarea",
-      placeholder: "Tell us about your project...",
-    },
-  ],
-  budgetRanges: [
-    { value: "", label: "Select a range" },
-    // Floored at `pricing.amount`. A band opening below the starting price
-    // invites a budget we would only have to turn down.
-    { value: "8k-10k", label: "RM 8,000 - RM 10,000" },
-    { value: "10k-25k", label: "RM 10,000 - RM 25,000" },
-    { value: "25k-50k", label: "RM 25,000 - RM 50,000" },
-    { value: "50k+", label: "RM 50,000+" },
-  ],
-  submitLabel: "Send Message",
+  social: [{ label: "LinkedIn", href: socialProfiles.linkedin }],
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -495,10 +374,3 @@ export const contactBrief = [
   },
 ] as const;
 
-/** Section labels used on the contact info card. */
-export const contactLabels = {
-  email: "Email",
-  whatsapp: "WhatsApp",
-  location: "Location",
-  social: "Social",
-} as const;

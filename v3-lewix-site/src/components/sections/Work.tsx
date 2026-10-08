@@ -11,10 +11,10 @@ import { workIndexCopy } from '@/content';
  */
 export function Work() {
   return (
-    <Section id="work" num="04" title="Work">
+    <Section id="work" num="03" title="Work">
       <p className="mx-auto mb-12 max-w-2xl text-center text-sm leading-relaxed text-fg-muted">
-        Factories, warehouses, fleets, workshops and shops. Each system replaced whatever the
-        business was holding itself together with. Our clients stay confidential, so we name
+        Factories, warehouses, fleets, workshops and shops. Each system is built to replace whatever
+        the business was holding itself together with. Our clients stay confidential, so we name
         the system and never the business.
       </p>
 
@@ -34,7 +34,7 @@ export function Work() {
         </div>
         <ProductCards only={['smoothsail']} />
         <div className="mt-12 text-center">
-          <Link href="/work" className="eyebrow transition-colors hover:text-accent">
+          <Link href="/work" className="eyebrow inline-block py-2 transition-colors hover:text-accent">
             All work &rarr;
           </Link>
         </div>

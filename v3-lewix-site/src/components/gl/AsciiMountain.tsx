@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 import { CharacterAtlas } from './CharacterAtlas';
 import { MouseTrail } from './MouseTrail';
@@ -125,7 +126,18 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
 
     const initial = viewport();
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
+    // No WebGL (disabled, blocklisted GPU, locked-down office PC): three throws
+    // here, and with nothing catching it the whole home page was replaced by
+    // "This page couldn't load". Without a canvas the page is still the page;
+    // release the loader and render nothing.
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
+    } catch {
+      canvas.style.display = 'none';
+      setLoadReady();
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     // `false` = don't write inline width/height styles onto the canvas. The
     // element is already sized by `fixed inset-0`; letting three.js also set
@@ -262,9 +274,13 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     let modelReady = false;
     let readySignalled = false;
 
+    // mountain-v2: textures (replaced by meshMaterial anyway) and unused
+    // attributes stripped, geometry meshopt-compressed with 14-bit positions on
+    // one scene-wide grid. 27.5MB -> 1.5MB, same 254,489 vertices.
     const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(
-      '/models/mountain.glb',
+      '/models/mountain-v2.glb',
       (gltf) => {
       if (disposed) return;
       const model = gltf.scene;
@@ -505,8 +521,12 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     // running it underneath the panel would waste the whole animation.
     let buildStart = 0;
     const BUILD_MS = 1600;
+    // Keyed on BOTH the reveal and the model: on a client-side return to home
+    // the reveal has already happened before the model has parsed, and starting
+    // the build then would finish it on an empty scene.
+    let revealSeen = false;
     const unsubscribeReveal = subscribeLoad(({ revealing }) => {
-      if (revealing && buildStart === 0) buildStart = performance.now();
+      revealSeen = revealing;
     });
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -531,26 +551,32 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     window.addEventListener('orientationchange', onResize);
 
     // --- loop ---
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     let raf = 0;
 
-    function animate() {
-      const dt = clock.getDelta();
+    function animate(now?: number) {
+      timer.update(now);
+      const dt = timer.getDelta();
+      if (revealSeen && modelReady && buildStart === 0) buildStart = performance.now();
 
       // uReveal 1 -> 0 wipes the mesh in. It must reach 0: `visible =
       // step(uReveal, revealMask)` discards everything but perfectly
       // upward-facing normals while this sits at 1.
-      meshUniforms.uReveal.value = THREE.MathUtils.damp(meshUniforms.uReveal.value, 0, 1.4, dt);
+      meshUniforms.uReveal.value = prefersReduced
+        ? 0
+        : THREE.MathUtils.damp(meshUniforms.uReveal.value, 0, 1.4, dt);
 
       const vh = viewport().h;
       const maxScroll = Math.max(document.documentElement.scrollHeight - vh, 1);
       const stageEnd = vh * STAGE_END_VH;
 
       // Phase 1: the shot, from the top of the page to About.
-      const stageT = clamp01(scrollY / stageEnd);
-
       // Phase 2: orbit, mapped across whatever scroll remains below the stage.
-      const orbitT = clamp01((scrollY - stageEnd) / Math.max(maxScroll - stageEnd, 1));
+      // Reduced motion holds the opening frame: no orbit, no dolly, no pan.
+      const stageT = prefersReduced ? 0 : clamp01(scrollY / stageEnd);
+      const orbitT = prefersReduced
+        ? 0
+        : clamp01((scrollY - stageEnd) / Math.max(maxScroll - stageEnd, 1));
 
       const angle = track(stageT, STAGE.angle) + orbitT * Math.PI;
       const restingDist = fitDistance * track(stageT, STAGE.dist) * (1 - orbitT * 0.14);
@@ -573,7 +599,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       // it there just shoves the mountain into the bottom-right corner and
       // crops most of it away, which is exactly how mobile was rendering.
       const introPan = viewport().w < 640 ? 0 : INTRO_PAN;
-      const panEase = smoothstep(clamp01(scrollY / (vh * PAN_VH)));
+      const panEase = prefersReduced ? 0 : smoothstep(clamp01(scrollY / (vh * PAN_VH)));
       const pan = THREE.MathUtils.lerp(introPan, 0, panEase) * modelRadius;
       if (pan !== 0) {
         viewDir.subVectors(lookTarget, camera.position).normalize();
@@ -605,7 +631,7 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
         scrollVelocity *= 0.8;
       }
 
-      asciiUniforms.uTime.value = clock.elapsedTime;
+      asciiUniforms.uTime.value = timer.getElapsed();
 
       // Linear build so every band of the range gets equal screen time, with a
       // slight ease-out at the tail so the last glyphs settle rather than snap.
@@ -653,8 +679,23 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     }
     raf = requestAnimationFrame(animate);
 
+    // A lost context (GPU reset, a phone backgrounding the tab) left the field
+    // black for the rest of the visit. preventDefault is what allows a restore;
+    // three re-uploads its resources on the restored context by itself.
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      cancelAnimationFrame(raf);
+    };
+    const onContextRestored = () => {
+      raf = requestAnimationFrame(animate);
+    };
+    canvas.addEventListener('webglcontextlost', onContextLost);
+    canvas.addEventListener('webglcontextrestored', onContextRestored);
+
     return () => {
       disposed = true;
+      canvas.removeEventListener('webglcontextlost', onContextLost);
+      canvas.removeEventListener('webglcontextrestored', onContextRestored);
       unsubscribeReveal();
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onPointerMove);
@@ -674,6 +715,9 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
         const mesh = o as THREE.Mesh;
         if (mesh.isMesh) mesh.geometry?.dispose();
       });
+      // No forceContextLoss() here: Next keeps the page's DOM for Back/Forward,
+      // so the same <canvas> comes back and the next mount must be able to get
+      // a live context from it. Losing it on purpose blanked the field.
       renderer.dispose();
     };
   }, [accent]);

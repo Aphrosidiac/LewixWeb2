@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 import { CharacterAtlas } from './CharacterAtlas';
 import { quadVertex, detailMeshVertex, detailMeshFragment, asciiFragment } from './asciiShaders';
@@ -48,13 +49,13 @@ const CELLS_ACROSS = 112;
 const VIEW: Record<string, { zoom: number; yaw: number; pitch: number; roll: number }> = {
   // Serpentine dragon, ~56 long x 25 tall x 40 deep — it already lies along X,
   // so yaw 0 looks straight down its length and gives the profile.
-  'lewis.glb': { zoom: 1.02, yaw: 0.0, pitch: 0.04, roll: 0 },
+  'lewis-v2.glb': { zoom: 1.02, yaw: 0.0, pitch: 0.04, roll: 0 },
   // Brain reads best near head-on, where both hemispheres and the stem show.
-  'noel.glb': { zoom: 0.95, yaw: 0.0, pitch: 0.05, roll: 0 },
-  // Katana ships lying flat along X. `roll` stands it upright; `yaw` then turns
-  // the blade's flat toward camera — edge-on it's two hairlines (blade + saya)
-  // with almost no surface to sample.
-  'fakhrul.glb': { zoom: 0.95, yaw: Math.PI / 2, pitch: 0.05, roll: Math.PI / 2 },
+  'noel-v2.glb': { zoom: 0.95, yaw: 0.0, pitch: 0.05, roll: 0 },
+  // Katana ships lying flat along X. `roll` stands it upright. yaw 0 shows the
+  // blade's flat, guard and handle; the old yaw of PI/2 was edge-on, which
+  // rendered as two hairlines (measured on the live site, 2026-10-09).
+  'fakhrul-v2.glb': { zoom: 0.95, yaw: 0, pitch: 0.05, roll: Math.PI / 2 },
 };
 
 const DEFAULT_VIEW = { zoom: 0.9, yaw: 0, pitch: 0.1, roll: 0 };
@@ -88,7 +89,15 @@ export function TeamModels() {
      *  `window.innerWidth/innerHeight` is the wrong measurement on mobile. */
     const viewport = () => ({ w: canvas.clientWidth, h: canvas.clientHeight });
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
+    // Same guard as the mountain: without WebGL the cards keep their empty
+    // frames instead of taking the page down.
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
+    } catch {
+      canvas.style.display = 'none';
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     const initial = viewport();
     // `false`: the canvas is sized by `fixed inset-0`, not by inline styles.
@@ -200,7 +209,32 @@ export function TeamModels() {
 
     let disposed = false;
     const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
 
+    // The models (≈8MB before compression) used to start downloading at the
+    // same moment as the mountain, on every visit, competing with the one file
+    // the loading screen waits on. They now start a screen before the Team
+    // section scrolls in.
+    const teamSection = document.getElementById('team');
+    let started = false;
+    const startLoading = () => {
+      if (started || disposed) return;
+      started = true;
+      loadAll();
+    };
+    const nearTeam = new IntersectionObserver(
+      (records) => {
+        if (records.some((r) => r.isIntersecting)) {
+          nearTeam.disconnect();
+          startLoading();
+        }
+      },
+      { rootMargin: '100% 0px' }
+    );
+    if (teamSection) nearTeam.observe(teamSection);
+    else startLoading();
+
+    function loadAll() {
     entries.forEach((entry) => {
       const cfg = entry.cfg;
       loader.load(
@@ -264,6 +298,7 @@ export function TeamModels() {
         (err) => console.error('[TeamModels] failed to load', entry.src, err)
       );
     });
+    }
 
     function onResize() {
       const { w, h } = viewport();
@@ -283,11 +318,12 @@ export function TeamModels() {
       (window as unknown as { __team?: unknown }).__team = entries;
     }
 
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     let raf = 0;
 
-    function animate() {
-      const t = clock.getElapsedTime();
+    function animate(now?: number) {
+      timer.update(now);
+      const t = timer.getElapsed();
 
       renderer.setScissorTest(false);
       renderer.setClearColor(0x000000, 0);
@@ -361,6 +397,7 @@ export function TeamModels() {
 
     return () => {
       disposed = true;
+      nearTeam.disconnect();
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('orientationchange', onResize);
@@ -378,6 +415,7 @@ export function TeamModels() {
       atlas.dispose();
       asciiMaterial.dispose();
       quad.geometry.dispose();
+      // See AsciiMountain: no forceContextLoss(), the canvas is reused.
       renderer.dispose();
     };
   }, []);

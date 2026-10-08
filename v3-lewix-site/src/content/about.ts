@@ -28,20 +28,9 @@ export interface Principle {
   description: string;
 }
 
-/**
- * The about page headline was rendered with a line break and an accented span:
- *   "A small team that" / "ships <accent>big systems</accent>"
- */
-export const aboutHero = {
-  eyebrow: "About Us",
-  headingLine1: "A small team that",
-  headingLine2Prefix: "ships ",
-  headingLine2Accent: "big systems",
-} as const;
-
 /** The two-column company story on /about. Paragraph order matters. */
 export const story = [
-  "Lewix.ai builds the operational software a business actually runs on: inventory, invoicing, dispatch, production scheduling. The systems that stop the company when they stop.",
+  "LEWIX builds the operational software a business actually runs on: inventory, invoicing, dispatch, production scheduling. The systems that stop the company when they stop.",
   "Today that means label printing and packaging plants, fresh produce supply, distribution fleets, car workshops, food delivery and packaging trade, with furniture, consumer goods and pet retail next. Each system is written around how the business already works: where the books are already in SQL Account, it reads from there directly instead of asking anyone to type the same figure twice.",
   "All of it runs on infrastructure we manage ourselves, not a platform we'd have to file a ticket with when something needs fixing.",
 ] as const;
@@ -49,11 +38,6 @@ export const story = [
 /** The full-width scroll-revealed manifesto statement on the home page. */
 export const manifesto =
   "Most software gets demoed. Ours gets used, every day, by people whose work stops when it breaks. That's a different standard, and it's the one we build to.";
-
-export const principlesCopy = {
-  eyebrow: "How We Work",
-  heading: "Our principles",
-} as const;
 
 export const principles = [
   {
@@ -66,7 +50,7 @@ export const principles = [
     // third time. One card carries it now; "or a prototype" is what's left of
     // the merge.
     num: "01",
-    title: "Ship, Don't Just Pitch",
+    title: "Ship, don't just pitch",
     description:
       "The deliverable is a running system, not a document or a prototype. We build it, deploy it, and hand over the keys.",
   },
@@ -76,7 +60,7 @@ export const principles = [
     // versions, audits, new modules years on. It's also the clearest line
     // between this and hiring a freelancer.
     num: "02",
-    title: "Launch Is The Start",
+    title: "Launch is the start",
     description:
       "Systems get second versions, new modules, and audits as the business changes. We're still in the codebase long after handover.",
   },
@@ -84,13 +68,13 @@ export const principles = [
     // Narrowed to the handoff point. The wider "we run every layer" claim was
     // already made by the Ethos paragraph sitting directly above this row.
     num: "03",
-    title: "Own the Stack",
+    title: "Own the stack",
     description:
       "One team writes the schema, the screens and the deploy script. Nothing gets lost in a handoff, because there isn't one.",
   },
   {
     num: "04",
-    title: "Real Problems Only",
+    title: "Real problems only",
     description:
       "We take on work where something is measurably broken: hours lost, orders missed, numbers that don't reconcile.",
   },

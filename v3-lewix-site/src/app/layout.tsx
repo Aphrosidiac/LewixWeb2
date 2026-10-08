@@ -4,6 +4,7 @@ import './globals.css';
 
 import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { SiteHeader } from '@/components/layout/SiteHeader';
+import { PageFooter } from '@/components/layout/PageFooter';
 import { metadata as siteMeta, site } from '@/content';
 import { JsonLd, organizationSchema, webSiteSchema } from '@/lib/schema';
 
@@ -130,9 +131,16 @@ export default function RootLayout({
         <JsonLd data={organizationSchema()} />
         <JsonLd data={webSiteSchema()} />
 
+        <a
+          href="#main"
+          className="sr-only z-[200] rounded-full bg-white px-5 py-3 text-sm text-[#0a0a0c] focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+        >
+          Skip to content
+        </a>
         <SmoothScroll />
         <SiteHeader />
         {children}
+        <PageFooter />
       </body>
     </html>
   );

@@ -39,7 +39,11 @@ export function HeadlineReveal({
   const words = text.split(' ');
 
   return (
-    <span className={className} aria-label={text}>
+    // The text itself, visually hidden, is what assistive tech reads. An
+    // aria-label on a plain <span> is not reliably announced, and every word
+    // span below is aria-hidden.
+    <span className={className}>
+      <span className="sr-only">{text}</span>
       {words.map((word, i) => (
         <span
           key={`${word}-${i}`}

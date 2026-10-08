@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { registerLenis } from '@/lib/scroll';
 
 /**
  * Lenis smooth scroll, driven off the GSAP ticker so ScrollTrigger stays in
@@ -21,6 +22,7 @@ export function SmoothScroll() {
     });
 
     lenis.on('scroll', ScrollTrigger.update);
+    registerLenis(lenis);
 
     // Lenis owns the scroll target, so window.scrollTo gets reverted on the next
     // frame. Expose the instance in dev so tooling can jump to an exact offset.
@@ -34,6 +36,7 @@ export function SmoothScroll() {
 
     return () => {
       gsap.ticker.remove(onTick);
+      registerLenis(null);
       lenis.destroy();
     };
   }, []);

@@ -29,8 +29,13 @@ export function ScrollStage() {
     let raf = 0;
     let last = -1;
 
+    // The CSS `vh` the spacer is sized in, measured off the spacer itself.
+    // On iOS `innerHeight` moves with the URL bar while `vh` does not, so the
+    // readout and the spacer it describes drifted apart.
+    const spacer = wrap.parentElement;
     const tick = () => {
-      const t = stageProgress(window.scrollY, window.innerHeight);
+      const vh = spacer ? spacer.offsetHeight / STAGE_VH : window.innerHeight;
+      const t = stageProgress(window.scrollY, vh);
       if (t !== last) {
         last = t;
 

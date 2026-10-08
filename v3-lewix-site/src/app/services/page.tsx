@@ -26,7 +26,8 @@ import { metadata as siteMeta, pricing, process, services, servicesCopy } from '
  */
 export const metadata: Metadata = {
   title: 'Services: custom ERPs, logistics and AI',
-  description: `${servicesCopy.page.intro} Systems and ERPs, web applications, AI integration, logistics and delivery. Projects start at ${pricing.amount}.`,
+  // Was the page intro plus a list: 202 characters, cut off in results.
+  description: `Custom ERPs, web applications, AI integration and logistics systems for Malaysian businesses, built to run every day. Projects start at ${pricing.amount}.`,
   alternates: { canonical: '/services' },
   ...shareCard({
     title: `Services · ${siteMeta.openGraph.siteName}`,
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <main>
+    <main id="main">
       <JsonLd data={breadcrumbSchema('Services', '/services')} />
       <Reveal />
 
@@ -49,7 +50,7 @@ export default function ServicesPage() {
         <div className="mx-auto w-full max-w-6xl">
           <p
             data-reveal
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/45"
+            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/70"
           >
             {servicesCopy.page.eyebrow}
           </p>
@@ -65,7 +66,7 @@ export default function ServicesPage() {
           <p
             data-reveal
             data-reveal-delay="120"
-            className="mt-10 max-w-xl text-base leading-relaxed text-[#0a0a0c]/60"
+            className="mt-10 max-w-xl text-base leading-relaxed text-[#0a0a0c]/70"
           >
             {servicesCopy.page.intro}
           </p>
@@ -120,7 +121,7 @@ export default function ServicesPage() {
       >
         <div className="mx-auto w-full max-w-6xl">
           <div data-reveal className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/45">
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/70">
               {servicesCopy.processSection.eyebrow}
             </p>
             <h2 className="mt-6 font-display font-semibold text-4xl leading-none tracking-tight sm:text-6xl">
@@ -131,13 +132,13 @@ export default function ServicesPage() {
           <ol className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {process.map((step, i) => (
               <li key={step.step} data-reveal data-reveal-delay={`${Math.min(i, 3) * 60}`}>
-                <span className="font-mono text-[11px] tracking-[0.2em] text-accent">
+                <span className="font-mono text-[11px] tracking-[0.2em] text-accent-ink">
                   {step.step}
                 </span>
                 <h3 className="mt-4 font-display font-semibold text-xl tracking-tight">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#0a0a0c]/60">{step.description}</p>
+                <p className="mt-3 text-sm leading-relaxed text-[#0a0a0c]/70">{step.description}</p>
               </li>
             ))}
           </ol>
@@ -159,7 +160,7 @@ export default function ServicesPage() {
             >
               {servicesCopy.page.ctaLabel}
             </Link>
-            <Link href="/work" className="text-sm text-fg-muted transition-colors hover:text-accent">
+            <Link href="/work" className="inline-block py-2 text-sm text-fg-muted transition-colors hover:text-accent">
               See what that looks like built
             </Link>
           </div>

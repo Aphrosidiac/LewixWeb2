@@ -32,6 +32,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
     },
     sitemap: [`${site.url}/sitemap.xml`, `${site.url}/horizon/sitemap.xml`],
-    host: site.url,
+    // No `host`: it emitted a non-standard `Host:` line (a retired Yandex
+    // directive) that other crawlers flag as an unknown rule.
   };
 }

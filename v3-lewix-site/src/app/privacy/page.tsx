@@ -20,12 +20,12 @@ import { contact, privacyCopy, privacyMeta, privacySections, site } from '@/cont
 export const metadata: Metadata = {
   title: 'Privacy',
   description:
-    'What LEWIX collects, which is almost nothing. No analytics, no cookies, and a contact form that sends nothing to us on its own.',
+    'What LEWIX collects, which is very little. No cookies, no advertising trackers, and a contact form that sends only what you write, when you press Send.',
   alternates: { canonical: '/privacy' },
   ...shareCard({
     title: `Privacy · ${site.name}`,
     description:
-      'No analytics, no cookies, no tracking. What we hold is what you email us, and for how long.',
+      'No cookies, no advertising trackers. What we hold is what you send us, why, and for how long.',
     url: '/privacy',
     type: 'website',
   }),
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main>
+    <main id="main">
       <Reveal />
 
       {/* `data-light-surface` inverts SiteHeader; without it the white pill
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
         <div className="mx-auto w-full max-w-3xl">
           <p
             data-reveal
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/45"
+            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#0a0a0c]/70"
           >
             {privacyCopy.eyebrow}
           </p>
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
           <p
             data-reveal
             data-reveal-delay="120"
-            className="mt-8 max-w-xl text-base leading-relaxed text-[#0a0a0c]/60"
+            className="mt-8 max-w-xl text-base leading-relaxed text-[#0a0a0c]/70"
           >
             {privacyCopy.intro}
           </p>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
           <p
             data-reveal
             data-reveal-delay="180"
-            className="mt-10 border-t border-[#0a0a0c]/12 pt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-[#0a0a0c]/40"
+            className="mt-10 border-t border-[#0a0a0c]/12 pt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-[#0a0a0c]/70"
           >
             Last updated {privacyMeta.updatedDisplay}
           </p>
@@ -82,6 +82,7 @@ export default function PrivacyPage() {
           {privacySections.map((section, i) => (
             <div
               key={section.heading}
+              lang={section.lang}
               data-reveal
               data-reveal-delay={i === 0 ? undefined : '60'}
               className="border-t border-line py-12 first:border-t-0 first:pt-0"

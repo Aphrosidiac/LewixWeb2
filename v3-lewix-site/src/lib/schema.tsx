@@ -19,6 +19,7 @@
  */
 
 import { caseStudies, contact, registration, site, socialProfiles } from '@/content';
+import { team } from '@/content/team';
 import { faqs } from '@/content/contactPage';
 
 /** Stable node ids, so separate blocks can reference one another by @id. */
@@ -49,12 +50,12 @@ export function organizationSchema() {
     legalName: site.legalName,
     url: site.url,
     logo: `${site.url}/brand/lewix-logomark-gradient-512.png`,
-    image: `${site.url}/opengraph-image`,
+    image: `${site.url}/opengraph-image.png`,
     // The locked LinkedIn About opening. Answer engines quote this field
     // directly when asked "what is LEWIX", so it is the positioning line
     // rather than a keyword list.
     description:
-      "We build the systems real businesses run on: logistics platforms tracking deliveries in real time, ERPs handling live inventory, AI agents that don't sleep. Not demos. Not prototypes. Production.",
+      "We build the systems real businesses run on: logistics platforms tracking deliveries in real time, ERPs handling live inventory, AI agents that don't sleep. Built for daily use, not for a pitch deck.",
     slogan: 'Transcending the Industry',
     foundingDate: registration.foundingDate,
     email: contact.email.label,
@@ -90,7 +91,8 @@ export function organizationSchema() {
       areaServed: 'MY',
       availableLanguage: ['en', 'ms'],
     })),
-    founder: contact.whatsapp.map((person) => ({
+    // The same three people the home page shows under "Founding Team".
+    founder: team.map((person) => ({
       '@type': 'Person',
       name: person.name,
     })),
@@ -198,7 +200,7 @@ export function caseStudySchema(slug: string) {
             '@type': 'ListItem',
             position: 2,
             name: 'Work',
-            item: `${site.url}/#work`,
+            item: `${site.url}/work`,
           },
           { '@type': 'ListItem', position: 3, name: study.title },
         ],

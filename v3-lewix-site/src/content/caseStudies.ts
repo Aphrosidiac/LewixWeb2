@@ -118,7 +118,7 @@ export const caseStudies: readonly CaseStudy[] = [
   },
   {
     slug: "flexible-packaging-mes",
-    title: "Flexible Packaging MES",
+    title: "Flexible Packaging Production System",
     type: "Production route, lot tracing and shop-floor tablets",
     category: "industry",
     sector: "Packaging manufacturing",
@@ -261,7 +261,7 @@ export const caseStudies: readonly CaseStudy[] = [
   },
   {
     slug: "packaging-supplies-mis",
-    title: "Packaging Supplies MIS",
+    title: "Packaging Supplies Pricing & Orders",
     type: "Pricing and order management",
     category: "trade",
     sector: "Packaging trade",
@@ -349,10 +349,10 @@ export const caseStudies: readonly CaseStudy[] = [
  */
 export const workIndexCopy = {
   eyebrow: "Work",
-  headingLine1: "Systems running",
-  headingLine2Accent: "in production",
+  headingLine1: "Systems that run",
+  headingLine2Accent: "real operations",
   intro:
-    "Factories, warehouses, fleets, workshops and shops. Each one is the software the business now runs on, not a pilot that was handed over and left. Clients stay confidential, so the systems are named and the businesses are not.",
+    "Factories, warehouses, fleets, workshops and shops. Most are the software the business now runs on every day. The rest are live demos or still in build, and each row says which. Clients stay confidential, so the systems are named and the businesses are not.",
   countLabel: "client systems",
   productsEyebrow: "Our own products",
   productsHeading: "Software we run ourselves",
@@ -360,7 +360,7 @@ export const workIndexCopy = {
     "The same team, building for itself. These are public, so you can open them and look around.",
   productsIntroSingle:
     "The same team, building for itself. It is public, so you can open it and look around.",
-  ctaHeading: "Something here look familiar?",
+  ctaHeading: "Anything here look familiar?",
   ctaBody:
     "If one of these reads like your operation, the conversation starts the same way it did for them.",
   ctaLabel: "Start a project",

@@ -28,15 +28,8 @@ export interface TeamMember {
   media?: TeamMedia;
 }
 
-export const teamCopy = {
-  eyebrow: 'Team',
-  heading: 'Who builds it',
-  /** Shown while the roster is still incomplete. */
-  pendingNote: 'Full team details coming soon.',
-} as const;
-
 export const team: readonly TeamMember[] = [
-  { name: 'Lewis', media: { kind: 'model', src: '/models/team/lewis.glb' } },
-  { name: 'Noel', media: { kind: 'model', src: '/models/team/noel.glb' } },
-  { name: 'Fakhrul', media: { kind: 'model', src: '/models/team/fakhrul.glb' } },
+  { name: 'Lewis', media: { kind: 'model', src: '/models/team/lewis-v2.glb' } },
+  { name: 'Noel', media: { kind: 'model', src: '/models/team/noel-v2.glb' } },
+  { name: 'Fakhrul', media: { kind: 'model', src: '/models/team/fakhrul-v2.glb' } },
 ];

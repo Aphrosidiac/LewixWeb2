@@ -124,7 +124,7 @@ export const briefSteps: readonly BriefStep[] = [
 export const faqs = [
   {
     q: 'What does it cost?',
-    a: 'Projects start at RM 8,000. That is a floor rather than an average — what a system actually costs depends on how much of the operation it has to cover — but it is a real number, and we would rather you had it before spending an hour on a call finding out.',
+    a: 'Projects start at RM 8,000. That is a floor rather than an average. What a system actually costs depends on how much of the operation it has to cover, but it is a real number, and we would rather you had it before spending an hour on a call finding out.',
   },
   {
     q: 'What do you actually build?',
@@ -132,7 +132,7 @@ export const faqs = [
   },
   {
     q: 'How does a project start?',
-    a: 'Discovery first, where we learn how the business actually operates. Then architecture — schema, API structure, user flows — before any interface gets built, so there are no surprises during the build.',
+    a: 'Discovery first, where we learn how the business actually operates. Then the design of the system itself: what it stores, how the parts talk to each other and how people move through it, all before any screen gets built, so there are no surprises during the build.',
   },
   {
     q: 'Will it work with the software we already use?',

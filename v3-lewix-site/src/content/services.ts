@@ -56,7 +56,7 @@ export const services = [
       "Real-Time Data",
       "API Integrations",
       "Multi-Tenant Architecture",
-      "Performance Optimized",
+      "Performance Optimised",
     ],
   },
   {
@@ -79,14 +79,14 @@ export const services = [
     num: "04",
     title: "Logistics & Delivery",
     description:
-      "Complete delivery and distribution platforms. Order management, driver tracking, route optimization, kitchen display systems, and fleet management.",
+      "Complete delivery and distribution platforms. Order management, driver tracking, route optimisation, kitchen display systems, and fleet management.",
     shortDescription:
-      "Order management, driver tracking, route optimization, and fleet management in real-time.",
+      "Order management, driver tracking, route optimisation, and fleet management in real time.",
     features: [
       "Order Management",
       "Driver Mobile Apps",
       "Real-Time Tracking",
-      "Route Optimization",
+      "Route Optimisation",
       "Kitchen Display",
       "Proof of Delivery",
     ],
@@ -110,7 +110,7 @@ export const process = [
     step: "03",
     title: "Build",
     description:
-      "We code. Fast, focused sprints with daily progress. You see working software within the first week.",
+      "We code. Fast, focused sprints with daily progress. You see working software as it is built, not only at the end.",
   },
   {
     step: "04",
@@ -135,8 +135,8 @@ export const servicesCopy = {
     eyebrow: "Services",
     heading: "What we build",
     intro:
-      "We specialize in production-grade systems for businesses that need to move fast and ship reliably.",
-    ctaLabel: "Start a Project",
+      "We specialise in production-grade systems for businesses that need to move fast and ship reliably.",
+    ctaLabel: "Start a project",
     ctaHref: "/contact",
   },
   processSection: {

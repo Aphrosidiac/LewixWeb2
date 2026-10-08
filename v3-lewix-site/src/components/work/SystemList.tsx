@@ -31,14 +31,14 @@ export function SystemList() {
 
   return (
     <div>
-      <div className="mb-10 flex flex-wrap justify-center gap-x-6 gap-y-3">
+      <div className="mb-10 flex flex-wrap justify-center gap-x-5 gap-y-1">
         {(['all', ...available] as Filter[]).map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
             aria-pressed={filter === f}
-            className={`eyebrow transition-colors ${filter === f ? 'text-accent' : 'hover:text-fg'}`}
+            className={`eyebrow py-2.5 transition-colors ${filter === f ? 'text-accent' : 'hover:text-fg'}`}
           >
             {f === 'all' ? 'All' : categoryLabels[f]}
           </button>
@@ -50,20 +50,22 @@ export function SystemList() {
           <li key={study.slug}>
             <Link
               href={`/work/${study.slug}`}
-              className="work-row group block border-b border-line py-7 outline-none transition-colors hover:bg-bg-raised/70 focus-visible:bg-bg-raised/70 sm:px-4"
+              className="work-row group block border-b border-line py-7 transition-colors hover:bg-bg-raised/70 focus-visible:bg-bg-raised/70 sm:px-4"
             >
-              <div className="grid items-baseline gap-x-6 gap-y-2 sm:grid-cols-12">
-                <span className="font-display font-semibold text-sm text-fg-faint sm:col-span-1">
+              {/* 12 columns only from lg. At tablet width the title column was
+                  a third of 768px and long names broke onto three lines. */}
+              <div className="grid items-baseline gap-x-6 gap-y-2 lg:grid-cols-12">
+                <span className="font-display font-semibold text-sm text-fg-faint lg:col-span-1">
                   {String(caseStudies.indexOf(study) + 1).padStart(2, '0')}
                 </span>
-                <span className="font-display font-semibold text-3xl leading-tight text-fg transition-colors group-hover:text-accent sm:col-span-4">
+                <span className="font-display font-semibold text-3xl leading-tight text-fg transition-colors group-hover:text-accent lg:col-span-4">
                   {study.title}
                 </span>
-                <span className="text-sm leading-relaxed text-fg-muted sm:col-span-5">
+                <span className="max-w-xl text-sm leading-relaxed text-fg-muted lg:col-span-5">
                   {study.shortDescription}
                   <span className="mt-2 block eyebrow">{study.sector}</span>
                 </span>
-                <span className="flex items-center justify-between gap-4 sm:col-span-2 sm:justify-end">
+                <span className="flex items-center justify-between gap-4 lg:col-span-2 lg:justify-end">
                   <StatusTag status={study.status} />
                   <span
                     aria-hidden="true"
@@ -73,10 +75,12 @@ export function SystemList() {
                   </span>
                 </span>
               </div>
-              <div className="work-row-flow">
+              {/* aria-hidden: the steps repeat the case page and made every row's
+                  link name a paragraph long for screen readers. */}
+              <div className="work-row-flow" aria-hidden="true">
                 <div>
-                  <div className="pt-6 sm:grid sm:grid-cols-12 sm:gap-x-6">
-                    <div className="sm:col-span-11 sm:col-start-2">
+                  <div className="pt-6 lg:grid lg:grid-cols-12 lg:gap-x-6">
+                    <div className="lg:col-span-11 lg:col-start-2">
                       <Flow steps={study.flow} compact />
                     </div>
                   </div>

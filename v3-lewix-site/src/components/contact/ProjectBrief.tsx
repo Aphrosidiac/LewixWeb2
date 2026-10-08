@@ -1,10 +1,19 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { briefSteps } from '@/content/contactPage';
 import { contact } from '@/content';
 
 type Answers = Record<string, string>;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Autofill hints, so a phone fills the first step in one tap. */
+const AUTOCOMPLETE: Record<string, string> = {
+  name: 'name',
+  email: 'email',
+  company: 'organization',
+};
 type Sent = null | 'sent' | 'failed';
 
 /**
@@ -55,18 +64,35 @@ export function ProjectBrief() {
       setInvalid([]);
       setSent(null);
       setLeaving(false);
-      headingRef.current?.focus({ preventScroll: true });
     }, 220);
   };
+
+  // Focus the new step's heading AFTER it renders. Focusing in the same tick
+  // as setStep hit the old heading, which was then unmounted, so focus fell to
+  // <body> on every Continue and Back.
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    headingRef.current?.focus({ preventScroll: true });
+  }, [step]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isReview) return;
     const missing = current.fields
-      .filter((f) => f.required && !(answers[f.name] ?? '').trim())
+      .filter((f) => {
+        const v = (answers[f.name] ?? '').trim();
+        if (f.required && !v) return true;
+        return f.type === 'email' && v !== '' && !EMAIL_RE.test(v);
+      })
       .map((f) => f.name);
     if (missing.length) {
       setInvalid(missing);
+      // Keyboard and screen-reader users land on the first field to fix.
+      document.getElementById(`brief-${missing[0]}`)?.focus();
       return;
     }
     goTo(step + 1);
@@ -83,7 +109,10 @@ export function ProjectBrief() {
       const at = briefSteps.findIndex((s) => s.fields.some((f) => names.includes(f.name)));
       if (at >= 0) {
         goTo(at);
-        window.setTimeout(() => setInvalid(names), 240);
+        window.setTimeout(() => {
+          setInvalid(names);
+          document.getElementById(`brief-${names[0]}`)?.focus();
+        }, 260);
         return;
       }
     }
@@ -162,7 +191,7 @@ export function ProjectBrief() {
           </h2>
           <p className="rise-in mt-4 text-sm text-fg-muted" style={{ animationDelay: '80ms' }}>
             {!isReview
-              ? 'A few details so the reply is worth reading.'
+              ? STEP_NOTES[step]
               : sent === 'sent'
                 ? `It goes straight to the people who will build it, and the reply comes to ${answers.email}.`
                 : sent === 'failed'
@@ -199,6 +228,8 @@ export function ProjectBrief() {
                         rows={4}
                         required={f.required}
                         aria-invalid={bad}
+                        aria-describedby={bad ? `${id}-error` : undefined}
+                        name={f.name}
                         value={answers[f.name] ?? ''}
                         onChange={(e) => set(f.name, e.target.value)}
                         placeholder={f.placeholder}
@@ -207,6 +238,9 @@ export function ProjectBrief() {
                     ) : f.type === 'select' ? (
                       <select
                         id={id}
+                        name={f.name}
+                        aria-invalid={bad}
+                        aria-describedby={bad ? `${id}-error` : undefined}
                         value={answers[f.name] ?? ''}
                         onChange={(e) => set(f.name, e.target.value)}
                         className={`${box} h-[68px]`}
@@ -222,8 +256,11 @@ export function ProjectBrief() {
                       <input
                         id={id}
                         type={f.type}
+                        name={f.name}
+                        autoComplete={AUTOCOMPLETE[f.name]}
                         required={f.required}
                         aria-invalid={bad}
+                        aria-describedby={bad ? `${id}-error` : undefined}
                         value={answers[f.name] ?? ''}
                         onChange={(e) => set(f.name, e.target.value)}
                         placeholder={f.placeholder}
@@ -232,8 +269,10 @@ export function ProjectBrief() {
                     )}
 
                     {bad && (
-                      <p role="alert" className="mt-2 text-xs text-red-400/80">
-                        {f.label} is needed before the next step.
+                      <p id={`${id}-error`} role="alert" className="mt-2 text-xs text-red-300">
+                        {f.type === 'email' && (answers[f.name] ?? '').trim()
+                          ? 'That email address does not look right.'
+                          : `${f.label} is needed before the next step.`}
                       </p>
                     )}
                   </div>
@@ -288,6 +327,7 @@ export function ProjectBrief() {
                       className="rounded-xl border border-white/[0.09] bg-white/[0.025] px-6 py-6 text-center text-sm text-fg transition-colors hover:border-accent hover:text-accent"
                     >
                       {sent === 'sent' ? `Also WhatsApp ${w.name}` : `WhatsApp ${w.name}`}
+                      <span className="sr-only"> (opens in a new tab)</span>
                     </a>
                   ))}
                 </div>
@@ -379,6 +419,13 @@ function Reel({ value }: { value: number }) {
     </span>
   );
 }
+
+/** The line under each step's title. Was the same sentence on every step. */
+const STEP_NOTES = [
+  'A few details so the reply is worth reading.',
+  'Plain words are fine. No need to know what the software should look like.',
+  'Rough answers are fine. Nothing here commits you to anything.',
+];
 
 const LABELS: Array<[string, string]> = [
   ['Name', 'name'],

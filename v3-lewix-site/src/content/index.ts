@@ -25,10 +25,8 @@ export { services, process, servicesCopy } from "./services";
 
 export type { Principle } from "./about";
 export {
-  aboutHero,
   story,
   manifesto,
-  principlesCopy,
   principles,
 } from "./about";
 
@@ -46,25 +44,16 @@ export {
 export type { PrivacySection } from "./legal";
 export { privacyMeta, privacyCopy, privacySections } from "./legal";
 
-export type { NavItem, Stat, WhatsAppContact } from "./site";
+export type { WhatsAppContact } from "./site";
 export {
   site,
   metadata,
   socialProfiles,
   registration,
-  navItems,
-  footerLinks,
-  footerEmail,
   hero,
   marqueeItems,
-  stats,
-  homeCta,
-  featuredWorkCopy,
-  workPagePlaceholder,
   caseStudyPageCopy,
   contact,
   contactBrief,
-  contactForm,
-  contactLabels,
   pricing,
 } from "./site";

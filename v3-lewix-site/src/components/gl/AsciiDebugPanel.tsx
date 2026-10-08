@@ -56,9 +56,8 @@ const FONT_PRESETS = {
  * lewix.ai/?mtn=1, which covers every value below except the three glyph
  * ones (fontFamily/fontSize/characters aren't stored back on the CharacterAtlas
  * instance, so they aren't introspectable at runtime); (2) confirmed those
- * three, plus a second read of everything else, via SSH against the actual
- * deployed source at commit 6206aad
- * (`git log -1` in /home/lewix-web/v3-lewix-site on the droplet).
+ * three, plus a second read of everything else, against the deployed source
+ * at commit 6206aad.
  *
  * If a future deploy changes any of AsciiMountain.tsx's `asciiUniforms`
  * initial values, CharacterAtlas's `FONT_STACK`, or AsciiMountain's

@@ -1,15 +1,25 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Section } from './Section';
 import { LocalTime } from '@/components/layout/LocalTime';
-import { contact, contactBrief, pricing, site, process as processSteps } from '@/content';
+import { Year } from '@/components/layout/Year';
+import { contact, contactBrief, pricing, site, socialProfiles, process as processSteps } from '@/content';
+
+const BUILD_YEAR = new Date().getFullYear();
+
+const SOCIALS = [
+  { href: socialProfiles.linkedin, label: 'LinkedIn' },
+  { href: socialProfiles.instagram, label: 'Instagram' },
+  { href: socialProfiles.threads, label: 'Threads' },
+  { href: socialProfiles.tiktok, label: 'TikTok' },
+].filter((s) => s.href);
 
 // Numbers match the section headers and the header's counter, so the footer
 // speaks the same index language as the rest of the page.
 const FOOTER_LINKS = [
   { id: 'about', num: '01', label: 'About' },
-  { id: 'writing', num: '02', label: 'Writing' },
-  { id: 'team', num: '03', label: 'Founding Team' },
-  { id: 'work', num: '04', label: 'Work' },
+  { id: 'team', num: '02', label: 'Founding Team' },
+  { id: 'work', num: '03', label: 'Work' },
 ] as const;
 
 /**
@@ -26,7 +36,7 @@ const FOOTER_LINKS = [
  */
 export function Contact() {
   return (
-    <Section id="contact" num="05" title="Contact">
+    <Section id="contact" num="04" title="Contact">
       <div className="max-w-3xl">
         <h3 className="font-display font-semibold text-4xl leading-[1.05] tracking-tight text-fg sm:text-6xl">
           {contact.headline}
@@ -76,6 +86,7 @@ export function Contact() {
                   <span className="eyebrow transition-colors group-hover:text-accent">{w.name}</span>
                   <span className="flex items-baseline gap-3 font-sans text-sm text-fg">
                     {w.display}
+                    <span className="sr-only"> (opens in a new tab)</span>
                     <Arrow />
                   </span>
                 </a>
@@ -206,7 +217,9 @@ function SiteFooter() {
   return (
     // One rule, one band. The copyright used to sit under a second border-t,
     // which made the block read as two stacked footers.
-    <footer className="text-legible relative mt-24 border-t border-line pt-12 sm:mt-32">
+    // Explicit role: nested inside the Contact <section>, a <footer> is not a
+    // contentinfo landmark on its own.
+    <footer role="contentinfo" className="text-legible relative mt-24 border-t border-line pt-12 sm:mt-32">
       {/*
         Bottom-weighted scrim. Transparent where the mountain is worth seeing,
         near-opaque where the type sits. Dropping the canvas opacity instead
@@ -233,21 +246,32 @@ function SiteFooter() {
 
       <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between">
         <p className="eyebrow max-w-[16rem] leading-relaxed">
-          &copy; {new Date().getFullYear()} {site.copyrightHolder}
-          <a href="/privacy" className="mt-3 block transition-colors hover:text-accent">
+          &copy; <Year fallback={BUILD_YEAR} /> {site.copyrightHolder}
+          <Link href="/privacy" className="mt-3 block py-1 transition-colors hover:text-accent">
             Privacy
-          </a>
+          </Link>
+          {SOCIALS.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noreferrer noopener me"
+              className="block py-1 transition-colors hover:text-accent"
+            >
+              {s.label} <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          ))}
         </p>
 
         <div className="flex flex-col gap-2 sm:items-end">
-          <nav className="flex flex-col gap-2 sm:items-end" aria-label="Sections">
+          <nav className="flex flex-col gap-1 sm:items-end" aria-label="Footer">
             {FOOTER_LINKS.map((l) => (
               <a
                 key={l.id}
                 href={`#${l.id}`}
-                className="group eyebrow flex items-baseline gap-3 transition-colors hover:text-accent sm:justify-end"
+                className="group eyebrow flex items-baseline gap-3 py-1 transition-colors hover:text-accent sm:justify-end"
               >
-                <span className="text-fg-faint/50 transition-colors group-hover:text-accent">
+                <span className="text-fg-faint transition-colors group-hover:text-accent">
                   {l.num}
                 </span>
                 {l.label}
@@ -268,7 +292,7 @@ function SiteFooter() {
               would just say it twice. The clock earns its place instead: it is
               the one line on the page that isn't identical on every visit.
               Dimmer than the nav — it is the least important thing here. */}
-          <p className="eyebrow mt-8 flex items-baseline gap-2 text-fg-faint/60">
+          <p className="eyebrow mt-8 flex items-baseline gap-2 text-fg-muted">
             {site.engineeredIn}
             <span aria-hidden="true" className="text-fg-faint/40">/</span>
             <LocalTime /> MYT

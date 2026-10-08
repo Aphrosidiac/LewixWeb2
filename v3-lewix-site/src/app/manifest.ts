@@ -17,11 +17,25 @@ export default function manifest(): MetadataRoute.Manifest {
     description: siteMeta.description,
     start_url: '/',
     display: 'standalone',
-    // Deep Night and Horizon Blue, from the brand cheatsheet.
+    // Deep Night for both, matching the viewport `themeColor` in layout.tsx;
+    // the two disagreed, so the installed app's chrome was blue and the
+    // browser's was black.
     background_color: '#09090c',
-    theme_color: '#6880f2',
+    theme_color: '#09090c',
     lang: 'en-MY',
     icons: [
+      {
+        src: '/brand/lewix-logomark-gradient-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/brand/lewix-logomark-maskable-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
       {
         src: '/brand/lewix-logomark-gradient-512.png',
         sizes: '512x512',

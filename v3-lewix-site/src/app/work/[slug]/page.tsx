@@ -60,7 +60,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   const { prev, next } = adjacentCaseStudies(study.slug);
 
   return (
-    <main className="px-6 pt-32 pb-24 sm:px-10 sm:pt-40">
+    <main id="main" className="px-6 pt-32 pb-24 sm:px-10 sm:pt-40">
       {/*
         CreativeWork plus BreadcrumbList. The breadcrumb matters more than it
         looks: without it a search result shows the bare URL path instead of
@@ -68,7 +68,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       */}
       <JsonLd data={caseStudySchema(study.slug)} />
       <article className="mx-auto w-full max-w-6xl">
-        <Link href="/work" className="eyebrow transition-colors hover:text-accent">
+        <Link href="/work" className="eyebrow inline-block py-2 transition-colors hover:text-accent">
           &larr; {caseStudyPageCopy.backLabel}
         </Link>
 
