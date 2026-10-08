@@ -267,6 +267,9 @@ export function LoadingScreen() {
     <div
       ref={rootRef}
       aria-hidden="true"
+      // The counter reels are columns of 0-9 in the server HTML, which text
+      // extractors read as "0123456789" at the top of the page.
+      data-nosnippet
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#c0c0c0]"
     >
       {/* Mark + its registration frame */}
@@ -400,13 +403,15 @@ export function LoadingScreen() {
                 {/* 0-9 plus a repeated 0, so the wrap from 9 back to 0 lands on
                     an identical glyph and the reset is invisible. */}
                 {[...Array(11)].map((_, n) => (
+                  // The digit is drawn from `data-digit` by CSS, not written as
+                  // text: as text, every page's HTML opened with "01234567890"
+                  // three times, which is what crawlers extract first.
                   <span
                     key={n}
-                    className="block text-center text-[12px] leading-none font-semibold tracking-[0.1em] text-[#050505]/80 tabular-nums"
+                    data-digit={n % 10}
+                    className="block text-center text-[12px] leading-none font-semibold tracking-[0.1em] text-[#050505]/80 tabular-nums before:content-[attr(data-digit)]"
                     style={{ height: REEL_H, lineHeight: `${REEL_H}px`, width: '0.72em' }}
-                  >
-                    {n % 10}
-                  </span>
+                  />
                 ))}
               </div>
             </div>

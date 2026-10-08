@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { shareCard } from '@/lib/shareCard';
+import { JsonLd, breadcrumbSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { Reveal } from '@/components/layout/Reveal';
 import { SystemList } from '@/components/work/SystemList';
@@ -13,20 +15,21 @@ import { metadata as siteMeta, workIndexCopy } from '@/content';
  * `src/content/caseStudies.ts`.
  */
 export const metadata: Metadata = {
-  title: 'Work',
+  title: 'Work: custom systems in production',
   description: `Production systems built by ${siteMeta.openGraph.siteName} for manufacturers, distributors, workshops and retailers in Malaysia, plus the products we run ourselves.`,
   alternates: { canonical: '/work' },
-  openGraph: {
+  ...shareCard({
     title: `Work · ${siteMeta.openGraph.siteName}`,
     description: workIndexCopy.intro,
     url: '/work',
     type: 'website',
-  },
+  }),
 };
 
 export default function WorkPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbSchema('Work', '/work')} />
       <Reveal />
 
       <section

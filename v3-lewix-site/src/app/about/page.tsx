@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { shareCard } from '@/lib/shareCard';
+import { JsonLd, breadcrumbSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { Reveal } from '@/components/layout/Reveal';
 import {
@@ -28,15 +30,15 @@ import {
  * "Right for" column mean something.
  */
 export const metadata: Metadata = {
-  title: 'About',
+  title: `About ${site.legalName}`,
   description: `${site.legalName}, trading as ${site.name}: a software company in ${registration.addressLocality} building custom ERPs, logistics platforms and AI agents. How a project runs, and who we are not right for.`,
   alternates: { canonical: '/about' },
-  openGraph: {
+  ...shareCard({
     title: `About · ${site.name}`,
     description: `Who we are, what we build, how a project runs, and who we are not the right people for. Projects start at ${pricing.amount}.`,
     url: '/about',
     type: 'website',
-  },
+  }),
 };
 
 const facts = [
@@ -51,6 +53,7 @@ const facts = [
 export default function AboutPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbSchema('About', '/about')} />
       <Reveal />
 
       <section

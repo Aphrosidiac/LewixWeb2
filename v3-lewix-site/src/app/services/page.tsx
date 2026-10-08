@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { shareCard } from '@/lib/shareCard';
+import { JsonLd, breadcrumbSchema } from '@/lib/schema';
 import Link from 'next/link';
 import { Reveal } from '@/components/layout/Reveal';
 import { metadata as siteMeta, pricing, process, services, servicesCopy } from '@/content';
@@ -23,20 +25,21 @@ import { metadata as siteMeta, pricing, process, services, servicesCopy } from '
  * what the content files keep warning against.
  */
 export const metadata: Metadata = {
-  title: 'Services',
+  title: 'Services: custom ERPs, logistics and AI',
   description: `${servicesCopy.page.intro} Systems and ERPs, web applications, AI integration, logistics and delivery. Projects start at ${pricing.amount}.`,
   alternates: { canonical: '/services' },
-  openGraph: {
+  ...shareCard({
     title: `Services · ${siteMeta.openGraph.siteName}`,
     description: servicesCopy.page.intro,
     url: '/services',
     type: 'website',
-  },
+  }),
 };
 
 export default function ServicesPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbSchema('Services', '/services')} />
       <Reveal />
 
       <section

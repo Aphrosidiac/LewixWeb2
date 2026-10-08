@@ -33,6 +33,14 @@ const nextConfig: NextConfig = {
         destination: 'https://lewix.ai/:path*',
         permanent: true,
       },
+      {
+        // Buyers and agents guess /pricing. The answer (a published floor and
+        // what drives cost) lives on /contact, so send them there rather than
+        // build a thin second page that competes with it.
+        source: '/pricing',
+        destination: '/contact',
+        permanent: true,
+      },
     ];
   },
 

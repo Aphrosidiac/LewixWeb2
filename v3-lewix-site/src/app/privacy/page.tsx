@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { shareCard } from '@/lib/shareCard';
 import { Reveal } from '@/components/layout/Reveal';
 import { contact, privacyCopy, privacyMeta, privacySections, site } from '@/content';
 
@@ -21,13 +22,13 @@ export const metadata: Metadata = {
   description:
     'What LEWIX collects, which is almost nothing. No analytics, no cookies, and a contact form that sends nothing to us on its own.',
   alternates: { canonical: '/privacy' },
-  openGraph: {
+  ...shareCard({
     title: `Privacy · ${site.name}`,
     description:
       'No analytics, no cookies, no tracking. What we hold is what you email us, and for how long.',
     url: '/privacy',
     type: 'website',
-  },
+  }),
 };
 
 export default function PrivacyPage() {

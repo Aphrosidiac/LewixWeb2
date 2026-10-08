@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { shareCard } from '@/lib/shareCard';
 
 import {
   adjacentCaseStudies,
@@ -37,15 +38,18 @@ export async function generateMetadata({
     // here; it came out with the rest of the rename, since a title is the most
     // visible surface on the site and the one place the old naming would have
     // survived the change.
-    title: `${study.title}: ${study.type}`,
+    // Was `${title}: ${type}`, which ran to 86 characters with the suffix and
+    // got cut mid-phrase in results. The type still leads the description
+    // and the share card.
+    title: `${study.title} · Case study`,
     description: study.description,
     alternates: { canonical: `/work/${study.slug}` },
-    openGraph: {
+    ...shareCard({
       title: `${study.title} · ${study.type}`,
       description: study.description,
       url: `/work/${study.slug}`,
       type: 'article',
-    },
+    }),
   };
 }
 

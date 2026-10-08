@@ -234,6 +234,9 @@ function SiteFooter() {
       <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between">
         <p className="eyebrow max-w-[16rem] leading-relaxed">
           &copy; {new Date().getFullYear()} {site.copyrightHolder}
+          <a href="/privacy" className="mt-3 block transition-colors hover:text-accent">
+            Privacy
+          </a>
         </p>
 
         <div className="flex flex-col gap-2 sm:items-end">

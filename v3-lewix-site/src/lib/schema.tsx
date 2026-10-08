@@ -106,8 +106,13 @@ export function organizationSchema() {
       'AI agents for business operations',
     ],
     makesOffer: {
-      '@type': 'Offer',
+      // AggregateOffer with only `lowPrice`: there is no typical project
+      // price, only a published floor, and a plain Offer requires a `price`
+      // that would claim one. lowPrice is schema.org's "from".
+      '@type': 'AggregateOffer',
       name: 'Custom business system development',
+      lowPrice: 8000,
+      priceCurrency: 'MYR',
       priceSpecification: {
         '@type': 'PriceSpecification',
         // The published floor, from `pricing.amount`. Marked as a minimum so
@@ -127,6 +132,10 @@ export function webSiteSchema() {
     '@id': SITE_ID,
     url: site.url,
     name: site.name,
+    // The other two ways the company is written: the registered entity's
+    // short form and the domain people type. Same entity, so engines should
+    // not treat them as three.
+    alternateName: ['Lewix AI', 'Lewix.ai'],
     inLanguage: 'en-MY',
     publisher: { '@id': ORG_ID },
   };
@@ -194,6 +203,19 @@ export function caseStudySchema(slug: string) {
           { '@type': 'ListItem', position: 3, name: study.title },
         ],
       },
+    ],
+  };
+}
+
+/** Home > page, for the top-level pages that are not case studies. */
+export function breadcrumbSchema(name: string, path: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${site.url}${path}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name, item: `${site.url}${path}` },
     ],
   };
 }

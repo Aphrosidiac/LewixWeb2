@@ -295,7 +295,7 @@ export function ProjectBrief() {
 function Reel({ value }: { value: number }) {
   const digits = String(value).padStart(2, '0').split('').map(Number);
   return (
-    <span aria-hidden="true" className="flex tabular-nums">
+    <span aria-hidden="true" data-nosnippet className="flex tabular-nums">
       {digits.map((d, i) => (
         <span key={i} className="inline-block h-[1em] overflow-hidden leading-[1em]">
           <span
@@ -303,9 +303,13 @@ function Reel({ value }: { value: number }) {
             style={{ transform: `translateY(${-d * 10}%)` }}
           >
             {Array.from({ length: 10 }, (_, n) => (
-              <span key={n} className="block h-[1em] leading-[1em]">
-                {n}
-              </span>
+              // Drawn from `data-digit` by CSS so the HTML carries no run of
+              // 0-9 for text extractors to read.
+              <span
+                key={n}
+                data-digit={n}
+                className="block h-[1em] leading-[1em] before:content-[attr(data-digit)]"
+              />
             ))}
           </span>
         </span>

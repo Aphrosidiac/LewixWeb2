@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
+import { shareCard } from '@/lib/shareCard';
 import { ProjectBrief } from '@/components/contact/ProjectBrief';
 import { Reveal } from '@/components/layout/Reveal';
 import { HeadlineReveal } from '@/components/contact/HeadlineReveal';
 import { LocalTime } from '@/components/layout/LocalTime';
 import { contactPage, faqs } from '@/content/contactPage';
 import { contact, pricing, metadata as siteMeta, site } from '@/content';
-import { JsonLd, faqSchema } from '@/lib/schema';
+import { JsonLd, breadcrumbSchema, faqSchema } from '@/lib/schema';
 
 /**
  * The title no longer appends the brand by hand: the root layout's
@@ -21,12 +22,12 @@ export const metadata: Metadata = {
   title: 'Start a project',
   description: `What a custom business system costs and how a build starts. Projects with ${siteMeta.openGraph.siteName} start at ${pricing.amount}. Replies within 24 hours, from a founder.`,
   alternates: { canonical: '/contact' },
-  openGraph: {
+  ...shareCard({
     title: `Start a project · ${siteMeta.openGraph.siteName}`,
     description: `${pricing.note} ${contact.intro}`,
     url: '/contact',
     type: 'website',
-  },
+  }),
 };
 
 /**
@@ -45,6 +46,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbSchema('Start a project', '/contact')} />
       {/*
         The seven questions further down this page are already written as
         complete, self-contained answers, which is the exact shape an answer
