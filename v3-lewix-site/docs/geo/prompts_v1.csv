@@ -1,0 +1,51 @@
+id,text,stratum,persona,locale,weight
+p001,what is a custom ERP and when does a Malaysian SME need one,discovery,first-time buyer,MY,1
+p002,how much does custom ERP development cost in Malaysia,discovery,first-time buyer,MY,3
+p003,how much does it cost to build an inventory system for a small business in Malaysia,discovery,first-time buyer,MY,2
+p004,custom software vs off-the-shelf ERP for a Malaysian manufacturer,discovery,evaluator,MY,2
+p005,is it worth building a custom system instead of using SQL Account add-ons,discovery,evaluator,MY,2
+p006,best custom ERP developer in Malaysia,best-for,comparison shopper,MY,3
+p007,best software house in Kuala Lumpur for business systems,best-for,comparison shopper,MY,3
+p008,custom software company in Malaysia that integrates with SQL Account,best-for,ops manager,MY,3
+p009,who can build a system that syncs with AutoCount in Malaysia,best-for,ops manager,MY,2
+p010,software developer for a label printing company in Malaysia,best-for,factory owner,MY,2
+p011,manufacturing execution system for a packaging factory in Malaysia,best-for,factory owner,MY,2
+p012,production planning software for a flexible packaging plant Malaysia,best-for,factory owner,MY,1
+p013,delivery and driver management system for a distributor in Malaysia,best-for,logistics owner,MY,3
+p014,proof of delivery app for a Malaysian logistics company,best-for,logistics owner,MY,2
+p015,ordering system for a vegetable wholesaler in Malaysia,best-for,distributor,MY,2
+p016,workshop management system for a car service centre in Malaysia,best-for,workshop owner,MY,2
+p017,tyre shop software Malaysia with invoicing and stock,best-for,workshop owner,MY,1
+p018,warehouse system with scan to pack for an e-commerce brand in Malaysia,best-for,brand owner,MY,2
+p019,system to manage KOL group buys and stock for a Malaysian brand,best-for,brand owner,MY,1
+p020,POS and online store that share stock for a multi-branch pet shop Malaysia,best-for,retail owner,MY,1
+p021,quotation and delivery scheduling system for a furniture retailer Malaysia,best-for,retail owner,MY,1
+p022,WhatsApp ordering bot for a Malaysian business,best-for,ops manager,MY,2
+p023,AI agent for business operations Malaysia,best-for,ops manager,MY,2
+p024,software that turns CAD racking drawings into a quotation,best-for,industrial supplier,MY,1
+p025,pricing software for a packaging supplies trading company,best-for,trader,MY,1
+p026,replace spreadsheets with a system for order tracking Malaysia,discovery,ops manager,MY,2
+p027,how long does it take to build a custom business system,discovery,first-time buyer,MY,1
+p028,what to prepare before talking to a software developer about an ERP,discovery,first-time buyer,MY,1
+p029,custom ERP developer Malaysia that hosts and maintains the system,best-for,ops manager,MY,2
+p030,small software team in Malaysia that builds production systems not prototypes,best-for,evaluator,MY,1
+p031,what is Lewix AI,branded-fact,evaluator,MY,2
+p032,Lewix AI Sdn Bhd what do they do,branded-fact,evaluator,MY,2
+p033,is Lewix AI legit,branded-fact,evaluator,MY,1
+p034,how much does Lewix charge for a custom system,branded-fact,evaluator,MY,2
+p035,where is Lewix AI based,branded-fact,evaluator,MY,1
+p036,what systems has Lewix AI built,branded-fact,evaluator,MY,2
+p037,does Lewix AI integrate with SQL Account,branded-fact,evaluator,MY,1
+p038,who founded Lewix AI,branded-fact,evaluator,MY,1
+p039,what is SmoothSail store builder,branded-fact,evaluator,MY,1
+p040,online store builder for Malaysian sellers with cash on delivery,best-for,seller,MY,2
+p041,sistem ERP custom untuk syarikat kecil di Malaysia,best-for,first-time buyer,MY-ms,2
+p042,berapa kos buat sistem inventori untuk bisnes,discovery,first-time buyer,MY-ms,2
+p043,developer sistem penghantaran dan driver Malaysia,best-for,logistics owner,MY-ms,1
+p044,syarikat buat software yang boleh sync dengan SQL Account,best-for,ops manager,MY-ms,2
+p045,sistem bengkel kereta Malaysia untuk invois dan stok,best-for,workshop owner,MY-ms,1
+p046,custom ERP developer Johor Bahru,best-for,comparison shopper,MY,1
+p047,custom ERP developer Penang,best-for,comparison shopper,MY,1
+p048,software house Selangor for manufacturing system,best-for,factory owner,MY,1
+p049,alternatives to off-the-shelf ERP for Malaysian SMEs,comparison,switcher,MY,2
+p050,questions to ask a custom software company before hiring them,discovery,evaluator,MY,1

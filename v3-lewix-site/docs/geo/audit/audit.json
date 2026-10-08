@@ -1,0 +1,1724 @@
+{
+ "site": {
+  "start": "https://lewix.ai",
+  "home_status": 200,
+  "home_final": "https://lewix.ai",
+  "home_chain": [],
+  "origin": "https://lewix.ai",
+  "http_redirect": {
+   "status_chain": [
+    301
+   ],
+   "final": "https://lewix.ai/"
+  },
+  "alt_host": {
+   "host": "www.lewix.ai",
+   "status": 200,
+   "final": "https://lewix.ai",
+   "error": ""
+  },
+  "robots_status": 200,
+  "robots_sitemaps": [
+   "https://lewix.ai/sitemap.xml",
+   "https://lewix.ai/horizon/sitemap.xml"
+  ],
+  "robots_errors": [],
+  "content_signals": [],
+  "access_matrix": {
+   "Googlebot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   },
+   "Google-Extended": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "control"
+   },
+   "Bingbot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   },
+   "OAI-SearchBot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   },
+   "ChatGPT-User": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "user"
+   },
+   "GPTBot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "training"
+   },
+   "Claude-SearchBot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   },
+   "Claude-User": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "user"
+   },
+   "ClaudeBot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "training"
+   },
+   "PerplexityBot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   },
+   "Perplexity-User": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "user"
+   },
+   "Applebot": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   },
+   "Applebot-Extended": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "control"
+   },
+   "meta-webindexer": {
+    "allowed": true,
+    "rule": "Allow: /",
+    "named": false,
+    "purpose": "search"
+   }
+  },
+  "llms.txt": {
+   "status": 200,
+   "content_type": "text/plain; charset=utf-8",
+   "bytes": 8827,
+   "h1": true,
+   "links": 22
+  },
+  "llms-full.txt": {
+   "status": 404,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 27025
+  },
+  "soft404_status": 404,
+  "markdown_negotiation": false,
+  "sitemaps": [
+   {
+    "url": "https://lewix.ai/sitemap.xml",
+    "status": 200,
+    "urls": 17
+   },
+   {
+    "url": "https://lewix.ai/horizon/sitemap.xml",
+    "status": 200,
+    "urls": 79
+   }
+  ],
+  "sitemap_url_count": 96,
+  "duplicate_clusters": [],
+  "schema_types_seen": [
+   "BreadcrumbList",
+   "CreativeWork",
+   "FAQPage",
+   "Organization",
+   "WebSite"
+  ]
+ },
+ "pages": [
+  {
+   "url": "https://lewix.ai",
+   "final_url": "https://lewix.ai",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 141,
+   "bytes": 138906,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "medium",
+     "category": "content",
+     "message": "1 run(s) of text split into single-character elements \u2014 text extractors read 'S M O O T H'",
+     "url": "https://lewix.ai",
+     "fix": "Keep real words in the server HTML; split letters at runtime in JS (after load) for the animation",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "No question-phrased headings; answer engines match sub-queries to headings",
+     "url": "https://lewix.ai",
+     "fix": "Phrase key H2/H3s as the questions buyers ask",
+     "evidence": ""
+    }
+   ],
+   "type": "home",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai"
+   ],
+   "canonical_abs": "https://lewix.ai",
+   "title": "LEWIX \u00b7 Custom ERP and Software Development in Malaysia",
+   "description": "LEWIX builds the operational software Malaysian businesses run on: custom ERPs, logistics platforms and AI agents. Production, not prototypes. From RM 8,000.",
+   "h1": [
+    "LEWIX builds custom ERPs, logistics platforms and AI agents for Malaysian businesses"
+   ],
+   "words": 1038,
+   "root_shell": false,
+   "schema_types": [
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 10,
+   "question_headings": 0,
+   "subheadings": 15,
+   "numbers_per_500w": 1.0,
+   "outbound_citations": 5,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 14,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/contact",
+   "final_url": "https://lewix.ai/contact",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 111,
+   "bytes": 59289,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/contact",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/contact",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/contact",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/contact",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "No BreadcrumbList",
+     "url": "https://lewix.ai/contact",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "medium",
+     "category": "content",
+     "message": "1 run(s) of text split into single-character elements \u2014 text extractors read 'S M O O T H'",
+     "url": "https://lewix.ai/contact",
+     "fix": "Keep real words in the server HTML; split letters at runtime in JS (after load) for the animation",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/contact",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "contact",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/contact"
+   ],
+   "canonical_abs": "https://lewix.ai/contact",
+   "title": "Start a project \u00b7 LEWIX",
+   "description": "What a custom business system costs and how a build starts. Projects with LEWIX start at RM 8,000. Replies within 24 hours, from a founder.",
+   "h1": [
+    "Let\u2019s find out what it takes."
+   ],
+   "words": 341,
+   "root_shell": false,
+   "schema_types": [
+    "FAQPage",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 3,
+   "question_headings": 1,
+   "subheadings": 4,
+   "numbers_per_500w": 1.5,
+   "outbound_citations": 4,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 5,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/about",
+   "final_url": "https://lewix.ai/about",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 132,
+   "bytes": 46157,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is only 13 chars: 'About \u00b7 LEWIX'",
+     "url": "https://lewix.ai/about",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/about",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/about",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/about",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/about",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "No BreadcrumbList",
+     "url": "https://lewix.ai/about",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/about",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "about",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/about"
+   ],
+   "canonical_abs": "https://lewix.ai/about",
+   "title": "About \u00b7 LEWIX",
+   "description": "Lewix AI Sdn Bhd, trading as LEWIX: a software company in Kuala Lumpur building custom ERPs, logistics platforms and AI agents. How a project runs, and who we are not right for.",
+   "h1": [
+    "The company behind the systems"
+   ],
+   "words": 484,
+   "root_shell": false,
+   "schema_types": [
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 5,
+   "question_headings": 2,
+   "subheadings": 5,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 5,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/services",
+   "final_url": "https://lewix.ai/services",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 130,
+   "bytes": 47791,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/services",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/services",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/services",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/services",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "No BreadcrumbList",
+     "url": "https://lewix.ai/services",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/services",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "service",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/services"
+   ],
+   "canonical_abs": "https://lewix.ai/services",
+   "title": "Services \u00b7 LEWIX",
+   "description": "We specialize in production-grade systems for businesses that need to move fast and ship reliably. Systems and ERPs, web applications, AI integration, logistics and delivery. Projects start at RM 8,000.",
+   "h1": [
+    "What we build"
+   ],
+   "words": 314,
+   "root_shell": false,
+   "schema_types": [
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 11,
+   "question_headings": 1,
+   "subheadings": 11,
+   "numbers_per_500w": 1.6,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 5,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work",
+   "final_url": "https://lewix.ai/work",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 86,
+   "bytes": 76210,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is only 12 chars: 'Work \u00b7 LEWIX'",
+     "url": "https://lewix.ai/work",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "No BreadcrumbList",
+     "url": "https://lewix.ai/work",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work"
+   ],
+   "canonical_abs": "https://lewix.ai/work",
+   "title": "Work \u00b7 LEWIX",
+   "description": "Production systems built by LEWIX for manufacturers, distributors, workshops and retailers in Malaysia, plus the products we run ourselves.",
+   "h1": [
+    "Systems running in production"
+   ],
+   "words": 594,
+   "root_shell": false,
+   "schema_types": [
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 5,
+   "question_headings": 1,
+   "subheadings": 5,
+   "numbers_per_500w": 2.5,
+   "outbound_citations": 5,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 15,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/label-printing-erp",
+   "final_url": "https://lewix.ai/work/label-printing-erp",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 20111,
+   "bytes": 54072,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "high",
+     "category": "perf",
+     "message": "Server response 20111 ms; AI user-fetchers work under tight timeouts",
+     "url": "https://lewix.ai/work/label-printing-erp",
+     "fix": "Cache HTML at the edge / SSG",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/label-printing-erp",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/label-printing-erp",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/label-printing-erp",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/label-printing-erp",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/label-printing-erp",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/label-printing-erp"
+   ],
+   "canonical_abs": "https://lewix.ai/work/label-printing-erp",
+   "title": "Label Printing ERP: Orders, artwork, tooling and production \u00b7 LEWIX",
+   "description": "A print and label manufacturer's whole operation, from purchase order to delivery note, where artwork, moulds and machines are checked before a job is allowed to start.",
+   "h1": [
+    "Label Printing ERP"
+   ],
+   "words": 355,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 2.8,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/racking-quotation-engine",
+   "final_url": "https://lewix.ai/work/racking-quotation-engine",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 40133,
+   "bytes": 47139,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "high",
+     "category": "perf",
+     "message": "Server response 40133 ms; AI user-fetchers work under tight timeouts",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "Cache HTML at the edge / SSG",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 86 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/racking-quotation-engine",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/racking-quotation-engine"
+   ],
+   "canonical_abs": "https://lewix.ai/work/racking-quotation-engine",
+   "title": "Racking Quotation Engine: Layout drawing to 3D model, materials list and quote \u00b7 LEWIX",
+   "description": "Upload the racking layout drawing you already make. Get back a walkable 3D warehouse, an exact list of materials and a priced quotation, all from the same drawing.",
+   "h1": [
+    "Racking Quotation Engine"
+   ],
+   "words": 256,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 3.9,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/flexible-packaging-mes",
+   "final_url": "https://lewix.ai/work/flexible-packaging-mes",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 280,
+   "bytes": 48026,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 84 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/flexible-packaging-mes",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/flexible-packaging-mes",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/flexible-packaging-mes",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/flexible-packaging-mes",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/flexible-packaging-mes",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/flexible-packaging-mes",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/flexible-packaging-mes"
+   ],
+   "canonical_abs": "https://lewix.ai/work/flexible-packaging-mes",
+   "title": "Flexible Packaging MES: Production route, lot tracing and shop-floor tablets \u00b7 LEWIX",
+   "description": "A manufacturing system for printed laminated film, replacing paper job cards and spreadsheets that never agreed with each other.",
+   "h1": [
+    "Flexible Packaging MES"
+   ],
+   "words": 258,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/produce-supply-delivery",
+   "final_url": "https://lewix.ai/work/produce-supply-delivery",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 222,
+   "bytes": 48721,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 76 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/produce-supply-delivery",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/produce-supply-delivery",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/produce-supply-delivery",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/produce-supply-delivery",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/produce-supply-delivery",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/produce-supply-delivery",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/produce-supply-delivery"
+   ],
+   "canonical_abs": "https://lewix.ai/work/produce-supply-delivery",
+   "title": "Produce Supply & Delivery: Storefront, packing floor and driver runs \u00b7 LEWIX",
+   "description": "Order-to-delivery system for a vegetable supplier: customers order online, the warehouse packs to a live board, and drivers deliver the same day.",
+   "h1": [
+    "Produce Supply & Delivery"
+   ],
+   "words": 276,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/distribution-fleet",
+   "final_url": "https://lewix.ai/work/distribution-fleet",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 268,
+   "bytes": 48258,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/distribution-fleet",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/distribution-fleet",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/distribution-fleet",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/distribution-fleet",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/distribution-fleet",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/distribution-fleet"
+   ],
+   "canonical_abs": "https://lewix.ai/work/distribution-fleet",
+   "title": "Distribution & Fleet: Route assignment and proof of delivery \u00b7 LEWIX",
+   "description": "Turns a day's orders into driver runs by area, and proves every drop was made.",
+   "h1": [
+    "Distribution & Fleet"
+   ],
+   "words": 262,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/workshop-management",
+   "final_url": "https://lewix.ai/work/workshop-management",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 20118,
+   "bytes": 49071,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "high",
+     "category": "perf",
+     "message": "Server response 20118 ms; AI user-fetchers work under tight timeouts",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "Cache HTML at the edge / SSG",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 71 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/workshop-management",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/workshop-management"
+   ],
+   "canonical_abs": "https://lewix.ai/work/workshop-management",
+   "title": "Workshop Management: Jobs, parts, invoicing and service history \u00b7 LEWIX",
+   "description": "Workshop management for a multi-branch car service business: jobs, parts, invoicing and customer history in one system.",
+   "h1": [
+    "Workshop Management"
+   ],
+   "words": 277,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 3.6,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/consumer-goods-commerce",
+   "final_url": "https://lewix.ai/work/consumer-goods-commerce",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 40266,
+   "bytes": 49677,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "high",
+     "category": "perf",
+     "message": "Server response 40266 ms; AI user-fetchers work under tight timeouts",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "Cache HTML at the edge / SSG",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 96 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/consumer-goods-commerce",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/consumer-goods-commerce"
+   ],
+   "canonical_abs": "https://lewix.ai/work/consumer-goods-commerce",
+   "title": "Consumer Goods Commerce & Warehouse: Creator sales, online store and a scanner warehouse \u00b7 LEWIX",
+   "description": "Orders, stock, creator group-buys and a warehouse that runs on phone scanners, replacing the subscription commerce software a consumer brand had outgrown.",
+   "h1": [
+    "Consumer Goods Commerce & Warehouse"
+   ],
+   "words": 272,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/packaging-supplies-mis",
+   "final_url": "https://lewix.ai/work/packaging-supplies-mis",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 117,
+   "bytes": 47937,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/packaging-supplies-mis",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/packaging-supplies-mis",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/packaging-supplies-mis",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/packaging-supplies-mis",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/packaging-supplies-mis",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/packaging-supplies-mis"
+   ],
+   "canonical_abs": "https://lewix.ai/work/packaging-supplies-mis",
+   "title": "Packaging Supplies MIS: Pricing and order management \u00b7 LEWIX",
+   "description": "Pricing, costing and order tracking for a packaging supplies trading company, replacing the spreadsheets that decided what every customer paid.",
+   "h1": [
+    "Packaging Supplies MIS"
+   ],
+   "words": 270,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/furniture-retail-back-office",
+   "final_url": "https://lewix.ai/work/furniture-retail-back-office",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 133,
+   "bytes": 49014,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 84 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/furniture-retail-back-office",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/furniture-retail-back-office",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/furniture-retail-back-office",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/furniture-retail-back-office",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/furniture-retail-back-office",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/furniture-retail-back-office",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/furniture-retail-back-office"
+   ],
+   "canonical_abs": "https://lewix.ai/work/furniture-retail-back-office",
+   "title": "Furniture Retail Back Office: Quotations, deliveries and WhatsApp assistants \u00b7 LEWIX",
+   "description": "Quotations, delivery planning and three assistants for a furniture retailer: one on WhatsApp, one on the website, and one for staff.",
+   "h1": [
+    "Furniture Retail Back Office"
+   ],
+   "words": 281,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/work/pet-retail-platform",
+   "final_url": "https://lewix.ai/work/pet-retail-platform",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 97,
+   "bytes": 46336,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Title is 88 chars; Google truncates/rewrites past ~60",
+     "url": "https://lewix.ai/work/pet-retail-platform",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/work/pet-retail-platform",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/work/pet-retail-platform",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/work/pet-retail-platform",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/work/pet-retail-platform",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/work/pet-retail-platform",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "page",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/work/pet-retail-platform"
+   ],
+   "canonical_abs": "https://lewix.ai/work/pet-retail-platform",
+   "title": "Multi-Branch Pet Retail: Till, online store, grooming and boarding on one record \u00b7 LEWIX",
+   "description": "One platform for a pet retailer with several branches, where the till, the online store, the customer app and grooming and boarding stays all share the same records.",
+   "h1": [
+    "Multi-Branch Pet Retail"
+   ],
+   "words": 213,
+   "root_shell": false,
+   "schema_types": [
+    "BreadcrumbList",
+    "CreativeWork",
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 4,
+   "question_headings": 2,
+   "subheadings": 4,
+   "numbers_per_500w": 0.0,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": false,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 7,
+   "alternates": []
+  },
+  {
+   "url": "https://lewix.ai/privacy",
+   "final_url": "https://lewix.ai/privacy",
+   "status": 200,
+   "error": "",
+   "hops": [],
+   "ttfb_ms": 20132,
+   "bytes": 43152,
+   "content_type": "text/html; charset=utf-8",
+   "x_robots": "",
+   "last_modified_header": "",
+   "findings": [
+    {
+     "severity": "high",
+     "category": "perf",
+     "message": "Server response 20132 ms; AI user-fetchers work under tight timeouts",
+     "url": "https://lewix.ai/privacy",
+     "fix": "Cache HTML at the edge / SSG",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "content",
+     "message": "Missing og:title/og:image (link previews in chat apps and some AI surfaces use them)",
+     "url": "https://lewix.ai/privacy",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'price'",
+     "url": "https://lewix.ai/privacy",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "high",
+     "category": "schema",
+     "message": "Offer is missing required 'priceCurrency'",
+     "url": "https://lewix.ai/privacy",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "WebSite could add: alternateName",
+     "url": "https://lewix.ai/privacy",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "schema",
+     "message": "No BreadcrumbList",
+     "url": "https://lewix.ai/privacy",
+     "fix": "",
+     "evidence": ""
+    },
+    {
+     "severity": "low",
+     "category": "trust",
+     "message": "Email address hidden from crawlers by Cloudflare Email Obfuscation \u2014 live AI fetchers can't read the contact email",
+     "url": "https://lewix.ai/privacy",
+     "fix": "Turn off Email Obfuscation (Scrape Shield) or also show the address as plain text on the Contact/About page",
+     "evidence": ""
+    }
+   ],
+   "type": "utility",
+   "robots_meta": "index, follow index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+   "canonical": [
+    "https://lewix.ai/privacy"
+   ],
+   "canonical_abs": "https://lewix.ai/privacy",
+   "title": "Privacy \u00b7 LEWIX",
+   "description": "What LEWIX collects, which is almost nothing. No analytics, no cookies, and a contact form that sends nothing to us on its own.",
+   "h1": [
+    "What we collect"
+   ],
+   "words": 595,
+   "root_shell": false,
+   "schema_types": [
+    "Organization",
+    "WebSite"
+   ],
+   "microdata_types": [],
+   "sections": 7,
+   "question_headings": 2,
+   "subheadings": 7,
+   "numbers_per_500w": 3.4,
+   "outbound_citations": 2,
+   "dates": {
+    "schema": {},
+    "visible": true,
+    "meta_modified": ""
+   },
+   "author": true,
+   "internal_links": 5,
+   "alternates": []
+  }
+ ],
+ "site_findings": [
+  {
+   "severity": "low",
+   "category": "trust",
+   "message": "No Privacy policy page linked from the sampled pages \u2014 trust pages are how engines and people verify who is behind a site",
+   "url": "https://lewix.ai",
+   "fix": "",
+   "evidence": ""
+  }
+ ],
+ "scores": {
+  "access": 100,
+  "render": 100,
+  "index": 100,
+  "schema": 57,
+  "content": 96,
+  "trust": 96,
+  "perf": 94,
+  "agent": 100,
+  "intl": 100
+ },
+ "overall": 79,
+ "generated": "2026-10-09T01:21:32",
+ "seconds": 113.8
+}

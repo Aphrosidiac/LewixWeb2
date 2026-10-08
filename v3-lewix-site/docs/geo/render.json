@@ -1,0 +1,208 @@
+[
+ {
+  "url": "https://lewix.ai/",
+  "nojs_status": 200,
+  "nojs": {
+   "title": "LEWIX · Custom ERP and Software Development in Malaysia",
+   "canonical": [
+    "https://lewix.ai"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "LEWIX builds the operational software Malaysian businesses run on: custom ERPs, logistics platforms and AI agents. Production, not prototypes. From RM 8,000."
+   ],
+   "jsonld": [
+    1912,
+    199
+   ],
+   "h1": [
+    "LEWIX builds custom ERPs, logistics platforms and AI agents for Malaysian businesses"
+   ],
+   "links": 35
+  },
+  "rendered_status": 200,
+  "rendered": {
+   "title": "LEWIX · Custom ERP and Software Development in Malaysia",
+   "canonical": [
+    "https://lewix.ai"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "LEWIX builds the operational software Malaysian businesses run on: custom ERPs, logistics platforms and AI agents. Production, not prototypes. From RM 8,000."
+   ],
+   "jsonld": [
+    1912,
+    199
+   ],
+   "h1": [
+    "LEWIX builds custom ERPs, logistics platforms and AI agents for Malaysian businesses"
+   ],
+   "links": 35
+  },
+  "words_nojs": 925,
+  "words_rendered": 922,
+  "missing_pct": 0.4,
+  "issues": []
+ },
+ {
+  "url": "https://lewix.ai/work",
+  "nojs_status": 200,
+  "nojs": {
+   "title": "Work · LEWIX",
+   "canonical": [
+    "https://lewix.ai/work"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "Production systems built by LEWIX for manufacturers, distributors, workshops and retailers in Malaysia, plus the products we run ourselves."
+   ],
+   "jsonld": [
+    1912,
+    199
+   ],
+   "h1": [
+    "Systems running in production"
+   ],
+   "links": 28
+  },
+  "rendered_status": 200,
+  "rendered": {
+   "title": "Work · LEWIX",
+   "canonical": [
+    "https://lewix.ai/work"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "Production systems built by LEWIX for manufacturers, distributors, workshops and retailers in Malaysia, plus the products we run ourselves."
+   ],
+   "jsonld": [
+    1912,
+    199
+   ],
+   "h1": [
+    "Systems running in production"
+   ],
+   "links": 28
+  },
+  "words_nojs": 527,
+  "words_rendered": 527,
+  "missing_pct": 0,
+  "issues": []
+ },
+ {
+  "url": "https://lewix.ai/work/label-printing-erp",
+  "nojs_status": 200,
+  "nojs": {
+   "title": "Label Printing ERP: Orders, artwork, tooling and production · LEWIX",
+   "canonical": [
+    "https://lewix.ai/work/label-printing-erp"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "A print and label manufacturer's whole operation, from purchase order to delivery note, where artwork, moulds and machines are checked before a job is allowed to start."
+   ],
+   "jsonld": [
+    1912,
+    199,
+    1466
+   ],
+   "h1": [
+    "Label Printing ERP"
+   ],
+   "links": 18
+  },
+  "rendered_status": 200,
+  "rendered": {
+   "title": "Label Printing ERP: Orders, artwork, tooling and production · LEWIX",
+   "canonical": [
+    "https://lewix.ai/work/label-printing-erp"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "A print and label manufacturer's whole operation, from purchase order to delivery note, where artwork, moulds and machines are checked before a job is allowed to start."
+   ],
+   "jsonld": [
+    1912,
+    199,
+    1466
+   ],
+   "h1": [
+    "Label Printing ERP"
+   ],
+   "links": 18
+  },
+  "words_nojs": 326,
+  "words_rendered": 326,
+  "missing_pct": 0,
+  "issues": []
+ },
+ {
+  "url": "https://lewix.ai/about",
+  "nojs_status": 200,
+  "nojs": {
+   "title": "About · LEWIX",
+   "canonical": [
+    "https://lewix.ai/about"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "Lewix AI Sdn Bhd, trading as LEWIX: a software company in Kuala Lumpur building custom ERPs, logistics platforms and AI agents. How a project runs, and who we are not right for."
+   ],
+   "jsonld": [
+    1912,
+    199
+   ],
+   "h1": [
+    "The company behind the systems"
+   ],
+   "links": 17
+  },
+  "rendered_status": 200,
+  "rendered": {
+   "title": "About · LEWIX",
+   "canonical": [
+    "https://lewix.ai/about"
+   ],
+   "robots": [
+    "index, follow",
+    "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+   ],
+   "description": [
+    "Lewix AI Sdn Bhd, trading as LEWIX: a software company in Kuala Lumpur building custom ERPs, logistics platforms and AI agents. How a project runs, and who we are not right for."
+   ],
+   "jsonld": [
+    1912,
+    199
+   ],
+   "h1": [
+    "The company behind the systems"
+   ],
+   "links": 17
+  },
+  "words_nojs": 453,
+  "words_rendered": 453,
+  "missing_pct": 0.7,
+  "issues": []
+ }
+]
