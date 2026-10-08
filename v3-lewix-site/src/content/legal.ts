@@ -5,10 +5,11 @@
  * template. That distinction is the whole reason this file reads the way it
  * does, and it is worth stating plainly for whoever edits it next:
  *
- *  - The project brief on /contact never reaches a server. `ProjectBrief`
- *    holds the answers in React state and the final step opens a `mailto:`
- *    link, so the visitor's own mail client sends the message. There is no
- *    endpoint, no database row, and no submission we could lose.
+ *  - The project brief on /contact is sent, on the visitor's Send, to
+ *    /api/brief, which emails it to us through Resend. The site keeps no copy:
+ *    no database row, nothing logged but whether delivery failed. If sending
+ *    fails, the visitor sends it themselves by email or WhatsApp.
+ *    (Changed 2026-10-09; before that it was mailto-only.)
  *  - There is no analytics of any kind. No gtag, no Plausible, no Clarity.
  *  - Nothing sets a cookie, `localStorage` or `sessionStorage`.
  *
@@ -21,15 +22,15 @@
 
 export const privacyMeta = {
   /** Shown on the page and used for the `dateModified` in metadata. */
-  updated: '2026-08-26',
-  updatedDisplay: '26 August 2026',
+  updated: '2026-10-09',
+  updatedDisplay: '9 October 2026',
 } as const;
 
 export const privacyCopy = {
   eyebrow: 'Privacy',
   heading: 'What we collect',
   intro:
-    'Short, because there is not much to describe. This site runs no analytics, sets no cookies, and its contact form does not send anything to us on its own.',
+    'Short, because there is not much to describe. This site runs no analytics, sets no cookies, and its contact form sends us only what you write in it, when you press Send.',
 } as const;
 
 export interface PrivacySection {
@@ -42,14 +43,14 @@ export const privacySections: readonly PrivacySection[] = [
     heading: 'The short version',
     body: [
       'We do not track you. There is no analytics script on this site, no advertising pixel, and nothing that sets a cookie or writes to your browser storage. You can read every page here without leaving us any record beyond an ordinary server log entry.',
-      'We hold personal data only when you send it to us yourself, by email or WhatsApp, and only for as long as the enquiry or the engagement needs it.',
+      'We hold personal data only when you send it to us yourself, through the project brief, by email or by WhatsApp, and only for as long as the enquiry or the engagement needs it.',
     ],
   },
   {
     heading: 'The project brief',
     body: [
-      'The multi-step brief on the contact page runs entirely in your browser. Your answers stay in the page while you fill it in, and the final step opens a message in your own email client with those answers already written out.',
-      'Nothing is transmitted to us at any point in that process. If you close the tab before sending, the answers are gone and we never saw them. If you do send it, we hold what you wrote in the same way we hold any other email.',
+      'Your answers stay in the page while you fill in the brief on the contact page. Nothing reaches us until you press Send on the last step. Then what you wrote (your name, email, company and answers) is emailed to our inbox. This site does not keep a copy of it.',
+      'If you close the tab before sending, the answers are gone and we never saw them. If the brief cannot be sent from the page, nothing leaves your browser and you can send it yourself by email or WhatsApp instead. Once it reaches us, we hold it in the same way we hold any other email.',
     ],
   },
   {
@@ -69,7 +70,7 @@ export const privacySections: readonly PrivacySection[] = [
   {
     heading: 'Who else sees it',
     body: [
-      'Cloudflare, as described above. Our email is hosted by a mail provider, in the same way business email always is. That is the complete list. There are no advertising networks, no data brokers, and no third-party embeds on this site.',
+      'Cloudflare, as described above. Resend, which delivers the project brief from this site to our inbox. Our email is hosted by a mail provider, in the same way business email always is. That is the complete list. There are no advertising networks, no data brokers, and no third-party embeds on this site.',
     ],
   },
   {

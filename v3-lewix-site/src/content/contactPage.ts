@@ -35,7 +35,7 @@ export const contactPage = {
   // The counter runs 01/04 (three steps plus the review), so "three short
   // steps" flatly contradicted the number on screen two scrolls down.
   intro:
-    'Three steps, then a review. You end up with a written brief you can send by email or WhatsApp, and a copy of it for yourself.',
+    'Three steps, then a review. Send it from here and it lands with the people who will build it.',
 } as const;
 
 /**

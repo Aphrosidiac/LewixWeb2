@@ -5,6 +5,7 @@ import { briefSteps } from '@/content/contactPage';
 import { contact } from '@/content';
 
 type Answers = Record<string, string>;
+type Sent = null | 'sent' | 'failed';
 
 /**
  * Multi-step brief, laid out after trionn.com/contact.
@@ -22,16 +23,18 @@ type Answers = Record<string, string>;
  *  - Steps swapped instantly. They now cross-fade.
  *  - The review was a monospace <pre> dump.
  *
- * Nothing is submitted to a server — the site has no backend, and the inherited
- * contact form was a "Send Message" button wired to nothing, which is worse
- * than no form. The answers assemble into a written brief that hands off to
- * whichever channel the sender prefers.
+ * The review step sends the brief to /api/brief, which emails it to the team
+ * (same delivery as ffdev.studio's form). If that fails, nothing is lost: the
+ * visitor gets the written brief as Send by email / WhatsApp buttons instead.
  */
 export function ProjectBrief() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [invalid, setInvalid] = useState<string[]>([]);
   const [leaving, setLeaving] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState<Sent>(null);
+  const [gotcha, setGotcha] = useState('');
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   const total = briefSteps.length + 1; // steps plus the review
@@ -50,6 +53,7 @@ export function ProjectBrief() {
     window.setTimeout(() => {
       setStep(next);
       setInvalid([]);
+      setSent(null);
       setLeaving(false);
       headingRef.current?.focus({ preventScroll: true });
     }, 220);
@@ -66,6 +70,25 @@ export function ProjectBrief() {
       return;
     }
     goTo(step + 1);
+  };
+
+  const send = async () => {
+    if (sending) return;
+    setSending(true);
+    const res = await sendBrief({ ...answers, _gotcha: gotcha, page: location.href.split(/[?#]/)[0] });
+    setSending(false);
+    if (res.fields) {
+      // The server disagreed with a field: go back to the step that holds it.
+      const names = Object.keys(res.fields);
+      const at = briefSteps.findIndex((s) => s.fields.some((f) => names.includes(f.name)));
+      if (at >= 0) {
+        goTo(at);
+        window.setTimeout(() => setInvalid(names), 240);
+        return;
+      }
+    }
+    setSent(res.ok ? 'sent' : 'failed');
+    window.setTimeout(() => headingRef.current?.focus({ preventScroll: true }), 0);
   };
 
   return (
@@ -87,7 +110,7 @@ export function ProjectBrief() {
       <form onSubmit={submit} noValidate className="mx-auto w-full max-w-4xl">
         <div className="flex items-start justify-between gap-8">
           <p className="max-w-[18rem] text-[10.5px] leading-relaxed font-medium tracking-[0.16em] text-fg-muted uppercase">
-            {isReview ? 'Everything below is what reaches us.' : current.intro}
+            {isReview ? (sent === 'sent' ? 'Complete.' : 'Everything below is what reaches us.') : current.intro}
           </p>
 
           <div className="w-40 shrink-0 text-right">
@@ -129,12 +152,22 @@ export function ProjectBrief() {
             tabIndex={-1}
             className="rise-in mt-16 font-display font-semibold text-4xl leading-[1.05] tracking-tight text-fg outline-none sm:mt-20 sm:text-6xl"
           >
-            {isReview ? 'Ready to send.' : current.title}
+            {!isReview
+              ? current.title
+              : sent === 'sent'
+                ? 'Your brief is in.'
+                : sent === 'failed'
+                  ? 'One more tap.'
+                  : 'Ready to send.'}
           </h2>
           <p className="rise-in mt-4 text-sm text-fg-muted" style={{ animationDelay: '80ms' }}>
-            {isReview
-              ? 'Pick a channel. Nothing leaves your browser until you do.'
-              : 'A few details so the reply is worth reading.'}
+            {!isReview
+              ? 'A few details so the reply is worth reading.'
+              : sent === 'sent'
+                ? `It goes straight to the people who will build it, and the reply comes to ${answers.email}.`
+                : sent === 'failed'
+                  ? 'It could not be sent from here just now. Nothing has been sent yet: send the same brief by email or WhatsApp instead.'
+                  : 'Check it over, then send. It goes straight to the people who will build it.'}
           </p>
 
           {!isReview && (
@@ -222,33 +255,62 @@ export function ProjectBrief() {
                 ))}
               </dl>
 
-              <div className="rise-in mt-4 grid gap-4 sm:grid-cols-3" style={{ animationDelay: '260ms' }}>
-                <a
-                  href={`mailto:${contact.email.label}?subject=${encodeURIComponent(
-                    `Project brief — ${answers.company || answers.name || 'new enquiry'}`
-                  )}&body=${encodeURIComponent(brief)}`}
-                  className="rounded-xl border border-white/[0.09] bg-white/[0.025] px-6 py-6 text-center text-sm text-fg transition-colors hover:border-accent hover:text-accent"
+              {sent === null && (
+                <button
+                  type="button"
+                  onClick={send}
+                  disabled={sending}
+                  className="rise-in mt-4 w-full rounded-xl bg-fg px-6 py-6 text-center text-sm font-medium text-bg transition-colors hover:bg-accent hover:text-white disabled:opacity-60"
+                  style={{ animationDelay: '260ms' }}
                 >
-                  Send by email
-                </a>
-                {contact.whatsapp.map((w) => (
-                  <a
-                    key={w.number}
-                    href={`https://wa.me/${w.number}?text=${encodeURIComponent(brief)}`}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="rounded-xl border border-white/[0.09] bg-white/[0.025] px-6 py-6 text-center text-sm text-fg transition-colors hover:border-accent hover:text-accent"
-                  >
-                    WhatsApp {w.name}
-                  </a>
-                ))}
-              </div>
+                  {sending ? 'Sending…' : 'Send brief'}
+                </button>
+              )}
+
+              {sent !== null && (
+                <div className={`rise-in mt-4 grid gap-4 ${sent === 'failed' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+                  {sent === 'failed' && (
+                    <a
+                      href={`mailto:${contact.email.label}?subject=${encodeURIComponent(
+                        `Project brief: ${answers.company || answers.name || 'new enquiry'}`
+                      )}&body=${encodeURIComponent(brief)}`}
+                      className="rounded-xl border border-white/[0.09] bg-white/[0.025] px-6 py-6 text-center text-sm text-fg transition-colors hover:border-accent hover:text-accent"
+                    >
+                      Send by email
+                    </a>
+                  )}
+                  {contact.whatsapp.map((w) => (
+                    <a
+                      key={w.number}
+                      href={`https://wa.me/${w.number}?text=${encodeURIComponent(brief)}`}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="rounded-xl border border-white/[0.09] bg-white/[0.025] px-6 py-6 text-center text-sm text-fg transition-colors hover:border-accent hover:text-accent"
+                    >
+                      {sent === 'sent' ? `Also WhatsApp ${w.name}` : `WhatsApp ${w.name}`}
+                    </a>
+                  ))}
+                </div>
+              )}
             </>
           )}
         </div>
 
+        {/* Honeypot: people never see or reach it; form-filling bots do. */}
+        <label className="sr-only" aria-hidden="true">
+          Leave this empty
+          <input
+            type="text"
+            name="_gotcha"
+            tabIndex={-1}
+            autoComplete="off"
+            value={gotcha}
+            onChange={(e) => setGotcha(e.target.value)}
+          />
+        </label>
+
         <div className="mt-16 flex items-end justify-between gap-8">
-          {step > 0 ? (
+          {step > 0 && sent !== 'sent' ? (
             <button
               type="button"
               onClick={() => goTo(step - 1)}
@@ -333,6 +395,24 @@ function reviewRows(a: Answers): Array<[string, string]> {
     ([, v]) => v
   );
   return rows.length ? rows : [['Nothing yet', 'Go back and fill in a step or two.']];
+}
+
+async function sendBrief(
+  payload: Record<string, string>
+): Promise<{ ok: boolean; fields?: Record<string, string> }> {
+  try {
+    const r = await fetch('/api/brief', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(15_000),
+    });
+    const b = await r.json().catch(() => ({}));
+    if (r.status === 422 && b.fields) return { ok: false, fields: b.fields };
+    return { ok: r.ok && b.ok === true };
+  } catch {
+    return { ok: false };
+  }
 }
 
 /** Plain text, because it has to survive both a mail client and WhatsApp. */
