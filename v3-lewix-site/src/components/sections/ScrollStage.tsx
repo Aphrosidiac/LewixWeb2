@@ -12,8 +12,7 @@ import { STAGE_VH, clamp01, smoothstep, stageProgress } from '@/lib/scrollStage'
  * bare.
  *
  * The one thing sitting in it is an ascent readout, which climbs with the
- * camera and clears the screen before the summit so the beat at the top stays
- * genuinely empty. It reuses the loading screen's counter language on purpose:
+ * camera across the whole shot and clears just before About arrives. It reuses the loading screen's counter language on purpose:
  * the two are the same idea, an instrument reading out a climb.
  */
 export function ScrollStage() {
@@ -35,15 +34,14 @@ export function ScrollStage() {
       if (t !== last) {
         last = t;
 
-        // In quickly, gone by the crest at 0.55 so the beat over the top stays
-        // genuinely empty.
+        // In quickly, out just before About's header crosses into view.
         const fadeIn = smoothstep(clamp01(t / 0.1));
-        const fadeOut = smoothstep(clamp01((t - 0.42) / 0.12));
+        const fadeOut = smoothstep(clamp01((t - 0.8) / 0.15));
         wrap.style.opacity = String(fadeIn * (1 - fadeOut));
 
-        // Tops out just as the readout clears, so the number reaches 100 at the
-        // summit rather than trailing off mid-climb.
-        const climb = smoothstep(clamp01(t / 0.5));
+        // Tops out as the readout starts to clear, so it reads 100 at the end
+        // of the climb rather than vanishing mid-count.
+        const climb = smoothstep(clamp01(t / 0.8));
         bar.style.transform = `scaleX(${climb})`;
         num.textContent = String(Math.round(climb * 100)).padStart(3, '0');
       }

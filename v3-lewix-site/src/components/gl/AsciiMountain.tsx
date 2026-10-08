@@ -8,7 +8,7 @@ import { CharacterAtlas } from './CharacterAtlas';
 import { MouseTrail } from './MouseTrail';
 import { quadVertex, meshVertex, meshFragment, asciiFragment } from './asciiShaders';
 import { setLoadProgress, setLoadReady, startReveal, subscribeLoad } from '@/lib/loadProgress';
-import { STAGE_END_VH, clamp01, smoothstep, stageProgress, track } from '@/lib/scrollStage';
+import { STAGE_END_VH, clamp01, smoothstep, track } from '@/lib/scrollStage';
 
 /**
  * dragonfly.xyz's own preset, verbatim. The blanks are load-bearing.
@@ -322,96 +322,76 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
     const pointerUv = new THREE.Vector2(0.5, 0.5);
     const pointerTarget = new THREE.Vector2(0, 0);
     const pointerCurrent = new THREE.Vector2(0, 0);
+    // Two-stage follow: the cursor feeds `pointerMid`, which feeds
+    // `pointerCurrent`. A single exponential lerp moves fastest on its very
+    // first frame, so every change of direction started with a jolt; chained,
+    // the response starts from rest and builds, like something with weight.
+    const pointerMid = new THREE.Vector2(0, 0);
+    // Tilt follows the cursor's ABSOLUTE position, but until the first
+    // pointermove the scene assumes it is dead centre. Wherever it really was,
+    // the first touch of the mouse used to swing the mountain to match in about
+    // a third of a second. The tilt now fades in over POINTER_EASE_IN_S from
+    // that first move instead.
+    let pointerSeen = false;
+    let pointerGain = 0;
+    const POINTER_EASE_IN_S = 1.2;
+    const POINTER_FOLLOW = 8; // per second, for each of the two stages
 
     function onPointerMove(e: PointerEvent) {
       pointerUv.set(e.clientX / viewport().w, 1 - e.clientY / viewport().h);
       mouseTrail.push(pointerUv);
       pointerTarget.set(pointerUv.x * 2 - 1, pointerUv.y * 2 - 1);
+      pointerSeen = true;
     }
 
     /**
-     * Scroll choreography, in three phases:
+     * Scroll choreography, in two phases:
      *
-     *  intro (0 → INTRO_VH viewports)  the mountain starts zoomed in and pushed
-     *      right, filling the space beside the hero lockup, then pans to centre
-     *      and zooms out to its resting framing.
-     *  stage (1 → STAGE_END_VH)        the empty run below the hero. See STAGE.
-     *  orbit (after that)              rotate and dolly with scroll, carrying on
-     *      from wherever the stage left the camera.
+     *  shot  (0 → STAGE_END_VH viewports)  one continuous move from the hero
+     *      framing to the About framing. The camera orbits about 60 degrees,
+     *      climbs, and widens out, while the mountain slides from beside the
+     *      hero lockup to the centre over the first PAN_VH viewports.
+     *  orbit (after that)  rotate and dolly with scroll, carrying on from
+     *      wherever the shot left the camera.
      *
-     * Everything below is a pure function of scrollY, so scrolling back up
-     * replays the whole thing exactly in reverse with no extra state.
+     * Rewritten 2026-10-09. The previous shot copied dragonfly.xyz's beat: dive
+     * at the massif, crest the summit, pitch up into empty sky, then let the
+     * summit fall back into frame in the same place. On a mountain that read as
+     * the subject vanishing and reappearing for no reason, and the first scroll
+     * also pulled back before diving in. Every track below now runs one way
+     * only, between two keys, so the camera never stops, reverses or looks away.
+     *
+     * Everything is a pure function of scrollY, so scrolling back up replays the
+     * whole thing exactly in reverse with no extra state.
      */
-    const INTRO_VH = 0.6; // viewports the intro takes to resolve
-    const INTRO_ZOOM = 0.52; // start distance as a fraction of the resting one
+    const PAN_VH = 1.2; // viewports the sideways pan takes to resolve
     const INTRO_PAN = 0.42; // start offset sideways, in model radii
 
     /**
-     * The stage shot: a summit approach.
-     *
-     * dragonfly's insect can fly at the lens; a mountain can't, so the camera
-     * moves instead. It drops off the wide establishing framing, dives at the
-     * massif until the slopes overrun the frame, crests the summit and pitches
-     * up into empty sky — which is where the near-black beat comes from, the
-     * same pause dragonfly lands on — then falls back and settles wide again
-     * for About.
-     *
-     * Five keyframes, all sharing the same t so they stay in step:
-     *   0.00  establishing, identical to the resting hero framing
-     *   0.38  close pass — the face overruns the frame, summit grazing the top
-     *   0.55  cresting — above the summit but still looking at it, so it sinks
-     *         out of frame instead of cutting
-     *   0.72  over the top, looking at nothing
-     *   0.82  pitching back down — the summit re-enters from above rather than
-     *         growing out of a dot in the middle of the frame
-     *   1.00  the About establishing shot
-     *
      * `dist` is a multiple of the fitted distance; `camY` and `lookY` are
-     * multiples of the model's height. `focus` blends the pivot from the
-     * bounding-box centre (which is what the wide framings want) to the summit
-     * (which is the only sane pivot once the camera is in among the slopes).
-     *
-     * The close-pass numbers are held against a measured height profile of the
-     * terrain around the summit: at these radii the ground never rises above
-     * ~40, so the camera stays in open air the whole way.
+     * multiples of the model's height; `angle` is radians of orbit. Two keys
+     * each, eased by `track`, so all five share one curve and stay in step.
+     * Key 0 is the hero framing, key 1 the About establishing shot.
      */
     const STAGE = {
       dist: [
-        [0, 1],
-        [0.38, 0.24],
-        [0.55, 0.19],
-        [0.72, 0.15],
-        [0.82, 0.36],
+        [0, 0.52],
         [1, 0.92],
       ],
       camY: [
         [0, 0.1],
-        [0.38, 0.1],
-        [0.55, 0.55],
-        [0.72, 0.88],
-        [0.82, 0.62],
         [1, 0.34],
       ],
       lookY: [
         [0, 0.18],
-        [0.38, 0.24],
-        [0.55, 0.42],
-        [0.72, 1.45],
-        [0.82, 0.35],
         [1, 0.2],
       ],
       angle: [
         [0, 0],
-        [0.38, 0.42],
-        [0.55, 0.55],
-        [0.72, 0.72],
-        [0.82, 0.85],
         [1, 1.05],
       ],
       focus: [
         [0, 0],
-        [0.28, 1],
-        [0.82, 1],
         [1, 0],
       ],
     } satisfies Record<string, [number, number][]>;
@@ -564,23 +544,17 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
 
       const vh = viewport().h;
       const maxScroll = Math.max(document.documentElement.scrollHeight - vh, 1);
-      const introEnd = vh * INTRO_VH;
       const stageEnd = vh * STAGE_END_VH;
 
-      // Phase 1: intro, smoothstepped so it eases at both ends.
-      const introEase = smoothstep(clamp01(scrollY / introEnd));
+      // Phase 1: the shot, from the top of the page to About.
+      const stageT = clamp01(scrollY / stageEnd);
 
-      // Phase 2: the stage shot.
-      const stageT = stageProgress(scrollY, vh);
-
-      // Phase 3: orbit, mapped across whatever scroll remains below the stage.
+      // Phase 2: orbit, mapped across whatever scroll remains below the stage.
       const orbitT = clamp01((scrollY - stageEnd) / Math.max(maxScroll - stageEnd, 1));
 
-      // The stage tracks resolve to the old resting values at t=0, so the intro
-      // and the idle stretch between the two are unaffected by any of this.
       const angle = track(stageT, STAGE.angle) + orbitT * Math.PI;
       const restingDist = fitDistance * track(stageT, STAGE.dist) * (1 - orbitT * 0.14);
-      const dist = restingDist * THREE.MathUtils.lerp(INTRO_ZOOM, 1, introEase);
+      const dist = restingDist;
 
       const focusT = track(stageT, STAGE.focus);
       focus.set(summit.x * focusT, 0, summit.z * focusT);
@@ -599,7 +573,8 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       // it there just shoves the mountain into the bottom-right corner and
       // crops most of it away, which is exactly how mobile was rendering.
       const introPan = viewport().w < 640 ? 0 : INTRO_PAN;
-      const pan = THREE.MathUtils.lerp(introPan, 0, introEase) * modelRadius;
+      const panEase = smoothstep(clamp01(scrollY / (vh * PAN_VH)));
+      const pan = THREE.MathUtils.lerp(introPan, 0, panEase) * modelRadius;
       if (pan !== 0) {
         viewDir.subVectors(lookTarget, camera.position).normalize();
         rightAxis.crossVectors(viewDir, camera.up).normalize();
@@ -610,9 +585,15 @@ export function AsciiMountain({ accent = '#6880f2' }: { accent?: string }) {
       camera.lookAt(lookTarget);
 
       if (!prefersReduced) {
-        pointerCurrent.lerp(pointerTarget, 1 - Math.pow(0.001, dt));
-        modelGroup.rotation.y = pointerCurrent.x * 0.15;
-        modelGroup.rotation.x = -pointerCurrent.y * 0.08;
+        const follow = 1 - Math.exp(-POINTER_FOLLOW * dt);
+        pointerMid.lerp(pointerTarget, follow);
+        pointerCurrent.lerp(pointerMid, follow);
+        if (pointerSeen && pointerGain < 1) {
+          pointerGain = Math.min(1, pointerGain + dt / POINTER_EASE_IN_S);
+        }
+        const gain = smoothstep(pointerGain);
+        modelGroup.rotation.y = pointerCurrent.x * 0.15 * gain;
+        modelGroup.rotation.x = -pointerCurrent.y * 0.08 * gain;
 
         const smearTarget = THREE.MathUtils.clamp(Math.abs(scrollVelocity) * 0.004, 0, 0.35);
         asciiUniforms.uSmear.value = THREE.MathUtils.damp(
